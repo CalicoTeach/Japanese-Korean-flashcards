@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한국어 90-Day Journey 🌷</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #e8a0b4;
+    --rose-deep: #c96b8a;
+    --rose-light: #fce8f0;
+    --cream: #fff8f5;
+    --peach: #f7d9c4;
+    --lavender: #d4bce8;
+    --lavender-deep: #9b72c8;
+    --mint: #b8ddd4;
+    --sky-blue: #b8d4f0;
+    --butter: #f5e4a0;
+    --warm-brown: #7a4a2e;
+    --text: #2e1a10;
+    --card-shadow: 0 8px 32px rgba(201,107,138,0.18);
+    --gold: #e8c87a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* FLOATING FLORALS BACKGROUND */
+  .floral-bg {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .floral-petal {
+    position: absolute;
+    font-size: 14px;
+    opacity: 0;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(110vh) rotate(0deg) scale(0.8); opacity: 0; }
+    10% { opacity: 0.35; }
+    90% { opacity: 0.2; }
+    100% { transform: translateY(-10vh) rotate(360deg) scale(1.1); opacity: 0; }
+  }
+
+  /* HEADER */
+  header {
+    position: relative; z-index: 10;
+    background: linear-gradient(135deg, #c96b8a 0%, #d49ab8 40%, #b8a0d4 70%, #9b72c8 100%);
+    padding: 20px 24px 18px;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(155,114,200,0.3);
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .header-cat {
+    font-size: 3rem;
+    display: block;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+    animation: sway 3s ease-in-out infinite;
+    position: relative;
+  }
+  @keyframes sway {
+    0%,100% { transform: rotate(-5deg) translateY(0); }
+    50% { transform: rotate(5deg) translateY(-6px); }
+  }
+  header h1 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    position: relative;
+  }
+  header p {
+    color: rgba(255,255,255,0.88);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 3px;
+    position: relative;
+  }
+  .kr-title {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1.1rem;
+  }
+  .header-flowers {
+    position: absolute;
+    top: 10px;
+    font-size: 1.2rem;
+    opacity: 0.5;
+  }
+  .header-flowers.left { left: 12px; }
+  .header-flowers.right { right: 12px; }
+
+  /* PROGRESS */
+  .progress-wrap {
+    position: relative; z-index: 10;
+    background: white;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--rose-light);
+  }
+  .progress-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--rose-deep);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .progress-bar-bg {
+    background: var(--rose-light);
+    border-radius: 20px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--rose-deep), var(--lavender-deep), var(--gold));
+    border-radius: 20px;
+    transition: width 0.5s ease;
+  }
+  .progress-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #aaa;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    position: relative; z-index: 10;
+    display: flex;
+    background: white;
+    border-bottom: 2px solid var(--rose-light);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    flex: none;
+    padding: 12px 18px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #bbb;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none;
+    border-top: none; border-left: none; border-right: none;
+    font-family: 'Nunito', sans-serif;
+  }
+  .nav-tab.active { color: var(--rose-deep); border-bottom-color: var(--rose-deep); }
+  .nav-tab:hover { color: var(--rose-deep); }
+
+  /* VIEWS */
+  .view { display: none; position: relative; z-index: 5; }
+  .view.active { display: block; }
+
+  /* ═══ TIMETABLE ═══ */
+  .timetable-view { padding: 16px; }
+  .week-section { margin-bottom: 22px; }
+  .week-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+  }
+  .week-badge {
+    background: linear-gradient(135deg, var(--rose-deep), var(--lavender-deep));
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 900;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .week-theme { font-size: 0.8rem; color: #aaa; font-weight: 700; }
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+  }
+  .day-cell {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+  .day-cell:hover { transform: translateY(-2px); box-shadow: var(--card-shadow); }
+  .day-cell.completed {
+    background: linear-gradient(135deg, #fce0ec, #ead4f4);
+    border-color: var(--rose);
+  }
+  .day-cell.completed::after {
+    content: '✓';
+    position: absolute;
+    top: 2px; right: 4px;
+    font-size: 0.5rem;
+    color: var(--rose-deep);
+    font-weight: 900;
+  }
+  .day-num { font-size: 0.85rem; font-weight: 900; color: var(--warm-brown); line-height: 1; }
+  .day-hangul {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.6rem;
+    color: var(--rose-deep);
+    margin-top: 2px;
+    line-height: 1;
+  }
+
+  /* ═══ FLASHCARD ═══ */
+  .card-view {
+    padding: 16px;
+    min-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .card-nav-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .card-nav-btn {
+    background: white;
+    border: 2px solid var(--rose-light);
+    border-radius: 12px;
+    width: 44px; height: 44px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    color: var(--rose-deep);
+  }
+  .card-nav-btn:hover { background: var(--rose-light); }
+  .card-nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .card-day-info { text-align: center; }
+  .day-label { font-size: 0.75rem; font-weight: 900; color: var(--rose-deep); text-transform: uppercase; letter-spacing: 1px; }
+  .day-category { font-size: 0.7rem; color: #bbb; font-weight: 700; }
+
+  /* THE CARD */
+  .flashcard-container {
+    width: 100%;
+    max-width: 360px;
+    perspective: 1000px;
+    cursor: pointer;
+    margin: 8px 0;
+  }
+  .flashcard-inner {
+    position: relative;
+    width: 100%;
+    padding-top: 130%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+  .flashcard-inner.flipped { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 28px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--card-shadow);
+  }
+  .card-front {
+    background: linear-gradient(150deg, #fff 0%, #fdf0f8 50%, #f5eeff 100%);
+    border: 2px solid var(--rose-light);
+  }
+  .card-back {
+    background: linear-gradient(150deg, #fceaf4 0%, #eedff8 50%, #e8f0fc 100%);
+    border: 2px solid var(--lavender);
+    transform: rotateY(180deg);
+  }
+  .card-floral-deco {
+    position: absolute;
+    font-size: 4rem;
+    opacity: 0.07;
+    top: 10px; right: 12px;
+    pointer-events: none;
+    line-height: 1;
+  }
+  .card-bottom-deco {
+    position: absolute;
+    font-size: 2.5rem;
+    opacity: 0.06;
+    bottom: 10px; left: 12px;
+    pointer-events: none;
+  }
+  .card-week-tag {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--lavender-deep);
+    background: #f0e8ff;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 2px;
+  }
+  .card-hangul {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    text-align: center;
+  }
+  .card-romanization {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--warm-brown);
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+  .card-pronunciation {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #bbb;
+    text-align: center;
+    font-style: italic;
+  }
+  .card-meaning {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--rose-deep);
+    text-align: center;
+    margin-top: 4px;
+  }
+  .card-tap-hint {
+    font-size: 0.65rem;
+    color: #ccc;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+  .back-label {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--rose-deep);
+    background: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .back-try {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--warm-brown);
+    text-align: center;
+    margin-top: 4px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .back-romanized {
+    font-size: 0.78rem;
+    color: #aaa;
+    text-align: center;
+    font-weight: 600;
+    font-style: italic;
+  }
+  .back-translation {
+    font-size: 0.82rem;
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    font-weight: 600;
+  }
+  .back-divider {
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--rose), var(--lavender));
+    border-radius: 2px;
+    margin: 6px 0;
+  }
+  .back-did-you-know { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #bbb; }
+  .back-fact { font-size: 0.8rem; color: var(--text); text-align: center; font-weight: 600; line-height: 1.5; }
+  .cat-mascot-card { font-size: 1.4rem; margin-top: 8px; }
+
+  /* CARD ACTIONS */
+  .card-actions {
+    display: flex; gap: 12px;
+    margin-top: 16px;
+    width: 100%; max-width: 360px;
+  }
+  .action-btn {
+    flex: 1;
+    padding: 14px 12px;
+    border-radius: 16px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-got-it {
+    background: linear-gradient(135deg, var(--rose-deep), var(--lavender-deep));
+    color: white;
+    box-shadow: 0 4px 16px rgba(155,114,200,0.35);
+  }
+  .btn-got-it:hover { transform: translateY(-2px); }
+  .btn-again {
+    background: white;
+    color: var(--rose-deep);
+    border: 2px solid var(--rose-light);
+  }
+  .btn-again:hover { background: var(--rose-light); }
+
+  /* ═══ CATEGORIES ═══ */
+  .categories-view { padding: 16px; }
+  .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .cat-card:hover { transform: translateY(-3px); box-shadow: var(--card-shadow); border-color: var(--rose); }
+  .cat-emoji { font-size: 2.2rem; display: block; margin-bottom: 8px; }
+  .cat-name { font-size: 0.9rem; font-weight: 900; color: var(--text); }
+  .cat-count { font-size: 0.72rem; color: #bbb; font-weight: 700; margin-top: 2px; }
+  .cat-bar { margin-top: 8px; background: var(--rose-light); border-radius: 10px; height: 6px; overflow: hidden; }
+  .cat-bar-fill { height: 100%; background: linear-gradient(90deg, var(--rose-deep), var(--lavender-deep)); border-radius: 10px; transition: width 0.5s; }
+
+  /* ═══ STATS ═══ */
+  .stats-view { padding: 16px; }
+  .stats-hero {
+    background: linear-gradient(135deg, #c96b8a 0%, #b89ad4 50%, #9b72c8 100%);
+    border-radius: 24px;
+    padding: 24px;
+    text-align: center;
+    color: white;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stats-hero::after {
+    content: '🌷🌸🌼';
+    position: absolute;
+    bottom: 8px; right: 12px;
+    font-size: 1.5rem;
+    opacity: 0.3;
+    letter-spacing: 4px;
+  }
+  .stats-hero-cat { font-size: 3rem; display: block; margin-bottom: 8px; }
+  .stats-hero h2 { font-size: 1.3rem; font-weight: 900; }
+  .stats-hero p { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .stat-card { background: white; border-radius: 16px; padding: 16px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .stat-icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+  .stat-val { font-size: 1.6rem; font-weight: 900; color: var(--rose-deep); }
+  .stat-label { font-size: 0.7rem; font-weight: 700; color: #bbb; text-transform: uppercase; letter-spacing: 0.5px; }
+  .streak-section {
+    background: linear-gradient(135deg, var(--peach), var(--butter));
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .streak-flame { font-size: 3rem; }
+  .streak-text h3 { font-size: 1.1rem; font-weight: 900; color: var(--warm-brown); }
+  .streak-text p { font-size: 0.8rem; color: rgba(122,74,46,0.7); font-weight: 600; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-sheet {
+    background: white;
+    border-radius: 28px 28px 0 0;
+    padding: 24px 20px 40px;
+    width: 100%; max-width: 480px;
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 20px; }
+  .modal-hangul { font-family: 'Noto Sans KR', sans-serif; font-size: 3.5rem; text-align: center; display: block; line-height: 1; margin-bottom: 6px; }
+  .modal-romaji { text-align: center; font-size: 1.1rem; font-weight: 800; color: var(--warm-brown); margin-bottom: 2px; }
+  .modal-pronunciation { text-align: center; font-size: 0.85rem; color: #bbb; font-style: italic; margin-bottom: 10px; }
+  .modal-meaning { text-align: center; font-size: 1.5rem; font-weight: 900; color: var(--rose-deep); margin-bottom: 16px; }
+  .modal-fact { background: var(--rose-light); border-radius: 14px; padding: 14px; font-size: 0.82rem; color: var(--text); font-weight: 600; line-height: 1.6; margin-bottom: 16px; }
+  .modal-fact-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: var(--rose-deep); margin-bottom: 6px; }
+  .modal-close-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--rose-deep), var(--lavender-deep)); color: white; border: none; border-radius: 16px; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 900; cursor: pointer; }
+
+  .section-title { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #bbb; margin-bottom: 12px; padding-top: 4px; }
+  .spacer { height: 80px; }
+</style>
+</head>
+<body>
+
+<div class="floral-bg" id="floralBg"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-flowers left">🌷🌸</div>
+  <div class="header-flowers right">🌼🌸</div>
+  <span class="header-cat">🐱</span>
+  <h1>한국어 90-Day Journey</h1>
+  <p class="kr-title">Korean for Beginners · Calico Series</p>
+</header>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-label">🌷 Your Progress</div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-stats">
+    <span id="progressDone">0 cards done</span>
+    <span id="progressLeft">90 remaining</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showView('timetable',this)">📅 90 Days</button>
+  <button class="nav-tab" onclick="showView('flashcard',this)">🗂️ Study</button>
+  <button class="nav-tab" onclick="showView('categories',this)">🏷️ Topics</button>
+  <button class="nav-tab" onclick="showView('stats',this)">⭐ Stats</button>
+</div>
+
+<!-- TIMETABLE -->
+<div class="view active timetable-view" id="view-timetable">
+  <p class="section-title">Tap any day to preview ✨</p>
+  <div id="timetableGrid"></div>
+  <div class="spacer"></div>
+</div>
+
+<!-- FLASHCARD -->
+<div class="view card-view" id="view-flashcard">
+  <div class="card-nav-header">
+    <button class="card-nav-btn" id="prevBtn" onclick="navigateCard(-1)">←</button>
+    <div class="card-day-info">
+      <div class="day-label" id="cardDayLabel">Day 1 of 90</div>
+      <div class="day-category" id="cardCategory">── Greetings ──</div>
+    </div>
+    <button class="card-nav-btn" id="nextBtn" onclick="navigateCard(1)">→</button>
+  </div>
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard-inner" id="flashcardInner">
+      <div class="card-face card-front">
+        <div class="card-floral-deco">🌷</div>
+        <div class="card-bottom-deco">🌸</div>
+        <div class="card-week-tag" id="cardWeek">Week 1</div>
+        <div class="card-hangul" id="cardHangul">안녕하세요</div>
+        <div class="card-romanization" id="cardRomanization">Annyeonghaseyo</div>
+        <div class="card-pronunciation" id="cardPronunciation">ahn-nyeong-ha-se-yo</div>
+        <div class="card-meaning" id="cardMeaning">Hello</div>
+        <div class="card-tap-hint">tap to flip 🐾</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-floral-deco">🌼</div>
+        <div class="card-bottom-deco">🌷</div>
+        <div class="back-label">Try Saying This!</div>
+        <div class="back-try" id="backTry">안녕하세요!</div>
+        <div class="back-romanized" id="backRomanized">Annyeonghaseyo!</div>
+        <div class="back-translation" id="backTranslation">"Hello!"</div>
+        <div class="back-divider"></div>
+        <div class="back-did-you-know">🐱 Did You Know?</div>
+        <div class="back-fact" id="backFact">Used any time of day — morning, afternoon, or evening!</div>
+        <div class="cat-mascot-card">🌷 화이팅!</div>
+      </div>
+    </div>
+  </div>
+  <div class="card-actions">
+    <button class="action-btn btn-again" onclick="markAgain()">🔄 Again</button>
+    <button class="action-btn btn-got-it" onclick="markGotIt()">✓ Got it!</button>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="view categories-view" id="view-categories">
+  <p class="section-title">Browse by topic 📚</p>
+  <div class="cat-grid" id="catGrid"></div>
+  <div class="spacer"></div>
+</div>
+
+<!-- STATS -->
+<div class="view stats-view" id="view-stats">
+  <div class="stats-hero">
+    <span class="stats-hero-cat">🐱</span>
+    <h2>Nyanko says 화이팅!</h2>
+    <p>Your calico companion is cheering you on~</p>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><span class="stat-icon">📚</span><div class="stat-val" id="statDone">0</div><div class="stat-label">Cards Done</div></div>
+    <div class="stat-card"><span class="stat-icon">🎯</span><div class="stat-val" id="statLeft">90</div><div class="stat-label">Remaining</div></div>
+    <div class="stat-card"><span class="stat-icon">📅</span><div class="stat-val" id="statWeek">Wk 1</div><div class="stat-label">Current Week</div></div>
+    <div class="stat-card"><span class="stat-icon">🌷</span><div class="stat-val" id="statPct">0%</div><div class="stat-label">Complete</div></div>
+  </div>
+  <div class="streak-section">
+    <div class="streak-flame">🔥</div>
+    <div class="streak-text">
+      <h3 id="streakVal">Start today! 🌷</h3>
+      <p>1 card a day keeps the forgetting away. 화이팅!</p>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <span class="modal-hangul" id="modalHangul">안녕하세요</span>
+    <div class="modal-romaji" id="modalRomaji">Annyeonghaseyo</div>
+    <div class="modal-pronunciation" id="modalPronunciation">ahn-nyeong-ha-se-yo</div>
+    <div class="modal-meaning" id="modalMeaning">Hello</div>
+    <div class="modal-fact"><div class="modal-fact-label">🐱 Did You Know?</div><span id="modalFact">Used any time of day!</span></div>
+    <button class="modal-close-btn" onclick="studyThisCard()">Study This Card 🗂️</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// 90-DAY KOREAN FLASHCARD DATA
+// ═══════════════════════════════════════
+const cards = [
+  // WEEK 1 — Greetings
+  {day:1,week:1,hangul:"안녕하세요",rom:"Annyeonghaseyo",pron:"ahn-nyeong-ha-se-yo",meaning:"Hello",category:"Greetings",try:"안녕하세요!",tryRom:"Annyeonghaseyo!",tryTrans:'"Hello!"',fact:"Used any time of day — morning, afternoon, or evening! The most essential Korean word."},
+  {day:2,week:1,hangul:"안녕히 가세요",rom:"Annyeonghi gaseyo",pron:"ahn-nyeong-hee ga-se-yo",meaning:"Goodbye (to one leaving)",category:"Greetings",try:"안녕히 가세요!",tryRom:"Annyeonghi gaseyo!",tryTrans:'"Goodbye! (safe travels)"',fact:"Say this to the person who is leaving. If YOU are leaving, say 안녕히 계세요!"},
+  {day:3,week:1,hangul:"감사합니다",rom:"Gamsahamnida",pron:"gam-sa-ham-ni-da",meaning:"Thank You (formal)",category:"Greetings",try:"감사합니다!",tryRom:"Gamsahamnida!",tryTrans:'"Thank you very much!"',fact:"The most formal way to say thank you. Perfect for shops, restaurants, and elders!"},
+  {day:4,week:1,hangul:"고마워요",rom:"Gomawoyo",pron:"go-ma-wo-yo",meaning:"Thank You (casual)",category:"Greetings",try:"도와줘서 고마워요!",tryRom:"Dowajwoseo gomawoyo!",tryTrans:'"Thank you for helping me!"',fact:"More casual than 감사합니다. You'll hear this a lot in K-dramas between friends!"},
+  {day:5,week:1,hangul:"죄송합니다",rom:"Joesonghamnida",pron:"joe-song-ham-ni-da",meaning:"I'm Sorry (formal)",category:"Greetings",try:"죄송합니다, 늦었어요.",tryRom:"Joesonghamnida, neujeosseoyo.",tryTrans:'"I\'m sorry, I\'m late."',fact:"Very sincere apology. You'll see this in K-dramas during emotional scenes!"},
+  {day:6,week:1,hangul:"괜찮아요",rom:"Gwaenchanayo",pron:"gwen-cha-na-yo",meaning:"It's Okay / I'm Fine",category:"Greetings",try:"괜찮아요, 걱정 마세요!",tryRom:"Gwaenchanayo, geokjeong maseyo!",tryTrans:'"It\'s okay, don\'t worry!"',fact:"One of the most heard phrases in K-dramas. Also used to ask 'Are you okay?'"},
+  {day:7,week:1,hangul:"처음 뵙겠습니다",rom:"Cheoeum boepgesseumnida",pron:"cheo-eum-boep-get-seum-ni-da",meaning:"Nice to Meet You",category:"Greetings",try:"처음 뵙겠습니다! 잘 부탁드립니다.",tryRom:"Cheoeum boepgesseumnida! Jal butakdeurimnida.",tryTrans:'"Nice to meet you! Please take care of me."',fact:"Very formal first meeting phrase. 잘 부탁드립니다 is added for extra politeness!"},
+
+  // WEEK 2 — Basics
+  {day:8,week:2,hangul:"네",rom:"Ne",pron:"neh",meaning:"Yes",category:"Basics",try:"네, 알겠습니다!",tryRom:"Ne, algesseumnida!",tryTrans:'"Yes, I understand!"',fact:"Also written 예 (ye) in very formal speech. 네 is everyday and super versatile!"},
+  {day:9,week:2,hangul:"아니요",rom:"Aniyo",pron:"ah-ni-yo",meaning:"No",category:"Basics",try:"아니요, 괜찮아요.",tryRom:"Aniyo, gwaenchanayo.",tryTrans:'"No, it\'s okay."',fact:"Koreans often soften 'no' by adding explanations — direct refusals can feel blunt!"},
+  {day:10,week:2,hangul:"주세요",rom:"Juseyo",pron:"ju-se-yo",meaning:"Please give me / Please",category:"Basics",try:"물 주세요!",tryRom:"Mul juseyo!",tryTrans:'"Water, please!"',fact:"Attach this to any noun to politely request it. The most useful word in restaurants!"},
+  {day:11,week:2,hangul:"모르겠어요",rom:"Moreugeseoyo",pron:"mo-reu-ge-seo-yo",meaning:"I Don't Know",category:"Basics",try:"죄송해요, 모르겠어요.",tryRom:"Joesonghaeyo, moreugeseoyo.",tryTrans:'"Sorry, I don\'t know."',fact:"Very handy phrase for learners! Pair with 죄송해요 (sorry) to sound extra polite."},
+  {day:12,week:2,hangul:"다시 말해 주세요",rom:"Dasi malhae juseyo",pron:"da-si mal-hae ju-se-yo",meaning:"Please Say It Again",category:"Basics",try:"다시 말해 주세요!",tryRom:"Dasi malhae juseyo!",tryTrans:'"Please say it again!"',fact:"Your lifesaver phrase when learning Korean. Koreans will happily repeat for you!"},
+  {day:13,week:2,hangul:"저는",rom:"Jeoneun",pron:"jeo-neun",meaning:"I am / As for me",category:"Basics",try:"저는 [이름]이에요.",tryRom:"Jeoneun [name]ieyo.",tryTrans:'"I am [your name]."',fact:"저 (jeo) = humble 'I'. 는 (neun) = topic marker. Together: formal 'as for me'!"},
+  {day:14,week:2,hangul:"이름이 뭐예요?",rom:"Ireumi mwoyeyo?",pron:"i-reu-mi mwo-ye-yo",meaning:"What is your name?",category:"Basics",try:"이름이 뭐예요?",tryRom:"Ireumi mwoyeyo?",tryTrans:'"What is your name?"',fact:"이름 = name, 이 = subject marker, 뭐 = what, 예요 = is. Your first full question!"},
+
+  // WEEK 3 — Numbers
+  {day:15,week:3,hangul:"일",rom:"Il",pron:"il",meaning:"One · 1",category:"Numbers",try:"일 번이에요!",tryRom:"Il beonieyo!",tryTrans:'"It\'s number one!"',fact:"Korean has TWO number systems! 일(il) is Sino-Korean, used for dates, money, floors."},
+  {day:16,week:3,hangul:"이",rom:"I",pron:"ee",meaning:"Two · 2",category:"Numbers",try:"이 층에 있어요.",tryRom:"I cheunge isseoyo.",tryTrans:'"It\'s on the 2nd floor."',fact:"이 (i) = 2 in Sino-Korean. Used for floor numbers, phone numbers, and more!"},
+  {day:17,week:3,hangul:"삼",rom:"Sam",pron:"sahm",meaning:"Three · 3",category:"Numbers",try:"삼 분만 기다려요!",tryRom:"Sam bunman gidaryeoyo!",tryTrans:'"Wait just 3 minutes!"',fact:"삼겹살 (samgyeopsal = pork belly) literally means '3-layer meat'!"},
+  {day:18,week:3,hangul:"사",rom:"Sa",pron:"sah",meaning:"Four · 4",category:"Numbers",try:"사 층 버튼 눌러요!",tryRom:"Sa cheung beoteun nulleoyo!",tryTrans:'"Press the 4th floor button!"',fact:"Like Japanese, 4 (사/사) sounds like 死 (death) in Chinese. Some buildings skip floor 4!"},
+  {day:19,week:3,hangul:"오",rom:"O",pron:"oh",meaning:"Five · 5",category:"Numbers",try:"오 분 후에 와요!",tryRom:"O bun hue wayo!",tryTrans:'"Come in 5 minutes!"',fact:"오 (o) = 5. 오후 (ohu) = afternoon = literally 'after 5'... well, 'after noon'!"},
+  {day:20,week:3,hangul:"육",rom:"Yuk",pron:"yook",meaning:"Six · 6",category:"Numbers",try:"육 시에 만나요!",tryRom:"Yuk sie mannayo!",tryTrans:'"Let\'s meet at 6 o\'clock!"',fact:"육 (yuk) = 6. 육개장 is a spicy beef soup — a classic Korean comfort food!"},
+  {day:21,week:3,hangul:"칠",rom:"Chil",pron:"chil",meaning:"Seven · 7",category:"Numbers",try:"칠 월 생일이에요!",tryRom:"Chil wol saengirieyo!",tryTrans:'"My birthday is in July!"',fact:"칠 (chil) = 7. 칠월 = July (7th month). Months use Sino-Korean numbers!"},
+
+  // WEEK 4 — More Numbers & Time
+  {day:22,week:4,hangul:"팔",rom:"Pal",pron:"pahl",meaning:"Eight · 8",category:"Numbers",try:"팔 시에 일어나요.",tryRom:"Pal sie ireonayo.",tryTrans:'"I wake up at 8 o\'clock."',fact:"팔 (pal) = 8. 팔도 (paldo) = the 8 provinces of Korea — a classic phrase!"},
+  {day:23,week:4,hangul:"구",rom:"Gu",pron:"goo",meaning:"Nine · 9",category:"Numbers",try:"구 월에 여행 가요!",tryRom:"Gu wore yeohaeng gayo!",tryTrans:'"I\'m traveling in September!"',fact:"구 (gu) = 9. September = 구월, the 9th month. Simple and logical!"},
+  {day:24,week:4,hangul:"십",rom:"Sip",pron:"sip",meaning:"Ten · 10",category:"Numbers",try:"십 분 기다려요!",tryRom:"Sip bun gidaryeoyo!",tryTrans:'"Wait 10 minutes!"',fact:"십 (sip) = 10. 십일 = 11, 십이 = 12. Korean numbers are very logical!"},
+  {day:25,week:4,hangul:"백",rom:"Baek",pron:"baek",meaning:"One Hundred · 100",category:"Numbers",try:"백 원짜리 있어요?",tryRom:"Baek wonjjari isseoyo?",tryTrans:'"Do you have 100 won?"',fact:"100 Korean won ≈ about $0.07 USD. Prices in Korea have lots of zeros!"},
+  {day:26,week:4,hangul:"천",rom:"Cheon",pron:"cheon",meaning:"One Thousand · 1,000",category:"Numbers",try:"천 원 주세요.",tryRom:"Cheon won juseyo.",tryTrans:'"1,000 won, please."',fact:"₩1,000 ≈ about $0.75 USD. Convenience store snacks in Korea start around ₩1,000!"},
+  {day:27,week:4,hangul:"지금",rom:"Jigeum",pron:"ji-geum",meaning:"Now / Right Now",category:"Time",try:"지금 몇 시예요?",tryRom:"Jigeum myeot siyeyo?",tryTrans:'"What time is it now?"',fact:"지금 = now. This is your first full question in Korean! 잘 했어요 (well done)!"},
+  {day:28,week:4,hangul:"오늘",rom:"Oneul",pron:"o-neul",meaning:"Today",category:"Time",try:"오늘 날씨 좋다!",tryRom:"Oneul nalssi jota!",tryTrans:'"The weather is nice today!"',fact:"오늘 (today), 어제 (yesterday), 내일 (tomorrow) — learn these three together!"},
+
+  // WEEK 5 — Time & Days
+  {day:29,week:5,hangul:"내일",rom:"Naeil",pron:"nae-il",meaning:"Tomorrow",category:"Time",try:"내일 또 봐요!",tryRom:"Naeil tto bwayo!",tryTrans:'"See you again tomorrow!"',fact:"내일 봐요 is a super common K-drama farewell. You'll hear it all the time!"},
+  {day:30,week:5,hangul:"어제",rom:"Eoje",pron:"eo-je",meaning:"Yesterday",category:"Time",try:"어제 뭐 했어요?",tryRom:"Eoje mwo haesseoyo?",tryTrans:'"What did you do yesterday?"',fact:"어제 (yesterday) → 오늘 (today) → 내일 (tomorrow). Memorise as a set of three!"},
+  {day:31,week:5,hangul:"월요일",rom:"Woryoil",pron:"wol-yo-il",meaning:"Monday",category:"Days",try:"월요일에 만나요!",tryRom:"Woryoire mannayo!",tryTrans:'"Let\'s meet on Monday!"',fact:"월 (wol) = moon/month. 요일 (yoil) = day of the week. Monday = Moon Day!"},
+  {day:32,week:5,hangul:"화요일",rom:"Hwayoil",pron:"hwa-yo-il",meaning:"Tuesday",category:"Days",try:"화요일은 바빠요.",tryRom:"Hwayoireun bappayo.",tryTrans:'"Tuesday is busy."',fact:"화 (hwa) = fire. Tuesday = Fire Day. Same logic as Japanese 火曜日!"},
+  {day:33,week:5,hangul:"수요일",rom:"Suyoil",pron:"su-yo-il",meaning:"Wednesday",category:"Days",try:"수요일에 영화 봐요!",tryRom:"Suyoire yeonghwa bwayo!",tryTrans:'"I watch a movie on Wednesday!"',fact:"수 (su) = water. Wednesday = Water Day. Mid-week splash!"},
+  {day:34,week:5,hangul:"목요일",rom:"Mogyoil",pron:"mog-yo-il",meaning:"Thursday",category:"Days",try:"목요일에 친구 만나요.",tryRom:"Mogyoire chingu mannayo.",tryTrans:'"I meet a friend on Thursday."',fact:"목 (mok) = wood/tree. Thursday = Wood/Tree Day. Almost Friday!"},
+  {day:35,week:5,hangul:"금요일",rom:"Geumyoil",pron:"geum-yo-il",meaning:"Friday",category:"Days",try:"금요일이 제일 좋아요!",tryRom:"Geumyoiri jeil joayo!",tryTrans:'"Friday is the best!"',fact:"금 (geum) = gold. Friday = Gold Day. The most beloved day of the week!"},
+
+  // WEEK 6 — Days & Food
+  {day:36,week:6,hangul:"토요일",rom:"Toyoil",pron:"to-yo-il",meaning:"Saturday",category:"Days",try:"토요일에 뭐 해요?",tryRom:"Toyoire mwo haeyo?",tryTrans:'"What are you doing on Saturday?"',fact:"토 (to) = earth/soil. Saturday = Earth Day. Weekend energy!"},
+  {day:37,week:6,hangul:"일요일",rom:"Iryoil",pron:"il-yo-il",meaning:"Sunday",category:"Days",try:"일요일은 쉬는 날이에요.",tryRom:"Iryoireun swineun narieyo.",tryTrans:'"Sunday is a rest day."',fact:"일 (il) = sun. Sunday = Sun Day. Same as Japanese and English!"},
+  {day:38,week:6,hangul:"음식",rom:"Eumsik",pron:"eum-sik",meaning:"Food",category:"Food",try:"한국 음식 좋아해요!",tryRom:"Hanguk eumsik joahaeyo!",tryTrans:'"I like Korean food!"',fact:"한국 음식 (Hanguk eumsik) = Korean food. Also called 한식 (hansik) for short!"},
+  {day:39,week:6,hangul:"물",rom:"Mul",pron:"mool",meaning:"Water",category:"Food",try:"물 한 잔 주세요.",tryRom:"Mul han jan juseyo.",tryTrans:'"One glass of water, please."',fact:"물 is one of the first words every Korean learner needs! Short and easy!"},
+  {day:40,week:6,hangul:"밥",rom:"Bap",pron:"bap",meaning:"Rice / Meal",category:"Food",try:"밥 먹었어요?",tryRom:"Bap meogeosseoyo?",tryTrans:'"Have you eaten (rice)?"',fact:"'Have you eaten?' is a common Korean greeting showing care — not just about food!"},
+  {day:41,week:6,hangul:"김치",rom:"Gimchi",pron:"gim-chi",meaning:"Kimchi",category:"Food",try:"김치 맛있어요!",tryRom:"Gimchi massisseoyo!",tryTrans:'"Kimchi is delicious!"',fact:"Korea's most iconic dish! Over 200 types of kimchi exist. It's a UNESCO cultural heritage!"},
+  {day:42,week:6,hangul:"라면",rom:"Ramyeon",pron:"ra-myeon",meaning:"Instant Noodles",category:"Food",try:"라면 끓여 줄까요?",tryRom:"Ramyeon kkeuryeo julkkayo?",tryTrans:'"Shall I make you ramyeon?"',fact:"Offering to make someone ramyeon late at night in K-dramas = a romantic move!"},
+
+  // WEEK 7 — Food & Places
+  {day:43,week:7,hangul:"치킨",rom:"Chikin",pron:"chi-kin",meaning:"Fried Chicken",category:"Food",try:"치킨이랑 맥주!",tryRom:"Chikinrang maekju!",tryTrans:'"Fried chicken and beer!"',fact:"치맥 (chimek = chicken + beer) is Korea's most beloved combo. A national institution!"},
+  {day:44,week:7,hangul:"커피",rom:"Keopi",pron:"keo-pi",meaning:"Coffee",category:"Food",try:"커피 한 잔 어때요?",tryRom:"Keopi han jan eottaeyo?",tryTrans:'"How about a cup of coffee?"',fact:"Korea has one of the highest café densities in the world. Coffee culture is huge!"},
+  {day:45,week:7,hangul:"지하철역",rom:"Jihacheol yeok",pron:"ji-ha-cheol-yeok",meaning:"Subway Station",category:"Places",try:"지하철역이 어디예요?",tryRom:"Jihacheol yeogi eodiyeyo?",tryTrans:'"Where is the subway station?"',fact:"Seoul's subway system is one of the best in the world — clean, cheap and always on time!"},
+  {day:46,week:7,hangul:"화장실",rom:"Hwajangsil",pron:"hwa-jang-sil",meaning:"Restroom / Bathroom",category:"Places",try:"화장실이 어디예요?",tryRom:"Hwajangsilhwa eodiyeyo?",tryTrans:'"Where is the restroom?"',fact:"화장 (hwajang) = makeup/grooming. 실 (sil) = room. Bathroom = grooming room!"},
+  {day:47,week:7,hangul:"편의점",rom:"Pyeonuijeom",pron:"pyeo-nui-jeom",meaning:"Convenience Store",category:"Places",try:"편의점에 가요!",tryRom:"Pyeonuijeome gayo!",tryTrans:'"Let\'s go to the convenience store!"',fact:"CU, GS25, 7-Eleven — Korean convenience stores sell everything, even hot food 24/7!"},
+  {day:48,week:7,hangul:"학교",rom:"Hakgyo",pron:"hak-gyo",meaning:"School",category:"Places",try:"학교 재미있어요!",tryRom:"Hakgyo jaemiisseoyo!",tryTrans:'"School is fun!"',fact:"학 (hak) = learning, 교 (gyo) = teaching. School = 'learning and teaching place'!"},
+  {day:49,week:7,hangul:"집",rom:"Jip",pron:"jip",meaning:"Home / House",category:"Places",try:"집에 가고 싶어요.",tryRom:"Jibe gago sipeoyo.",tryTrans:'"I want to go home."',fact:"집 (jip) is home. 우리 집 (uri jip = our home) is how Koreans affectionately say 'my house'!"},
+
+  // WEEK 8 — Verbs
+  {day:50,week:8,hangul:"먹어요",rom:"Meogeoyo",pron:"meo-geo-yo",meaning:"To Eat / I eat",category:"Verbs",try:"김치찌개 먹어요!",tryRom:"Gimchijjigae meogeoyo!",tryTrans:'"I eat kimchi stew!"',fact:"먹다 (meokda) = to eat. 먹어요 is the polite present form. Essential verb!"},
+  {day:51,week:8,hangul:"마셔요",rom:"Masyeoyo",pron:"ma-syeo-yo",meaning:"To Drink / I drink",category:"Verbs",try:"커피 마셔요.",tryRom:"Keopi masyeoyo.",tryTrans:'"I drink coffee."',fact:"마시다 (masida) = to drink. 마셔요 is the polite form. Pair with any beverage!"},
+  {day:52,week:8,hangul:"가요",rom:"Gayo",pron:"ga-yo",meaning:"To Go / I go",category:"Verbs",try:"학교에 가요!",tryRom:"Hakgyoe gayo!",tryTrans:'"I go to school!"',fact:"가다 (gada) = to go. 가요 = polite present. Also the word for Korean pop music!"},
+  {day:53,week:8,hangul:"와요",rom:"Wayo",pron:"wa-yo",meaning:"To Come / I come",category:"Verbs",try:"빨리 와요!",tryRom:"Ppalli wayo!",tryTrans:'"Come quickly!"',fact:"오다 (oda) = to come. 빨리 (ppalli) = quickly/hurry. A very K-drama phrase!"},
+  {day:54,week:8,hangul:"봐요",rom:"Bwayo",pron:"bwa-yo",meaning:"To Watch / See",category:"Verbs",try:"드라마 봐요!",tryRom:"Deurama bwayo!",tryTrans:'"I watch dramas!"',fact:"보다 (boda) = to see/watch/look. Perfect for K-drama addicts!"},
+  {day:55,week:8,hangul:"들어요",rom:"Deuroyo",pron:"deu-reo-yo",meaning:"To Listen / Hear",category:"Verbs",try:"K-pop 들어요!",tryRom:"K-pop deuroyo!",tryTrans:'"I listen to K-pop!"',fact:"듣다 (deutda) = to listen. An irregular verb — 듣 becomes 들 before vowels!"},
+  {day:56,week:8,hangul:"사요",rom:"Sayo",pron:"sa-yo",meaning:"To Buy / I buy",category:"Verbs",try:"옷 사러 가요!",tryRom:"Ot sareo gayo!",tryTrans:'"I\'m going to buy clothes!"',fact:"사다 (sada) = to buy. 사러 가요 = 'going to buy'. Shopping is a cultural event in Korea!"},
+
+  // WEEK 9 — More Verbs
+  {day:57,week:9,hangul:"말해요",rom:"Malhaeyo",pron:"mal-hae-yo",meaning:"To Speak / Talk",category:"Verbs",try:"한국어로 말해요!",tryRom:"Hangugeurо malhaeyo!",tryTrans:'"I speak in Korean!"',fact:"말하다 (malhada) = to speak. 말 (mal) also means 'horse' — same pronunciation!"},
+  {day:58,week:9,hangul:"읽어요",rom:"Ilgeoyo",pron:"il-geo-yo",meaning:"To Read",category:"Verbs",try:"책 읽어요.",tryRom:"Chaek ilgeoyo.",tryTrans:'"I read a book."',fact:"읽다 (ikda) = to read. Pronunciation changes! 읽 is pronounced 'ik' before consonants."},
+  {day:59,week:9,hangul:"써요",rom:"Sseoyo",pron:"sseo-yo",meaning:"To Write / Use",category:"Verbs",try:"한글로 써요!",tryRom:"Hangeullо sseoyo!",tryTrans:'"I write in Hangul!"',fact:"쓰다 (sseuda) = to write or to use. Dual meaning! Context tells you which one!"},
+  {day:60,week:9,hangul:"자요",rom:"Jayo",pron:"ja-yo",meaning:"To Sleep",category:"Verbs",try:"잘 자요! 굿나잇!",tryRom:"Jal jayo! Gutnaet!",tryTrans:'"Sleep well! Goodnight!"',fact:"자다 (jada) = to sleep. 잘 자요 (jal jayo) = sleep well — the Korean goodnight!"},
+  {day:61,week:9,hangul:"일어나요",rom:"Ireonayo",pron:"i-reo-na-yo",meaning:"To Wake Up / Get Up",category:"Verbs",try:"일찍 일어나요!",tryRom:"Iljjik ireonayo!",tryTrans:'"I wake up early!"',fact:"일어나다 (ireonada) = to wake up/stand up. 일어나! is what moms shout in the morning!"},
+  {day:62,week:9,hangul:"놀아요",rom:"Norayo",pron:"no-ra-yo",meaning:"To Play / Hang Out",category:"Verbs",try:"오늘 같이 놀아요!",tryRom:"Oneul gachi norayo!",tryTrans:'"Let\'s hang out together today!"',fact:"놀다 (nolda) = to play/hang out. 놀자 (nollja) = casual 'let's hang out!'"},
+  {day:63,week:9,hangul:"공부해요",rom:"Gongbuhaeyo",pron:"gong-bu-hae-yo",meaning:"To Study",category:"Verbs",try:"한국어 공부해요!",tryRom:"Hangugeo gongbuhaeyo!",tryTrans:'"I study Korean!"',fact:"공부 (gongbu) = study + 하다 (hada) = to do. Study = 'do studying'. Same pattern as Japanese!"},
+
+  // WEEK 10 — Adjectives
+  {day:64,week:10,hangul:"귀여워요",rom:"Gwiyeowoyo",pron:"gwi-yeo-wo-yo",meaning:"Cute / Adorable",category:"Adjectives",try:"너무 귀여워요!",tryRom:"Neomu gwiyeowoyo!",tryTrans:'"So cute!"',fact:"귀엽다 (gwiyeopda) = cute. 너무 (neomu) = too much/very. The ultimate K-pop compliment!"},
+  {day:65,week:10,hangul:"멋있어요",rom:"Meossisseoyo",pron:"meos-sis-seo-yo",meaning:"Cool / Stylish / Hot",category:"Adjectives",try:"와, 진짜 멋있어요!",tryRom:"Wa, jinjja meossisseoyo!",tryTrans:'"Wow, you\'re so cool!"',fact:"멋있다 (meossitda) = cool/stylish. The compliment idols get from fans at airports!"},
+  {day:66,week:10,hangul:"맛있어요",rom:"Massisseoyo",pron:"mas-sis-seo-yo",meaning:"Delicious / Tasty",category:"Adjectives",try:"이거 진짜 맛있어요!",tryRom:"Igeo jinjja massisseoyo!",tryTrans:'"This is really delicious!"',fact:"맛있다 (masitda) = delicious. 맛없다 (mateoptda) = not tasty. 맛 (mat) = taste/flavor!"},
+  {day:67,week:10,hangul:"재미있어요",rom:"Jaemiisseoyo",pron:"jae-mi-is-seo-yo",meaning:"Fun / Interesting",category:"Adjectives",try:"한국어 진짜 재미있어요!",tryRom:"Hangugeo jinjja jaemiisseoyo!",tryTrans:'"Korean is really fun!"',fact:"재미있다 = fun/interesting. 재미없다 = boring. 재미 (jaemi) = fun/interest!"},
+  {day:68,week:10,hangul:"어려워요",rom:"Eoryeowoyo",pron:"eo-ryeo-wo-yo",meaning:"Difficult / Hard",category:"Adjectives",try:"한국어가 어려워요...",tryRom:"Hangugeoga eoryeowoyo...",tryTrans:'"Korean is difficult..."',fact:"어렵다 (eoryeopda) = difficult. But you're doing it! 화이팅 (hwaiting) = you got this!"},
+  {day:69,week:10,hangul:"쉬워요",rom:"Swiwoyo",pron:"swi-wo-yo",meaning:"Easy",category:"Adjectives",try:"이거 쉬워요!",tryRom:"Igeo swiwoyo!",tryTrans:'"This is easy!"',fact:"쉽다 (swipda) = easy. The opposite of 어렵다! You'll be saying this soon enough!"},
+  {day:70,week:10,hangul:"대박이에요",rom:"Daebagiеyo",pron:"dae-bak-i-e-yo",meaning:"Amazing / Jackpot / Awesome",category:"Adjectives",try:"대박이에요! 진짜요?",tryRom:"Daebagiеyo! Jinjjayo?",tryTrans:'"No way! Seriously?"',fact:"대박 (daebak) literally means 'jackpot'. Now it's the ultimate hype word in Korean!"},
+
+  // WEEK 11 — Feelings & Social
+  {day:71,week:11,hangul:"좋아해요",rom:"Joahaeyo",pron:"jo-a-hae-yo",meaning:"I like / love",category:"Feelings",try:"한국 좋아해요!",tryRom:"Hanguk joahaeyo!",tryTrans:'"I like Korea!"',fact:"좋아하다 (joahada) = to like. 사랑해요 (saranghaeyo) = I love you — for deeper love!"},
+  {day:72,week:11,hangul:"싫어해요",rom:"Sirohaeyo",pron:"si-reo-hae-yo",meaning:"I dislike",category:"Feelings",try:"거미 싫어해요!",tryRom:"Geomi sirohaeyo!",tryTrans:'"I dislike spiders!"',fact:"싫어하다 (siroehada) = to dislike. The opposite of 좋아하다. Very honest feeling!"},
+  {day:73,week:11,hangul:"행복해요",rom:"Haengbokaeyo",pron:"haeng-bok-hae-yo",meaning:"Happy",category:"Feelings",try:"오늘 너무 행복해요!",tryRom:"Oneul neomu haengbokaeyo!",tryTrans:'"I\'m so happy today!"',fact:"행복 (haengbok) = happiness. 행복하세요! = 'Be happy!' — a warm Korean blessing!"},
+  {day:74,week:11,hangul:"슬퍼요",rom:"Seulpeoyo",pron:"seul-peo-yo",meaning:"Sad",category:"Feelings",try:"왜 슬퍼요?",tryRom:"Wae seulpeoyo?",tryTrans:'"Why are you sad?"',fact:"슬프다 (seulpeuda) = sad. 왜 (wae) = why. A K-drama staple line between lovers!"},
+  {day:75,week:11,hangul:"친구",rom:"Chingu",pron:"chin-gu",meaning:"Friend (same age)",category:"Social",try:"내 친구야, 반가워!",tryRom:"Nae chinguya, bangawo!",tryTrans:'"My friend, nice to see you!"',fact:"친구 strictly means a same-age friend in Korean! Age matters in friendships here."},
+  {day:76,week:11,hangul:"오빠",rom:"Oppa",pron:"op-pa",meaning:"Older brother (said by girls)",category:"Social",try:"오빠, 기다려!",tryRom:"Oppa, gidaryeo!",tryTrans:'"Oppa, wait for me!"',fact:"오빠 = older brother, but girls use it for any older guy they're close to. K-drama essential!"},
+  {day:77,week:11,hangul:"언니",rom:"Eonni",pron:"eon-ni",meaning:"Older sister (said by girls)",category:"Social",try:"언니 최고예요!",tryRom:"Eonni choegoye yo!",tryTrans:'"Unnie is the best!"',fact:"언니 = older sister between girls. 오빠/언니/형/누나 — Korean has all the sibling terms!"},
+
+  // WEEK 12 — Colors
+  {day:78,week:12,hangul:"빨간색",rom:"Ppalganasaek",pron:"ppal-gan-saek",meaning:"Red",category:"Colors",try:"빨간색 좋아해요!",tryRom:"Ppalganasaek joahaeyo!",tryTrans:'"I like red!"',fact:"빨간색 = red. 색 (saek) = color. Red is considered lucky and protective in Korean culture!"},
+  {day:79,week:12,hangul:"파란색",rom:"Paranasaek",pron:"pa-ran-saek",meaning:"Blue",category:"Colors",try:"파란색 하늘 예뻐요!",tryRom:"Paranasaek haneul yeppeoyo!",tryTrans:'"The blue sky is pretty!"',fact:"파란색 = blue. 하늘 (haneul) = sky. Blue sky is a symbol of freedom in Korean culture!"},
+  {day:80,week:12,hangul:"하얀색",rom:"Hayanasaek",pron:"ha-yan-saek",meaning:"White",category:"Colors",try:"하얀색 옷 입었어요.",tryRom:"Hayanasaek ot ibeoasseoyo.",tryTrans:'"I wore white clothes."',fact:"하얀색 = white. White is the color of Korean traditional dress — hanbok at ceremonies!"},
+  {day:81,week:12,hangul:"검은색",rom:"Geomeunsaek",pron:"geo-meun-saek",meaning:"Black",category:"Colors",try:"검은색 고양이 귀여워요!",tryRom:"Geomeunsaek goyangi gwiyeowoyo!",tryTrans:'"Black cats are cute!"',fact:"검은색 = black. 고양이 (goyangi) = cat. Your calico companion loves all colors!"},
+  {day:82,week:12,hangul:"노란색",rom:"Noransaek",pron:"no-ran-saek",meaning:"Yellow",category:"Colors",try:"노란색 꽃이 예뻐요!",tryRom:"Noransaek kkochi yeppeoyo!",tryTrans:'"Yellow flowers are pretty!"',fact:"노란색 = yellow. 꽃 (kkot) = flower. Forsythia (개나리) is Korea's iconic yellow flower!"},
+  {day:83,week:12,hangul:"초록색",rom:"Choroksaek",pron:"cho-rok-saek",meaning:"Green",category:"Colors",try:"초록색 차 마셔요!",tryRom:"Choroksaek cha masyeoyo!",tryTrans:'"I drink green tea!"',fact:"초록색 = green. 녹차 (nokcha) = green tea — Korea has amazing green tea from Boseong!"},
+  {day:84,week:12,hangul:"보라색",rom:"Borasaek",pron:"bo-ra-saek",meaning:"Purple",category:"Colors",try:"보라색 좋아해요!",tryRom:"Borasaek joahaeyo!",tryTrans:'"I like purple!"',fact:"보라색 = purple. 보라해 (borahae) = 'I purple you' — BTS ARMY's signature phrase of love!"},
+
+  // WEEK 13 — Culture & K-Pop
+  {day:85,week:13,hangul:"한국",rom:"Hanguk",pron:"han-guk",meaning:"Korea / South Korea",category:"Culture",try:"한국에 가고 싶어요!",tryRom:"Hanguge gago sipeoyo!",tryTrans:'"I want to go to Korea!"',fact:"한국 = Korea. 한 (han) = Korean people/nation. 국 (guk) = country. 한국 = Korean country!"},
+  {day:86,week:13,hangul:"한국어",rom:"Hangugeo",pron:"han-gu-geo",meaning:"Korean Language",category:"Culture",try:"저는 한국어 공부해요!",tryRom:"Jeoneun hangugeo gongbuhaeyo!",tryTrans:'"I study Korean!"',fact:"한국 (Korea) + 어 (language) = 한국어. You are already speaking it! 대박이에요!"},
+  {day:87,week:13,hangul:"K-pop",rom:"K-pop",pron:"kei-pop",meaning:"Korean Pop Music",category:"Culture",try:"K-pop 진짜 좋아해요!",tryRom:"K-pop jinjja joahaeyo!",tryTrans:'"I really love K-pop!"',fact:"K-pop idols train for years in singing, dancing & languages. The global K-wave is real!"},
+  {day:88,week:13,hangul:"드라마",rom:"Deurama",pron:"deu-ra-ma",meaning:"Drama / K-Drama",category:"Culture",try:"드라마 보면서 공부해요!",tryRom:"Deurama bomyeonseo gongbuhaeyo!",tryTrans:'"I study while watching dramas!"',fact:"K-dramas are one of the best ways to learn Korean! Subtitles + emotions = fast learning!"},
+  {day:89,week:13,hangul:"수고했어요",rom:"Sugohasseoyo",pron:"su-go-hae-sseo-yo",meaning:"Good Work / Well Done",category:"Culture",try:"오늘도 수고했어요!",tryRom:"Oneuldo sugohasseoyo!",tryTrans:'"Good work today too!"',fact:"수고 = hard work/effort. This phrase shows deep respect for someone's effort and dedication!"},
+  {day:90,week:13,hangul:"화이팅",rom:"Hwaiting",pron:"hwa-i-ting",meaning:"Fighting! / You Got This!",category:"Culture",try:"화이팅! 할 수 있어요!",tryRom:"Hwaiting! Hal su isseoyo!",tryTrans:'"Fighting! You can do it!"',fact:"Day 90! 화이팅 (hwaiting) from 'fighting' = ultimate Korean cheer. You did it! 대박이에요! 🎉"},
+];
+
+// ═══════════════════════════════════════
+// CATEGORY EMOJIS & FLORALS
+// ═══════════════════════════════════════
+const catEmojis = {
+  'Greetings':'👋','Basics':'💬','Numbers':'🔢','Time':'⏰',
+  'Days':'📅','Food':'🍜','Places':'📍','Verbs':'🏃',
+  'Adjectives':'✨','Feelings':'💭','Social':'👥','Colors':'🎨','Culture':'🇰🇷'
+};
+const floralSet = ['🌷','🌸','🌼','🌺','💐','🌹','🪷','🌻'];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let completed = new Set(JSON.parse(localStorage.getItem('krCompleted') || '[]'));
+let currentCardIdx = 0;
+let isFlipped = false;
+let currentModalDay = null;
+
+function saveProgress() {
+  localStorage.setItem('krCompleted', JSON.stringify([...completed]));
+}
+
+// ═══════════════════════════════════════
+// FLOATING FLORALS
+// ═══════════════════════════════════════
+function spawnFlorals() {
+  const bg = document.getElementById('floralBg');
+  for (let i = 0; i < 22; i++) {
+    const p = document.createElement('div');
+    p.className = 'floral-petal';
+    p.textContent = floralSet[Math.floor(Math.random() * floralSet.length)];
+    p.style.left = Math.random() * 100 + '%';
+    p.style.fontSize = (10 + Math.random() * 14) + 'px';
+    p.style.animationDuration = (10 + Math.random() * 14) + 's';
+    p.style.animationDelay = (-Math.random() * 20) + 's';
+    bg.appendChild(p);
+  }
+}
+spawnFlorals();
+
+// ═══════════════════════════════════════
+// VIEW SWITCHING
+// ═══════════════════════════════════════
+function showView(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name === 'stats') updateStats();
+  if (name === 'categories') buildCategories();
+  if (name === 'flashcard') updateCard();
+  updateProgressBar();
+}
+
+// ═══════════════════════════════════════
+// PROGRESS
+// ═══════════════════════════════════════
+function updateProgressBar() {
+  const done = completed.size;
+  const pct = Math.round(done / 90 * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressDone').textContent = done + ' cards done';
+  document.getElementById('progressLeft').textContent = (90 - done) + ' remaining';
+}
+
+// ═══════════════════════════════════════
+// TIMETABLE
+// ═══════════════════════════════════════
+function buildTimetable() {
+  const container = document.getElementById('timetableGrid');
+  const weeks = {};
+  cards.forEach(c => {
+    if (!weeks[c.week]) weeks[c.week] = [];
+    weeks[c.week].push(c);
+  });
+
+  let html = '';
+  Object.keys(weeks).forEach(wk => {
+    const wkCards = weeks[wk];
+    const theme = wkCards[0].category;
+    html += `<div class="week-section">
+      <div class="week-header">
+        <span class="week-badge">Week ${wk}</span>
+        <span class="week-theme">${theme} & more</span>
+      </div>
+      <div class="days-grid">`;
+    wkCards.forEach(c => {
+      const isDone = completed.has(c.day);
+      html += `<div class="day-cell ${isDone ? 'completed' : ''}" onclick="openDayModal(${c.day - 1})">
+        <span class="day-num">${c.day}</span>
+        <span class="day-hangul">${c.hangul.length > 2 ? c.hangul.substring(0,2) : c.hangul}</span>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  container.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════
+function openDayModal(idx) {
+  const c = cards[idx];
+  currentModalDay = idx;
+  document.getElementById('modalHangul').textContent = c.hangul;
+  document.getElementById('modalRomaji').textContent = c.rom;
+  document.getElementById('modalPronunciation').textContent = c.pron;
+  document.getElementById('modalMeaning').textContent = c.meaning;
+  document.getElementById('modalFact').textContent = c.fact;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+}
+function studyThisCard() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  currentCardIdx = currentModalDay;
+  updateCard();
+  const tabs = document.querySelectorAll('.nav-tab');
+  showView('flashcard', tabs[1]);
+  tabs.forEach(t => t.classList.remove('active'));
+  tabs[1].classList.add('active');
+}
+
+// ═══════════════════════════════════════
+// FLASHCARD
+// ═══════════════════════════════════════
+function updateCard() {
+  const c = cards[currentCardIdx];
+  isFlipped = false;
+  document.getElementById('flashcardInner').classList.remove('flipped');
+  document.getElementById('cardDayLabel').textContent = `Day ${c.day} of 90`;
+  document.getElementById('cardCategory').textContent = `── ${c.category} ──`;
+  document.getElementById('cardWeek').textContent = `Week ${c.week}`;
+  document.getElementById('cardHangul').textContent = c.hangul;
+  document.getElementById('cardRomanization').textContent = c.rom;
+  document.getElementById('cardPronunciation').textContent = c.pron;
+  document.getElementById('cardMeaning').textContent = c.meaning;
+  document.getElementById('backTry').textContent = c.try;
+  document.getElementById('backRomanized').textContent = c.tryRom;
+  document.getElementById('backTranslation').textContent = c.tryTrans;
+  document.getElementById('backFact').textContent = c.fact;
+  document.getElementById('prevBtn').disabled = currentCardIdx === 0;
+  document.getElementById('nextBtn').disabled = currentCardIdx === 89;
+}
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('flashcardInner').classList.toggle('flipped', isFlipped);
+}
+function navigateCard(dir) {
+  currentCardIdx = Math.max(0, Math.min(89, currentCardIdx + dir));
+  updateCard();
+}
+function markGotIt() {
+  completed.add(cards[currentCardIdx].day);
+  saveProgress(); updateProgressBar(); buildTimetable();
+  if (currentCardIdx < 89) { currentCardIdx++; updateCard(); }
+}
+function markAgain() {
+  completed.delete(cards[currentCardIdx].day);
+  saveProgress(); updateProgressBar(); buildTimetable();
+}
+
+// ═══════════════════════════════════════
+// CATEGORIES
+// ═══════════════════════════════════════
+function buildCategories() {
+  const cats = {};
+  cards.forEach(c => {
+    if (!cats[c.category]) cats[c.category] = { total: 0, done: 0 };
+    cats[c.category].total++;
+    if (completed.has(c.day)) cats[c.category].done++;
+  });
+  let html = '';
+  Object.keys(cats).forEach(cat => {
+    const {total, done} = cats[cat];
+    const pct = Math.round(done/total*100);
+    html += `<div class="cat-card" onclick="studyCat('${cat}')">
+      <span class="cat-emoji">${catEmojis[cat] || '📚'}</span>
+      <div class="cat-name">${cat}</div>
+      <div class="cat-count">${done}/${total} done</div>
+      <div class="cat-bar"><div class="cat-bar-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  });
+  document.getElementById('catGrid').innerHTML = html;
+}
+function studyCat(cat) {
+  const firstCard = cards.findIndex(c => c.category === cat);
+  if (firstCard >= 0) {
+    currentCardIdx = firstCard;
+    updateCard();
+    const tabs = document.querySelectorAll('.nav-tab');
+    tabs.forEach(t => t.classList.remove('active'));
+    tabs[1].classList.add('active');
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-flashcard').classList.add('active');
+  }
+}
+
+// ═══════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════
+function updateStats() {
+  const done = completed.size;
+  const pct = Math.round(done/90*100);
+  const currentWeek = Math.min(13, Math.ceil((currentCardIdx + 1) / 7));
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('statLeft').textContent = 90 - done;
+  document.getElementById('statWeek').textContent = 'Wk ' + currentWeek;
+  document.getElementById('statPct').textContent = pct + '%';
+  const sv = document.getElementById('streakVal');
+  if (done === 0) sv.textContent = 'Start today! 🌷';
+  else if (done < 10) sv.textContent = `${done} cards! Keep going! 🌸`;
+  else if (done < 30) sv.textContent = `${done} done! You're on fire 🔥`;
+  else if (done < 60) sv.textContent = `Halfway there! 대박! ⭐`;
+  else if (done < 90) sv.textContent = `Almost done! 화이팅! 💪`;
+  else sv.textContent = `완료! All 90 done! 🎉`;
+}
+
+// INIT
+buildTimetable();
+updateCard();
+updateProgressBar();
+</script>
+</body>
+</html>

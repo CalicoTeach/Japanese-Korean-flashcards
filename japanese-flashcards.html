@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>にほんご 90-Day Journey 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sakura: #ffb7c5;
+    --sakura-deep: #e8678a;
+    --sakura-light: #ffe4ec;
+    --cream: #fff9f5;
+    --soft-orange: #ffcba4;
+    --calico-brown: #c47a3a;
+    --calico-black: #2d1a0e;
+    --leaf: #a8c5a0;
+    --sky: #b8d4e8;
+    --gold: #f5c842;
+    --text: #2d1a0e;
+    --card-shadow: 0 8px 32px rgba(228, 103, 138, 0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SAKURA PETALS BACKGROUND */
+  .petal-bg {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .petal {
+    position: absolute;
+    width: 12px; height: 12px;
+    background: var(--sakura);
+    border-radius: 50% 0 50% 0;
+    opacity: 0.35;
+    animation: fall linear infinite;
+  }
+  .petal:nth-child(odd) { border-radius: 0 50% 0 50%; background: #f7c0cc; }
+  @keyframes fall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 0.4; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* HEADER */
+  header {
+    position: relative; z-index: 10;
+    background: linear-gradient(135deg, var(--sakura-deep) 0%, #f4a0b8 50%, var(--soft-orange) 100%);
+    padding: 20px 24px 16px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(228,103,138,0.3);
+  }
+  .header-cat {
+    font-size: 3rem;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+    animation: bounce 2.5s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  header h1 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    letter-spacing: -0.5px;
+  }
+  header p {
+    color: rgba(255,255,255,0.9);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .jp-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.85);
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    position: relative; z-index: 10;
+    background: white;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--sakura-light);
+  }
+  .progress-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--sakura-deep);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .progress-bar-bg {
+    background: var(--sakura-light);
+    border-radius: 20px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sakura-deep), var(--gold));
+    border-radius: 20px;
+    transition: width 0.5s ease;
+  }
+  .progress-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #999;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    position: relative; z-index: 10;
+    display: flex;
+    background: white;
+    border-bottom: 2px solid var(--sakura-light);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    flex: none;
+    padding: 12px 18px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #bbb;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none;
+    border-top: none; border-left: none; border-right: none;
+  }
+  .nav-tab.active {
+    color: var(--sakura-deep);
+    border-bottom-color: var(--sakura-deep);
+  }
+  .nav-tab:hover { color: var(--sakura-deep); }
+
+  /* VIEWS */
+  .view { display: none; position: relative; z-index: 5; }
+  .view.active { display: block; }
+
+  /* ═══════════════════════════
+     TIMETABLE VIEW
+  ═══════════════════════════ */
+  .timetable-view {
+    padding: 16px;
+  }
+  .week-section {
+    margin-bottom: 20px;
+  }
+  .week-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .week-badge {
+    background: linear-gradient(135deg, var(--sakura-deep), #f4a0b8);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 900;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .week-theme {
+    font-size: 0.8rem;
+    color: #999;
+    font-weight: 700;
+  }
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+  }
+  .day-cell {
+    aspect-ratio: 1;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+  .day-cell:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+  }
+  .day-cell.completed {
+    background: linear-gradient(135deg, #ffe0ea, #ffd4e8);
+    border-color: var(--sakura);
+  }
+  .day-cell.today {
+    background: linear-gradient(135deg, var(--sakura-deep), #f4a0b8);
+    border-color: var(--sakura-deep);
+    box-shadow: 0 4px 16px rgba(228,103,138,0.4);
+  }
+  .day-cell.today .day-num { color: white; }
+  .day-cell.today .day-kana { color: rgba(255,255,255,0.85); }
+  .day-num {
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: var(--calico-brown);
+    line-height: 1;
+  }
+  .day-kana {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.65rem;
+    color: var(--sakura-deep);
+    margin-top: 2px;
+    line-height: 1;
+  }
+  .day-cell.completed .day-num { color: var(--sakura-deep); }
+  .day-cell.completed::after {
+    content: '✓';
+    position: absolute;
+    top: 2px; right: 4px;
+    font-size: 0.5rem;
+    color: var(--sakura-deep);
+    font-weight: 900;
+  }
+
+  /* ═══════════════════════════
+     FLASHCARD VIEW
+  ═══════════════════════════ */
+  .card-view {
+    padding: 16px;
+    min-height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .card-nav-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .card-nav-btn {
+    background: white;
+    border: 2px solid var(--sakura-light);
+    border-radius: 12px;
+    width: 44px; height: 44px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    color: var(--sakura-deep);
+  }
+  .card-nav-btn:hover { background: var(--sakura-light); }
+  .card-nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .card-day-info {
+    text-align: center;
+  }
+  .card-day-info .day-label {
+    font-size: 0.75rem;
+    font-weight: 900;
+    color: var(--sakura-deep);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .card-day-info .day-category {
+    font-size: 0.7rem;
+    color: #bbb;
+    font-weight: 700;
+  }
+
+  /* THE FLASHCARD */
+  .flashcard-container {
+    width: 100%;
+    max-width: 360px;
+    perspective: 1000px;
+    cursor: pointer;
+    margin: 8px 0;
+  }
+  .flashcard-inner {
+    position: relative;
+    width: 100%;
+    padding-top: 130%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .flashcard-inner.flipped { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 24px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--card-shadow);
+  }
+  .card-front {
+    background: linear-gradient(145deg, #fff 0%, #fff5f8 100%);
+    border: 2px solid var(--sakura-light);
+  }
+  .card-back {
+    background: linear-gradient(145deg, #fff5f8 0%, #ffe4ec 100%);
+    border: 2px solid var(--sakura);
+    transform: rotateY(180deg);
+  }
+  .card-sakura-deco {
+    position: absolute;
+    font-size: 4rem;
+    opacity: 0.06;
+    top: 10px; right: 10px;
+    pointer-events: none;
+  }
+  .card-week-tag {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--sakura-deep);
+    background: var(--sakura-light);
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 4px;
+  }
+  .card-kana {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--calico-black);
+    line-height: 1;
+    text-align: center;
+  }
+  .card-romaji {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--calico-brown);
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+  .card-pronunciation {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #bbb;
+    text-align: center;
+    font-style: italic;
+  }
+  .card-meaning {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--sakura-deep);
+    text-align: center;
+    margin-top: 4px;
+  }
+  .card-tap-hint {
+    font-size: 0.65rem;
+    color: #ccc;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+  /* Back face */
+  .back-label {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--sakura-deep);
+    background: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .back-try {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--calico-brown);
+    text-align: center;
+    margin-top: 6px;
+  }
+  .back-translation {
+    font-size: 0.82rem;
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    font-weight: 600;
+  }
+  .back-divider {
+    width: 40px;
+    height: 2px;
+    background: var(--sakura);
+    border-radius: 2px;
+    margin: 8px 0;
+  }
+  .back-did-you-know {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #bbb;
+  }
+  .back-fact {
+    font-size: 0.8rem;
+    color: var(--text);
+    text-align: center;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .cat-mascot-card {
+    font-size: 1.4rem;
+    margin-top: 8px;
+  }
+
+  /* CARD ACTIONS */
+  .card-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    width: 100%;
+    max-width: 360px;
+  }
+  .action-btn {
+    flex: 1;
+    padding: 14px 12px;
+    border-radius: 16px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-got-it {
+    background: linear-gradient(135deg, var(--sakura-deep), #f4a0b8);
+    color: white;
+    box-shadow: 0 4px 16px rgba(228,103,138,0.35);
+  }
+  .btn-got-it:hover { transform: translateY(-2px); }
+  .btn-again {
+    background: white;
+    color: var(--sakura-deep);
+    border: 2px solid var(--sakura-light);
+  }
+  .btn-again:hover { background: var(--sakura-light); }
+
+  /* ═══════════════════════════
+     CATEGORIES VIEW
+  ═══════════════════════════ */
+  .categories-view {
+    padding: 16px;
+  }
+  .cat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .cat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .cat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--card-shadow);
+    border-color: var(--sakura);
+  }
+  .cat-emoji { font-size: 2.2rem; display: block; margin-bottom: 8px; }
+  .cat-name { font-size: 0.9rem; font-weight: 900; color: var(--text); }
+  .cat-count { font-size: 0.72rem; color: #bbb; font-weight: 700; margin-top: 2px; }
+  .cat-bar {
+    margin-top: 8px;
+    background: var(--sakura-light);
+    border-radius: 10px;
+    height: 6px;
+    overflow: hidden;
+  }
+  .cat-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sakura-deep), var(--gold));
+    border-radius: 10px;
+    transition: width 0.5s;
+  }
+
+  /* ═══════════════════════════
+     STATS VIEW
+  ═══════════════════════════ */
+  .stats-view {
+    padding: 16px;
+  }
+  .stats-hero {
+    background: linear-gradient(135deg, var(--sakura-deep) 0%, #f4a0b8 100%);
+    border-radius: 24px;
+    padding: 24px;
+    text-align: center;
+    color: white;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stats-hero-cat { font-size: 3rem; display: block; margin-bottom: 8px; }
+  .stats-hero h2 { font-size: 1.3rem; font-weight: 900; }
+  .stats-hero p { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .stat-icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+  .stat-val { font-size: 1.6rem; font-weight: 900; color: var(--sakura-deep); }
+  .stat-label { font-size: 0.7rem; font-weight: 700; color: #bbb; text-transform: uppercase; letter-spacing: 0.5px; }
+  .streak-section {
+    background: linear-gradient(135deg, var(--soft-orange) 0%, var(--gold) 100%);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .streak-flame { font-size: 3rem; }
+  .streak-text h3 { font-size: 1.1rem; font-weight: 900; color: var(--calico-black); }
+  .streak-text p { font-size: 0.8rem; color: rgba(45,26,14,0.7); font-weight: 600; }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: white;
+    border-top: 2px solid var(--sakura-light);
+    display: flex;
+    z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .bnav-btn {
+    flex: 1;
+    padding: 12px 8px 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.2s;
+  }
+  .bnav-icon { font-size: 1.4rem; line-height: 1; }
+  .bnav-label { font-size: 0.62rem; font-weight: 800; color: #ccc; text-transform: uppercase; letter-spacing: 0.5px; }
+  .bnav-btn.active .bnav-label { color: var(--sakura-deep); }
+  .bnav-btn.active .bnav-icon { filter: none; }
+
+  /* MODAL for day click */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-sheet {
+    background: white;
+    border-radius: 28px 28px 0 0;
+    padding: 24px 20px 40px;
+    width: 100%;
+    max-width: 480px;
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .modal-handle {
+    width: 40px; height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+  .modal-kana {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 3.5rem;
+    text-align: center;
+    display: block;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .modal-romaji {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--calico-brown);
+    margin-bottom: 4px;
+  }
+  .modal-pronunciation {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #bbb;
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+  .modal-meaning {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--sakura-deep);
+    margin-bottom: 16px;
+  }
+  .modal-fact {
+    background: var(--sakura-light);
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 0.82rem;
+    color: var(--text);
+    font-weight: 600;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .modal-fact-label {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--sakura-deep);
+    margin-bottom: 6px;
+  }
+  .modal-close-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--sakura-deep), #f4a0b8);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  /* Section headings */
+  .section-title {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #bbb;
+    margin-bottom: 12px;
+    padding-top: 4px;
+  }
+
+  .spacer { height: 80px; }
+</style>
+</head>
+<body>
+
+<!-- Sakura petals -->
+<div class="petal-bg" id="petalBg"></div>
+
+<!-- HEADER -->
+<header>
+  <span class="header-cat">🐱</span>
+  <h1>にほんご 90-Day Journey</h1>
+  <p class="jp-title">Japanese for Beginners · Calico Series</p>
+</header>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-label">🌸 Your Progress</div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
+  </div>
+  <div class="progress-stats">
+    <span id="progressDone">0 cards done</span>
+    <span id="progressLeft">90 remaining</span>
+  </div>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showView('timetable', this)">📅 90 Days</button>
+  <button class="nav-tab" onclick="showView('flashcard', this)">🗂️ Study</button>
+  <button class="nav-tab" onclick="showView('categories', this)">🏷️ Topics</button>
+  <button class="nav-tab" onclick="showView('stats', this)">⭐ Stats</button>
+</div>
+
+<!-- ═══════════════════════════
+     TIMETABLE VIEW
+═══════════════════════════ -->
+<div class="view active timetable-view" id="view-timetable">
+  <p class="section-title">Tap any day to preview the card ✨</p>
+  <div id="timetableGrid"></div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ═══════════════════════════
+     FLASHCARD VIEW
+═══════════════════════════ -->
+<div class="view card-view" id="view-flashcard">
+  <div class="card-nav-header">
+    <button class="card-nav-btn" id="prevBtn" onclick="navigateCard(-1)">←</button>
+    <div class="card-day-info">
+      <div class="day-label" id="cardDayLabel">Day 1 of 90</div>
+      <div class="day-category" id="cardCategory">── Greetings ──</div>
+    </div>
+    <button class="card-nav-btn" id="nextBtn" onclick="navigateCard(1)">→</button>
+  </div>
+
+  <div class="flashcard-container" onclick="flipCard()">
+    <div class="flashcard-inner" id="flashcardInner">
+      <!-- FRONT -->
+      <div class="card-face card-front">
+        <div class="card-sakura-deco">🌸</div>
+        <div class="card-week-tag" id="cardWeek">Week 1</div>
+        <div class="card-kana" id="cardKana">こんにちは</div>
+        <div class="card-romaji" id="cardRomaji">Konnichiwa</div>
+        <div class="card-pronunciation" id="cardPronunciation">kon-nee-chee-wah</div>
+        <div class="card-meaning" id="cardMeaning">Hello / Good Afternoon</div>
+        <div class="card-tap-hint">tap to flip 🐾</div>
+      </div>
+      <!-- BACK -->
+      <div class="card-face card-back">
+        <div class="card-sakura-deco">🌸</div>
+        <div class="back-label">Try Saying This!</div>
+        <div class="back-try" id="backTry">Konnichiwa! O-genki desu ka?</div>
+        <div class="back-translation" id="backTranslation">"Hello! How are you?"</div>
+        <div class="back-divider"></div>
+        <div class="back-did-you-know">🐱 Did You Know?</div>
+        <div class="back-fact" id="backFact">Used from noon to evening. Think: 'Konnichiwa = daytime hello'</div>
+        <div class="cat-mascot-card">🌸 がんばって！</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-actions">
+    <button class="action-btn btn-again" onclick="markAgain()">🔄 Again</button>
+    <button class="action-btn btn-got-it" onclick="markGotIt()">✓ Got it!</button>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ═══════════════════════════
+     CATEGORIES VIEW
+═══════════════════════════ -->
+<div class="view categories-view" id="view-categories">
+  <p class="section-title">Browse by topic 📚</p>
+  <div class="cat-grid" id="catGrid"></div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ═══════════════════════════
+     STATS VIEW
+═══════════════════════════ -->
+<div class="view stats-view" id="view-stats">
+  <div class="stats-hero">
+    <span class="stats-hero-cat">🐱</span>
+    <h2>Nyanko says がんばって！</h2>
+    <p>Your calico companion is so proud of you~</p>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-icon">📚</span>
+      <div class="stat-val" id="statDone">0</div>
+      <div class="stat-label">Cards Done</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">🎯</span>
+      <div class="stat-val" id="statLeft">90</div>
+      <div class="stat-label">Remaining</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">📅</span>
+      <div class="stat-val" id="statWeek">Wk 1</div>
+      <div class="stat-label">Current Week</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">🌸</span>
+      <div class="stat-val" id="statPct">0%</div>
+      <div class="stat-label">Complete</div>
+    </div>
+  </div>
+  <div class="streak-section">
+    <div class="streak-flame">🔥</div>
+    <div class="streak-text">
+      <h3 id="streakVal">Keep going!</h3>
+      <p>Study 1 card every day. You've got this, senpai! 🌸</p>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<!-- DAY MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <span class="modal-kana" id="modalKana">こんにちは</span>
+    <div class="modal-romaji" id="modalRomaji">Konnichiwa</div>
+    <div class="modal-pronunciation" id="modalPronunciation">kon-nee-chee-wah</div>
+    <div class="modal-meaning" id="modalMeaning">Hello / Good Afternoon</div>
+    <div class="modal-fact">
+      <div class="modal-fact-label">🐱 Did You Know?</div>
+      <span id="modalFact">Used from noon to evening!</span>
+    </div>
+    <button class="modal-close-btn" onclick="studyThisCard()">Study This Card 🗂️</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// FLASHCARD DATA (all 90 days)
+// ═══════════════════════════════════════
+const cards = [
+  {day:1,week:1,kana:"こんにちは",romaji:"Konnichiwa",pron:"kon-nee-chee-wah",meaning:"Hello / Good Afternoon",category:"Greetings",try:"Konnichiwa! O-genki desu ka?",tryTrans:'"Hello! How are you?"',fact:"Used from noon to evening. Think: 'Konnichiwa = daytime hello'"},
+  {day:2,week:1,kana:"おはよう",romaji:"Ohayou",pron:"oh-hah-yoh",meaning:"Good Morning",category:"Greetings",try:"Ohayou! Ii tenki desu ne!",tryTrans:'"Good morning! Nice weather, isn\'t it!"',fact:"Say it to anyone you see in the morning — friends, family, coworkers!"},
+  {day:3,week:1,kana:"こんばんは",romaji:"Konbanwa",pron:"kon-bahn-wah",meaning:"Good Evening",category:"Greetings",try:"Konbanwa! Kyou mo otsukaresama!",tryTrans:'"Good evening! Thanks for your hard work today!"',fact:"Use after sunset. kon=this, ban=evening, wa=topic marker"},
+  {day:4,week:1,kana:"さようなら",romaji:"Sayounara",pron:"sah-yoh-nah-rah",meaning:"Goodbye",category:"Greetings",try:"Sayounara! Mata ne!",tryTrans:'"Goodbye! See you later!"',fact:"Used for longer goodbyes. For 'see you later', say またね (mata ne)!"},
+  {day:5,week:1,kana:"ありがとう",romaji:"Arigatou",pron:"ah-ree-gah-toh",meaning:"Thank You",category:"Greetings",try:"Arigatou gozaimasu!",tryTrans:'"Thank you very much!"',fact:"Add ございます (go-zai-mas) for extra politeness: Arigatou gozaimasu!"},
+  {day:6,week:1,kana:"すみません",romaji:"Sumimasen",pron:"soo-mee-mah-sen",meaning:"Excuse Me / Sorry",category:"Greetings",try:"Sumimasen, toire wa doko desu ka?",tryTrans:'"Excuse me, where is the restroom?"',fact:"Works for 'excuse me' AND 'sorry'! Super useful word."},
+  {day:7,week:1,kana:"はじめまして",romaji:"Hajimemashite",pron:"hah-jee-meh-mah-sh-teh",meaning:"Nice to Meet You",category:"Greetings",try:"Hajimemashite! Yoroshiku onegaishimasu!",tryTrans:'"Nice to meet you! Please take care of me!"',fact:"Always said when meeting someone for the first time!"},
+  {day:8,week:2,kana:"はい",romaji:"Hai",pron:"hah-ee",meaning:"Yes",category:"Basics",try:"Hai, wakarimashita!",tryTrans:'"Yes, I understand!"',fact:"Also used to mean 'I'm listening' — like saying 'uh huh'!"},
+  {day:9,week:2,kana:"いいえ",romaji:"Iie",pron:"ee-eh",meaning:"No",category:"Basics",try:"Iie, daijoubu desu.",tryTrans:'"No, I\'m okay, thank you."',fact:"Japanese people often soften 'no' — chotto... (a little...) is common!"},
+  {day:10,week:2,kana:"おねがいします",romaji:"Onegaishimasu",pron:"oh-neh-gah-ee-shi-mas",meaning:"Please",category:"Basics",try:"Mizu wo onegaishimasu.",tryTrans:'"Water, please."',fact:"The most polite way to say please when requesting something."},
+  {day:11,week:2,kana:"わかりません",romaji:"Wakarimasen",pron:"wah-kah-ree-mah-sen",meaning:"I Don't Understand",category:"Basics",try:"Sumimasen, wakarimasen.",tryTrans:'"Sorry, I don\'t understand."',fact:"わかる (wakaru) = to understand. Adding ません makes it 'don't'."},
+  {day:12,week:2,kana:"もう一度",romaji:"Mou ichido",pron:"moh ee-chee-doh",meaning:"One More Time",category:"Basics",try:"Mou ichido onegaishimasu.",tryTrans:'"Please say it one more time."',fact:"Say this when you need something repeated. Very handy for learners!"},
+  {day:13,week:2,kana:"わたし",romaji:"Watashi",pron:"wah-tah-shi",meaning:"I / Me",category:"Basics",try:"Watashi wa [name] desu.",tryTrans:'"I am [your name]."',fact:"The polite way to say 'I'. Casual = ぼく (boku) for boys."},
+  {day:14,week:2,kana:"あなた",romaji:"Anata",pron:"ah-nah-tah",meaning:"You",category:"Basics",try:"Anata no namae wa nan desu ka?",tryTrans:'"What is your name?"',fact:"In Japanese, 'you' is often avoided — use the person's name instead!"},
+  {day:15,week:3,kana:"いち",romaji:"Ichi",pron:"ee-chee",meaning:"One · 1",category:"Numbers",try:"Ichi, ni, san — let's count!",tryTrans:'"One, two, three — let\'s count!"',fact:"One is ichi! Like 'each' but with an i. Easy!"},
+  {day:16,week:3,kana:"に",romaji:"Ni",pron:"nee",meaning:"Two · 2",category:"Numbers",try:"Futari de ikimashoo!",tryTrans:'"Let\'s go together (as two people)!"',fact:"に (ni) also means 'to/at' in Japanese. Two meanings!"},
+  {day:17,week:3,kana:"さん",romaji:"San",pron:"sahn",meaning:"Three · 3",category:"Numbers",try:"San-nin no tomodachi!",tryTrans:'"Three friends!"',fact:"さん also means Mr./Ms. when added after names (Tanaka-san)!"},
+  {day:18,week:3,kana:"よん",romaji:"Yon",pron:"yohn",meaning:"Four · 4",category:"Numbers",try:"Yon-mai kudasai.",tryTrans:'"Four (pieces), please."',fact:"4 is unlucky in Japan (sounds like death 死=shi). Use よん instead!"},
+  {day:19,week:3,kana:"ご",romaji:"Go",pron:"goh",meaning:"Five · 5",category:"Numbers",try:"Go-fun matte kudasai!",tryTrans:'"Please wait five minutes!"',fact:"ご also means 'language' in にほんご (Nihongo = Japanese)!"},
+  {day:20,week:3,kana:"ろく",romaji:"Roku",pron:"roh-koo",meaning:"Six · 6",category:"Numbers",try:"Roku-ji ni aimashoo!",tryTrans:'"Let\'s meet at 6 o\'clock!"',fact:"You might know Roku — the streaming device. Named after 6!"},
+  {day:21,week:3,kana:"なな",romaji:"Nana",pron:"nah-nah",meaning:"Seven · 7",category:"Numbers",try:"Nana-ji ni okimashita.",tryTrans:'"I woke up at 7 o\'clock."',fact:"なな is the cute way to say 7. しち (shichi) is the formal way."},
+  {day:22,week:4,kana:"はち",romaji:"Hachi",pron:"hah-chee",meaning:"Eight · 8",category:"Numbers",try:"Hachi-gatsu wa atsui desu!",tryTrans:'"August is hot!"',fact:"8 is a lucky number in Japan! The kanji 八 spreads out = prosperity."},
+  {day:23,week:4,kana:"きゅう",romaji:"Kyuu",pron:"kyoo",meaning:"Nine · 9",category:"Numbers",try:"Kyuu-ji ni nemasu.",tryTrans:'"I sleep at 9 o\'clock."',fact:"9 can be unlucky (sounds like 苦=ku, suffering). But きゅう is fine!"},
+  {day:24,week:4,kana:"じゅう",romaji:"Juu",pron:"joo",meaning:"Ten · 10",category:"Numbers",try:"Juu-en onegaishimasu.",tryTrans:'"Ten yen, please."',fact:"じゅう + いち = 11, じゅう + に = 12. Simple pattern!"},
+  {day:25,week:4,kana:"ひゃく",romaji:"Hyaku",pron:"hyah-koo",meaning:"One Hundred · 100",category:"Numbers",try:"Hyaku-en shoppu wa ii desu!",tryTrans:'"The 100-yen shop is great!"',fact:"100 yen ≈ about $0.70 USD. Super common amount in Japan!"},
+  {day:26,week:4,kana:"せん",romaji:"Sen",pron:"sen",meaning:"One Thousand · 1,000",category:"Numbers",try:"Issen-en kashite kudasai.",tryTrans:'"Please lend me 1000 yen."',fact:"¥1000 bill has Noguchi Hideyo on it. Like a $1 bill!"},
+  {day:27,week:4,kana:"いま",romaji:"Ima",pron:"ee-mah",meaning:"Now / Right Now",category:"Time",try:"Ima nan-ji desu ka?",tryTrans:'"What time is it right now?"',fact:"いま + なんじ？= 'What time is it now?' — your first full question!"},
+  {day:28,week:4,kana:"きょう",romaji:"Kyou",pron:"kyoh",meaning:"Today",category:"Time",try:"Kyou wa ii tenki desu ne!",tryTrans:'"The weather is nice today, isn\'t it!"',fact:"きょう is Today. きのう is Yesterday. あした is Tomorrow. Easy trio!"},
+  {day:29,week:5,kana:"あした",romaji:"Ashita",pron:"ah-shi-tah",meaning:"Tomorrow",category:"Time",try:"Ashita mata kimasu!",tryTrans:'"I\'ll come again tomorrow!"',fact:"Also written あす (asu) in formal/poetic contexts."},
+  {day:30,week:5,kana:"きのう",romaji:"Kinou",pron:"kee-noh",meaning:"Yesterday",category:"Time",try:"Kinou nani wo shimashita ka?",tryTrans:'"What did you do yesterday?"',fact:"きのう (yesterday) → きょう (today) → あした (tomorrow) — memorize as a set!"},
+  {day:31,week:5,kana:"げつようび",romaji:"Getsuyoubi",pron:"gets-yoh-bee",meaning:"Monday",category:"Days",try:"Getsuyoubi wa isogashii desu.",tryTrans:'"I\'m busy on Monday."',fact:"月 (getsu) = moon/month. Monday = Moon Day — same as English!"},
+  {day:32,week:5,kana:"かようび",romaji:"Kayoubi",pron:"kah-yoh-bee",meaning:"Tuesday",category:"Days",try:"Kayoubi ni eiga wo mimasu.",tryTrans:'"I\'ll watch a movie on Tuesday."',fact:"火 (ka) = fire. Tuesday = Fire Day. Like Mars (god of war/fire)!"},
+  {day:33,week:5,kana:"すいようび",romaji:"Suiyoubi",pron:"soo-ee-yoh-bee",meaning:"Wednesday",category:"Days",try:"Suiyoubi ni benkyou shimasu.",tryTrans:'"I study on Wednesday."',fact:"水 (sui) = water. Wednesday = Water Day!"},
+  {day:34,week:5,kana:"もくようび",romaji:"Mokuyoubi",pron:"moh-koo-yoh-bee",meaning:"Thursday",category:"Days",try:"Mokuyoubi ni tomodachi ni aimasu.",tryTrans:'"I meet my friend on Thursday."',fact:"木 (moku) = wood/tree. Thursday = Wood Day!"},
+  {day:35,week:5,kana:"きんようび",romaji:"Kinyoubi",pron:"kin-yoh-bee",meaning:"Friday",category:"Days",try:"Kinyoubi ga ichiban suki desu!",tryTrans:'"Friday is my favorite!"',fact:"金 (kin) = gold. Friday = Gold Day. Best day of the week!"},
+  {day:36,week:6,kana:"どようび",romaji:"Doyoubi",pron:"doh-yoh-bee",meaning:"Saturday",category:"Days",try:"Doyoubi ni kaimono wo shimasu.",tryTrans:'"I go shopping on Saturday."',fact:"土 (do) = earth/soil. Saturday = Earth Day!"},
+  {day:37,week:6,kana:"にちようび",romaji:"Nichiyoubi",pron:"nee-chee-yoh-bee",meaning:"Sunday",category:"Days",try:"Nichiyoubi wa yasumi desu.",tryTrans:'"Sunday is a day off."',fact:"日 (nichi) = sun. Sunday = Sun Day — same as English!"},
+  {day:38,week:6,kana:"たべもの",romaji:"Tabemono",pron:"tah-beh-moh-noh",meaning:"Food",category:"Food",try:"Nihon no tabemono wa oishii desu!",tryTrans:'"Japanese food is delicious!"',fact:"たべる (taberu) = to eat + もの (mono) = thing. Food = 'eating thing'!"},
+  {day:39,week:6,kana:"みず",romaji:"Mizu",pron:"mee-zoo",meaning:"Water",category:"Food",try:"Mizu wo ippai kudasai.",tryTrans:'"One glass of water, please."',fact:"みず is one of the first words every Japanese learner needs!"},
+  {day:40,week:6,kana:"ごはん",romaji:"Gohan",pron:"goh-hahn",meaning:"Rice / Meal",category:"Food",try:"Gohan wo tabemasu!",tryTrans:'"I will eat rice/a meal!"',fact:"ごはん means both 'rice' and 'meal'. Rice is that important in Japan!"},
+  {day:41,week:6,kana:"すし",romaji:"Sushi",pron:"soo-shi",meaning:"Sushi",category:"Food",try:"Sushi ga daisuki desu!",tryTrans:'"I love sushi!"',fact:"Sushi originally meant vinegared rice. The fish on top is the topping!"},
+  {day:42,week:6,kana:"ラーメン",romaji:"Ramen",pron:"rah-men",meaning:"Ramen Noodles",category:"Food",try:"Ramen wo tabetai desu!",tryTrans:'"I want to eat ramen!"',fact:"ラーメン is written in katakana — used for foreign-origin words!"},
+  {day:43,week:7,kana:"おちゃ",romaji:"Ocha",pron:"oh-chah",meaning:"Green Tea",category:"Food",try:"Ocha wo ippai douzo!",tryTrans:'"Please have a cup of green tea!"',fact:"お (o) is an honorific prefix. ちゃ (cha) = tea. Very polite!"},
+  {day:44,week:7,kana:"コーヒー",romaji:"Koohii",pron:"koh-hee",meaning:"Coffee",category:"Food",try:"Koohii wo kudasai!",tryTrans:'"Coffee, please!"',fact:"コーヒー is katakana for 'coffee'. Sounds just like the English!"},
+  {day:45,week:7,kana:"えき",romaji:"Eki",pron:"eh-kee",meaning:"Train Station",category:"Places",try:"Eki wa doko desu ka?",tryTrans:'"Where is the train station?"',fact:"Japan has one of the best train systems in the world — えき is key!"},
+  {day:46,week:7,kana:"トイレ",romaji:"Toire",pron:"toh-ee-reh",meaning:"Restroom / Toilet",category:"Places",try:"Toire wa doko desu ka?",tryTrans:'"Where is the restroom?"',fact:"From English 'toilet'! Katakana borrowed words are everywhere in Japanese."},
+  {day:47,week:7,kana:"コンビニ",romaji:"Konbini",pron:"kon-bee-nee",meaning:"Convenience Store",category:"Places",try:"Konbini ni ikimasu!",tryTrans:'"I\'m going to the convenience store!"',fact:"Short for コンビニエンスストア. Japanese konbini are legendary — open 24/7!"},
+  {day:48,week:7,kana:"がっこう",romaji:"Gakkou",pron:"gah-koh",meaning:"School",category:"Places",try:"Gakkou wa tanoshii desu!",tryTrans:'"School is fun!"',fact:"がく (gaku) = study/learning. こう (kou) = school/institution."},
+  {day:49,week:7,kana:"うち",romaji:"Uchi",pron:"oo-chee",meaning:"Home / My Place",category:"Places",try:"Uchi ni kaerimashou!",tryTrans:'"Let\'s go home!"',fact:"うち = my home/house. いえ (ie) is more formal. うち feels warm and cozy!"},
+  {day:50,week:8,kana:"たべます",romaji:"Tabemasu",pron:"tah-beh-mas",meaning:"To Eat",category:"Verbs",try:"Sushi wo tabemasu!",tryTrans:'"I eat sushi!"',fact:"ます (masu) ending = polite present/future tense. Super important!"},
+  {day:51,week:8,kana:"のみます",romaji:"Nomimasu",pron:"noh-mee-mas",meaning:"To Drink",category:"Verbs",try:"Ocha wo nomimasu.",tryTrans:'"I drink green tea."',fact:"のむ (nomu) is the casual form. Add ます for polite speech!"},
+  {day:52,week:8,kana:"いきます",romaji:"Ikimasu",pron:"ee-kee-mas",meaning:"To Go",category:"Verbs",try:"Nihon ni ikimasu!",tryTrans:'"I\'m going to Japan!"',fact:"One of the most used verbs! いく (iku) is the casual form."},
+  {day:53,week:8,kana:"きます",romaji:"Kimasu",pron:"kee-mas",meaning:"To Come",category:"Verbs",try:"Ashita kimasu!",tryTrans:'"I\'ll come tomorrow!"',fact:"いきます (go) vs きます (come) — perspective matters in Japanese!"},
+  {day:54,week:8,kana:"みます",romaji:"Mimasu",pron:"mee-mas",meaning:"To Watch / See",category:"Verbs",try:"Anime wo mimasu!",tryTrans:'"I watch anime!"',fact:"みる (miru) = to see/watch/look. Very versatile verb!"},
+  {day:55,week:8,kana:"ききます",romaji:"Kikimasu",pron:"kee-kee-mas",meaning:"To Listen / Ask",category:"Verbs",try:"Ongaku wo kikimasu!",tryTrans:'"I listen to music!"',fact:"きく (kiku) means both 'to listen' AND 'to ask'. Double meaning!"},
+  {day:56,week:8,kana:"かいます",romaji:"Kaimasu",pron:"kah-ee-mas",meaning:"To Buy",category:"Verbs",try:"Konbini de kaimono wo shimasu.",tryTrans:'"I shop at the convenience store."',fact:"かう (kau) = to buy. Shopping is serious business in Japan!"},
+  {day:57,week:9,kana:"はなします",romaji:"Hanashimasu",pron:"hah-nah-shi-mas",meaning:"To Speak",category:"Verbs",try:"Nihongo wo hanashimasu!",tryTrans:'"I speak Japanese!"',fact:"はなす (hanasu) = to speak/talk. はなし (hanashi) = a story/talk."},
+  {day:58,week:9,kana:"よみます",romaji:"Yomimasu",pron:"yoh-mee-mas",meaning:"To Read",category:"Verbs",try:"Manga wo yomimasu!",tryTrans:'"I read manga!"',fact:"よむ (yomu) = to read. Great verb for manga fans!"},
+  {day:59,week:9,kana:"かきます",romaji:"Kakimasu",pron:"kah-kee-mas",meaning:"To Write",category:"Verbs",try:"Hiragana wo kakimasu!",tryTrans:'"I write hiragana!"',fact:"かく (kaku) = to write. Also means to draw/paint in some contexts!"},
+  {day:60,week:9,kana:"ねます",romaji:"Nemasu",pron:"neh-mas",meaning:"To Sleep",category:"Verbs",try:"Hayaku nemasu!",tryTrans:'"I sleep early!"',fact:"ねる (neru) = to sleep. おやすみ (oyasumi) = goodnight/sleep well!"},
+  {day:61,week:9,kana:"おきます",romaji:"Okimasu",pron:"oh-kee-mas",meaning:"To Wake Up",category:"Verbs",try:"Roku-ji ni okimasu!",tryTrans:'"I wake up at 6 o\'clock!"',fact:"おきる (okiru) = to wake up. Also means 'to happen/occur'!"},
+  {day:62,week:9,kana:"あそびます",romaji:"Asobimasu",pron:"ah-soh-bee-mas",meaning:"To Play / Hang Out",category:"Verbs",try:"Tomodachi to asobimasu!",tryTrans:'"I hang out with friends!"',fact:"あそぶ (asobu) = play/hang out. Used for both kids playing and adults chilling!"},
+  {day:63,week:9,kana:"べんきょうします",romaji:"Benkyou shimasu",pron:"ben-kyoh-shi-mas",meaning:"To Study",category:"Verbs",try:"Mainichi nihongo wo benkyou shimasu!",tryTrans:'"I study Japanese every day!"',fact:"べんきょう (benkyou) = study. します (shimasu) = to do. Study = 'do studying'!"},
+  {day:64,week:10,kana:"かわいい",romaji:"Kawaii",pron:"kah-wah-ee",meaning:"Cute",category:"Adjectives",try:"Kawaii neko desu ne!",tryTrans:'"What a cute cat!"',fact:"かわいい is probably the most famous Japanese word worldwide!"},
+  {day:65,week:10,kana:"かっこいい",romaji:"Kakkoii",pron:"kah-koh-ee",meaning:"Cool / Hot",category:"Adjectives",try:"Kakkoii desu ne!",tryTrans:'"That\'s so cool!"',fact:"かっこいい is the compliment you want to receive in Japan!"},
+  {day:66,week:10,kana:"おいしい",romaji:"Oishii",pron:"oh-ee-shee",meaning:"Delicious",category:"Adjectives",try:"Kono ramen wa oishii desu!",tryTrans:'"This ramen is delicious!"',fact:"おいしい is a must-know word for any foodie visiting Japan!"},
+  {day:67,week:10,kana:"たのしい",romaji:"Tanoshii",pron:"tah-noh-shee",meaning:"Fun / Enjoyable",category:"Adjectives",try:"Nihongo wa tanoshii desu!",tryTrans:'"Japanese is fun!"',fact:"たのしい describes fun experiences. たのしんで！= Have fun!"},
+  {day:68,week:10,kana:"むずかしい",romaji:"Muzukashii",pron:"moo-zoo-kah-shee",meaning:"Difficult",category:"Adjectives",try:"Nihongo wa muzukashii desu...",tryTrans:'"Japanese is difficult..."',fact:"むずかしい is the word you\'ll use a lot while learning Japanese! But you\'ve got this!"},
+  {day:69,week:10,kana:"やさしい",romaji:"Yasashii",pron:"yah-sah-shee",meaning:"Kind / Easy",category:"Adjectives",try:"Sensei wa yasashii desu!",tryTrans:'"The teacher is kind!"',fact:"やさしい = kind (人) AND easy (問題). Same word, different kanji!"},
+  {day:70,week:10,kana:"すごい",romaji:"Sugoi",pron:"soo-goh-ee",meaning:"Amazing / Wow",category:"Adjectives",try:"Sugoi desu ne!",tryTrans:'"That\'s amazing!"',fact:"すごい is the ultimate hype word in Japanese! Use it generously."},
+  {day:71,week:11,kana:"すき",romaji:"Suki",pron:"soo-kee",meaning:"Like / Love",category:"Feelings",try:"Nihon ga daisuki desu!",tryTrans:'"I love Japan so much!"',fact:"だい + すき = REALLY like/love. だい = big/great. Big like = love!"},
+  {day:72,week:11,kana:"きらい",romaji:"Kirai",pron:"kee-rah-ee",meaning:"Dislike",category:"Feelings",try:"Natto ga kirai desu...",tryTrans:'"I dislike natto..."',fact:"だいきらい = really dislike. The opposite of だいすき!"},
+  {day:73,week:11,kana:"うれしい",romaji:"Ureshii",pron:"oo-reh-shee",meaning:"Happy / Glad",category:"Feelings",try:"Ureshii desu! Arigatou!",tryTrans:'"I\'m so happy! Thank you!"',fact:"うれしい is that specific happy feeling when something good happens!"},
+  {day:74,week:11,kana:"かなしい",romaji:"Kanashii",pron:"kah-nah-shee",meaning:"Sad",category:"Feelings",try:"Kanashii desu ne...",tryTrans:'"That\'s sad, isn\'t it..."',fact:"かなしい = sad. You can add ね (ne) to share the feeling with someone."},
+  {day:75,week:11,kana:"ともだち",romaji:"Tomodachi",pron:"toh-moh-dah-chee",meaning:"Friend",category:"Social",try:"Tomodachi ga takusan imasu!",tryTrans:'"I have many friends!"',fact:"とも (tomo) = companion + だち = attaches to nouns. Friends = companions!"},
+  {day:76,week:11,kana:"せんぱい",romaji:"Senpai",pron:"sen-pah-ee",meaning:"Senior / Upperclassman",category:"Social",try:"Senpai ni kikimashita!",tryTrans:'"I asked my senpai!"',fact:"Thanks to anime, senpai is now a worldwide phenomenon!"},
+  {day:77,week:11,kana:"こうはい",romaji:"Kouhai",pron:"koh-hah-ee",meaning:"Junior",category:"Social",try:"Watashi no kouhai desu.",tryTrans:'"This is my junior."',fact:"The opposite of senpai! Senpai-kouhai relationships are key in Japan."},
+  {day:78,week:12,kana:"あか",romaji:"Aka",pron:"ah-kah",meaning:"Red",category:"Colors",try:"Aka ga suki desu!",tryTrans:'"I like red!"',fact:"赤 (aka) = red. The Japanese flag has a red circle — hi no maru!"},
+  {day:79,week:12,kana:"あお",romaji:"Ao",pron:"ah-oh",meaning:"Blue / Green",category:"Colors",try:"Ao ga kirei desu ne!",tryTrans:'"Blue/green is pretty, isn\'t it!"',fact:"あお covers both blue AND green in traditional Japanese! Traffic lights are あお."},
+  {day:80,week:12,kana:"しろ",romaji:"Shiro",pron:"shi-roh",meaning:"White",category:"Colors",try:"Shiro neko ga kawaii!",tryTrans:'"White cats are cute!"',fact:"白 (shiro) = white. Also the name of a popular anime character!"},
+  {day:81,week:12,kana:"くろ",romaji:"Kuro",pron:"koo-roh",meaning:"Black",category:"Colors",try:"Kuro neko mo kawaii!",tryTrans:'"Black cats are also cute!"',fact:"黒 (kuro) = black. くろねこ (kuro neko) = black cat — a classic image!"},
+  {day:82,week:12,kana:"きいろ",romaji:"Kiiro",pron:"kee-ee-roh",meaning:"Yellow",category:"Colors",try:"Kiiro no hana ga suki!",tryTrans:'"I like yellow flowers!"',fact:"きいろ (yellow) + い = きいろい as an adjective. Double i!"},
+  {day:83,week:12,kana:"みどり",romaji:"Midori",pron:"mee-doh-ree",meaning:"Green",category:"Colors",try:"Midori no ki ga kirei!",tryTrans:'"The green trees are beautiful!"',fact:"みどり is also a popular girl's name in Japan! 緑 means green."},
+  {day:84,week:12,kana:"むらさき",romaji:"Murasaki",pron:"moo-rah-sah-kee",meaning:"Purple",category:"Colors",try:"Murasaki ga suki desu!",tryTrans:'"I like purple!"',fact:"紫 (murasaki) = purple. Historically a royal color in Japan!"},
+  {day:85,week:13,kana:"にほん",romaji:"Nihon",pron:"nee-hohn",meaning:"Japan",category:"Culture",try:"Nihon ni ikitai desu!",tryTrans:'"I want to go to Japan!"',fact:"にほん = origin of the sun. Ni=sun, hon=origin. 'Land of the Rising Sun'!"},
+  {day:86,week:13,kana:"にほんご",romaji:"Nihongo",pron:"nee-hohn-goh",meaning:"Japanese Language",category:"Culture",try:"Nihongo wo benkyou shite imasu!",tryTrans:'"I am studying Japanese!"',fact:"にほん (Japan) + ご (language). You're already learning にほんご!"},
+  {day:87,week:13,kana:"アニメ",romaji:"Anime",pron:"ah-nee-meh",meaning:"Anime",category:"Culture",try:"Anime ga daisuki desu!",tryTrans:'"I love anime!"',fact:"Short for アニメーション (animation). Japan's greatest cultural export!"},
+  {day:88,week:13,kana:"まんが",romaji:"Manga",pron:"mahn-gah",meaning:"Manga",category:"Culture",try:"Manga wo yonde imasu!",tryTrans:'"I am reading manga!"',fact:"まんが = Japanese comics. まん = involuntary, が = picture. 'Whimsical pictures'!"},
+  {day:89,week:13,kana:"おつかれさま",romaji:"Otsukaresama",pron:"oh-tsoo-kah-reh-sah-mah",meaning:"Great Work / Well Done",category:"Culture",try:"Otsukaresama deshita!",tryTrans:'"Good work today! You did great!"',fact:"Said to coworkers at end of day. おつかれ = tiredness. 'You must be tired!' = respect!"},
+  {day:90,week:13,kana:"がんばって",romaji:"Ganbatte",pron:"gahn-bah-teh",meaning:"Do Your Best! / You Got This!",category:"Culture",try:"Ganbatte ne! Ouen shite iru yo!",tryTrans:'"Do your best! I\'m cheering for you!"',fact:"The motto of all Japanese learners. You made it to Day 90! がんばって！🎉"},
+];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let completed = new Set(JSON.parse(localStorage.getItem('jpCompleted') || '[]'));
+let currentCardIdx = 0;
+let isFlipped = false;
+let currentModalDay = null;
+
+function saveProgress() {
+  localStorage.setItem('jpCompleted', JSON.stringify([...completed]));
+}
+
+// ═══════════════════════════════════════
+// PETALS
+// ═══════════════════════════════════════
+function spawnPetals() {
+  const bg = document.getElementById('petalBg');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (6 + Math.random() * 10) + 's';
+    p.style.animationDelay = (-Math.random() * 15) + 's';
+    p.style.width = p.style.height = (8 + Math.random() * 10) + 'px';
+    bg.appendChild(p);
+  }
+}
+spawnPetals();
+
+// ═══════════════════════════════════════
+// VIEW SWITCHING
+// ═══════════════════════════════════════
+function showView(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name === 'stats') updateStats();
+  if (name === 'categories') buildCategories();
+  if (name === 'flashcard') updateCard();
+  updateProgressBar();
+}
+
+// ═══════════════════════════════════════
+// PROGRESS
+// ═══════════════════════════════════════
+function updateProgressBar() {
+  const done = completed.size;
+  const pct = Math.round(done / 90 * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressDone').textContent = done + ' cards done';
+  document.getElementById('progressLeft').textContent = (90 - done) + ' remaining';
+}
+
+// ═══════════════════════════════════════
+// TIMETABLE
+// ═══════════════════════════════════════
+function buildTimetable() {
+  const container = document.getElementById('timetableGrid');
+  // Group by week
+  const weeks = {};
+  cards.forEach(c => {
+    if (!weeks[c.week]) weeks[c.week] = [];
+    weeks[c.week].push(c);
+  });
+
+  const categoryColors = {
+    'Greetings': '#ffb7c5', 'Basics': '#b8d4e8', 'Numbers': '#a8c5a0',
+    'Time': '#ffcba4', 'Days': '#f5c842', 'Food': '#f4a0b8',
+    'Places': '#c8b4e8', 'Verbs': '#a0d4c8', 'Adjectives': '#f0c8a0',
+    'Feelings': '#e8a0b8', 'Social': '#b8e8c0', 'Colors': '#e8d4a0',
+    'Culture': '#c4a0e8'
+  };
+
+  let html = '';
+  Object.keys(weeks).forEach(wk => {
+    const wkCards = weeks[wk];
+    const theme = wkCards[0].category;
+    html += `<div class="week-section">
+      <div class="week-header">
+        <span class="week-badge">Week ${wk}</span>
+        <span class="week-theme">${theme} & more</span>
+      </div>
+      <div class="days-grid">`;
+
+    wkCards.forEach(c => {
+      const isDone = completed.has(c.day);
+      const isToday = c.day === currentCardIdx + 1;
+      const style = isDone ? `background: linear-gradient(135deg, #ffe0ea, #ffd4e8); border-color: var(--sakura);` : '';
+      html += `<div class="day-cell ${isDone ? 'completed' : ''}" 
+        style="${style}"
+        onclick="openDayModal(${c.day - 1})">
+        <span class="day-num">${c.day}</span>
+        <span class="day-kana">${c.kana.length > 3 ? c.kana.substring(0,3) : c.kana}</span>
+      </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════
+function openDayModal(idx) {
+  const c = cards[idx];
+  currentModalDay = idx;
+  document.getElementById('modalKana').textContent = c.kana;
+  document.getElementById('modalRomaji').textContent = c.romaji;
+  document.getElementById('modalPronunciation').textContent = c.pron;
+  document.getElementById('modalMeaning').textContent = c.meaning;
+  document.getElementById('modalFact').textContent = c.fact;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+}
+
+function studyThisCard() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  currentCardIdx = currentModalDay;
+  updateCard();
+  // Switch to flashcard tab
+  const tabs = document.querySelectorAll('.nav-tab');
+  showView('flashcard', tabs[1]);
+  tabs.forEach(t => t.classList.remove('active'));
+  tabs[1].classList.add('active');
+}
+
+// ═══════════════════════════════════════
+// FLASHCARD
+// ═══════════════════════════════════════
+function updateCard() {
+  const c = cards[currentCardIdx];
+  isFlipped = false;
+  document.getElementById('flashcardInner').classList.remove('flipped');
+
+  document.getElementById('cardDayLabel').textContent = `Day ${c.day} of 90`;
+  document.getElementById('cardCategory').textContent = `── ${c.category} ──`;
+  document.getElementById('cardWeek').textContent = `Week ${c.week}`;
+  document.getElementById('cardKana').textContent = c.kana;
+  document.getElementById('cardRomaji').textContent = c.romaji;
+  document.getElementById('cardPronunciation').textContent = c.pron;
+  document.getElementById('cardMeaning').textContent = c.meaning;
+  document.getElementById('backTry').textContent = c.try;
+  document.getElementById('backTranslation').textContent = c.tryTrans;
+  document.getElementById('backFact').textContent = c.fact;
+
+  document.getElementById('prevBtn').disabled = currentCardIdx === 0;
+  document.getElementById('nextBtn').disabled = currentCardIdx === 89;
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('flashcardInner').classList.toggle('flipped', isFlipped);
+}
+
+function navigateCard(dir) {
+  currentCardIdx = Math.max(0, Math.min(89, currentCardIdx + dir));
+  updateCard();
+}
+
+function markGotIt() {
+  completed.add(cards[currentCardIdx].day);
+  saveProgress();
+  updateProgressBar();
+  buildTimetable();
+  if (currentCardIdx < 89) {
+    currentCardIdx++;
+    updateCard();
+  }
+}
+
+function markAgain() {
+  completed.delete(cards[currentCardIdx].day);
+  saveProgress();
+  updateProgressBar();
+  buildTimetable();
+}
+
+// ═══════════════════════════════════════
+// CATEGORIES
+// ═══════════════════════════════════════
+const categoryEmojis = {
+  'Greetings': '👋', 'Basics': '💬', 'Numbers': '🔢',
+  'Time': '⏰', 'Days': '📅', 'Food': '🍱',
+  'Places': '📍', 'Verbs': '🏃', 'Adjectives': '✨',
+  'Feelings': '💭', 'Social': '👥', 'Colors': '🎨',
+  'Culture': '🗾'
+};
+
+function buildCategories() {
+  const cats = {};
+  cards.forEach(c => {
+    if (!cats[c.category]) cats[c.category] = { total: 0, done: 0 };
+    cats[c.category].total++;
+    if (completed.has(c.day)) cats[c.category].done++;
+  });
+
+  let html = '';
+  Object.keys(cats).forEach(cat => {
+    const {total, done} = cats[cat];
+    const pct = Math.round(done/total*100);
+    html += `<div class="cat-card" onclick="studyCat('${cat}')">
+      <span class="cat-emoji">${categoryEmojis[cat] || '📚'}</span>
+      <div class="cat-name">${cat}</div>
+      <div class="cat-count">${done}/${total} done</div>
+      <div class="cat-bar"><div class="cat-bar-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  });
+
+  document.getElementById('catGrid').innerHTML = html;
+}
+
+function studyCat(cat) {
+  const firstCard = cards.findIndex(c => c.category === cat);
+  if (firstCard >= 0) {
+    currentCardIdx = firstCard;
+    updateCard();
+    const tabs = document.querySelectorAll('.nav-tab');
+    tabs.forEach(t => t.classList.remove('active'));
+    tabs[1].classList.add('active');
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-flashcard').classList.add('active');
+  }
+}
+
+// ═══════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════
+function updateStats() {
+  const done = completed.size;
+  const pct = Math.round(done/90*100);
+  const currentWeek = Math.min(13, Math.ceil((currentCardIdx + 1) / 7));
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('statLeft').textContent = 90 - done;
+  document.getElementById('statWeek').textContent = 'Wk ' + currentWeek;
+  document.getElementById('statPct').textContent = pct + '%';
+
+  const streakVal = document.getElementById('streakVal');
+  if (done === 0) streakVal.textContent = 'Start today! 🌸';
+  else if (done < 10) streakVal.textContent = `${done} cards done! 🌱`;
+  else if (done < 30) streakVal.textContent = `${done} down! 🌸`;
+  else if (done < 60) streakVal.textContent = `Halfway there! 🔥`;
+  else if (done < 90) streakVal.textContent = `Almost done! ⭐`;
+  else streakVal.textContent = `完了！All 90 done! 🎉`;
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+buildTimetable();
+updateCard();
+updateProgressBar();
+</script>
+</body>
+</html>

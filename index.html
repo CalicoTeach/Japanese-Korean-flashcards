@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nyanko Academy 🐱 — Language Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@700&family=Noto+Sans+KR:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fff9f5;
+    --text: #2d1a0e;
+    --sakura: #e8678a;
+    --sakura-light: #ffe4ec;
+    --rose: #c96b8a;
+    --lavender: #9b72c8;
+    --gold: #f5c842;
+    --peach: #ffcba4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── ANIMATED BG ── */
+  .bg-canvas {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(160deg, #fff5fa 0%, #f9f5ff 40%, #f5fff9 100%);
+    overflow: hidden;
+  }
+  .bg-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.25;
+    animation: blobDrift ease-in-out infinite alternate;
+  }
+  .blob1 { width: 400px; height: 400px; background: #ffb7c5; top: -100px; left: -100px; animation-duration: 12s; }
+  .blob2 { width: 350px; height: 350px; background: #c8a8f0; top: 30%; right: -80px; animation-duration: 15s; animation-delay: -4s; }
+  .blob3 { width: 300px; height: 300px; background: #a8e8d0; bottom: 10%; left: 20%; animation-duration: 18s; animation-delay: -8s; }
+  .blob4 { width: 200px; height: 200px; background: var(--gold); bottom: -60px; right: 10%; animation-duration: 10s; animation-delay: -2s; }
+  @keyframes blobDrift {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(30px, 20px) scale(1.08); }
+  }
+
+  /* floating symbols */
+  .float-symbols {
+    position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden;
+  }
+  .fsym {
+    position: absolute;
+    opacity: 0;
+    animation: floatSym linear infinite;
+    font-size: 1.2rem;
+  }
+  @keyframes floatSym {
+    0%   { opacity: 0; transform: translateY(0) rotate(0deg); }
+    10%  { opacity: 0.18; }
+    90%  { opacity: 0.12; }
+    100% { opacity: 0; transform: translateY(-100vh) rotate(180deg); }
+  }
+
+  /* ── LAYOUT ── */
+  .page { position: relative; z-index: 2; }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 60px 24px 40px;
+  }
+  .hero-cat {
+    font-size: 5rem;
+    display: block;
+    animation: catBob 3s ease-in-out infinite;
+    filter: drop-shadow(0 8px 24px rgba(232,103,138,0.25));
+    margin-bottom: 16px;
+  }
+  @keyframes catBob {
+    0%,100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-12px) rotate(3deg); }
+  }
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--sakura), var(--lavender));
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: 2.6rem;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, var(--sakura) 0%, var(--lavender) 60%, #72c8b4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .hero-sub {
+    font-size: 1rem;
+    color: #999;
+    font-weight: 600;
+    max-width: 300px;
+    margin: 0 auto 8px;
+    line-height: 1.6;
+  }
+  .hero-script {
+    font-size: 1.3rem;
+    margin-top: 8px;
+    opacity: 0.5;
+    letter-spacing: 6px;
+  }
+
+  /* ── STATS STRIP ── */
+  .stats-strip {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin: 24px 20px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    overflow: hidden;
+  }
+  .strip-item {
+    flex: 1;
+    padding: 16px 8px;
+    text-align: center;
+    border-right: 1px solid #f0e8f4;
+  }
+  .strip-item:last-child { border-right: none; }
+  .strip-val {
+    font-size: 1.4rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--sakura), var(--lavender));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+  }
+  .strip-label { font-size: 0.65rem; font-weight: 800; color: #bbb; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── SECTION TITLE ── */
+  .section-head {
+    padding: 0 20px 12px;
+  }
+  .section-head h2 {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--text);
+  }
+  .section-head p {
+    font-size: 0.78rem;
+    color: #bbb;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* ── LANGUAGE CARDS ── */
+  .lang-cards {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .lang-card {
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+    text-decoration: none;
+    display: block;
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
+    position: relative;
+  }
+  .lang-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 16px 56px rgba(0,0,0,0.15);
+  }
+  .lang-card:active { transform: scale(0.98); }
+
+  /* Japanese card */
+  .card-jp {
+    background: linear-gradient(145deg, #fff5f8 0%, #ffe8f2 40%, #fff0e8 100%);
+    border: 2px solid #ffd4e8;
+  }
+  .card-jp .card-header {
+    background: linear-gradient(135deg, #e8678a 0%, #f4a0b8 50%, #ffcba4 100%);
+  }
+
+  /* Korean card */
+  .card-kr {
+    background: linear-gradient(145deg, #f8f0ff 0%, #eedff8 40%, #e8f4ff 100%);
+    border: 2px solid #d4bce8;
+  }
+  .card-kr .card-header {
+    background: linear-gradient(135deg, #c96b8a 0%, #b89ad4 50%, #9b72c8 100%);
+  }
+
+  .card-header {
+    padding: 20px 20px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-header::after {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 100px; height: 100px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+  }
+  .card-header::before {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -10px;
+    width: 80px; height: 80px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+  }
+
+  .card-flag-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .card-flag { font-size: 1.8rem; }
+  .card-lang-name {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+  .card-lang-sub {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.82);
+    font-weight: 700;
+  }
+  .card-script-preview {
+    font-size: 2rem;
+    color: rgba(255,255,255,0.9);
+    font-weight: 700;
+    line-height: 1;
+    position: relative;
+    letter-spacing: 4px;
+  }
+  .card-jp .card-script-preview { font-family: 'Noto Sans JP', sans-serif; }
+  .card-kr .card-script-preview { font-family: 'Noto Sans KR', sans-serif; }
+
+  .card-body { padding: 16px 20px 20px; }
+
+  .card-meta-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .meta-chip {
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .card-jp .meta-chip { background: var(--sakura-light); color: var(--sakura); }
+  .card-kr .meta-chip { background: #f0e8ff; color: var(--lavender); }
+
+  .card-desc {
+    font-size: 0.82rem;
+    color: #888;
+    font-weight: 600;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .card-topics {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .topic-tag {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.04);
+    color: #999;
+  }
+
+  .card-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    font-weight: 900;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-jp .card-cta { background: linear-gradient(135deg, #e8678a, #f4a0b8); box-shadow: 0 4px 16px rgba(232,103,138,0.35); }
+  .card-kr .card-cta { background: linear-gradient(135deg, #c96b8a, #9b72c8); box-shadow: 0 4px 16px rgba(155,114,200,0.35); }
+  .cta-arrow { font-size: 1.2rem; }
+
+  .card-progress-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .mini-bar-bg { flex: 1; background: rgba(0,0,0,0.06); border-radius: 10px; height: 6px; overflow: hidden; }
+  .mini-bar-fill { height: 100%; border-radius: 10px; transition: width 0.5s; }
+  .card-jp .mini-bar-fill { background: linear-gradient(90deg, var(--sakura), var(--gold)); }
+  .card-kr .mini-bar-fill { background: linear-gradient(90deg, var(--rose), var(--lavender)); }
+  .mini-bar-label { font-size: 0.68rem; font-weight: 800; color: #bbb; white-space: nowrap; }
+
+  /* ── HOW IT WORKS ── */
+  .how-section {
+    padding: 0 20px 32px;
+  }
+  .how-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .how-card {
+    background: white;
+    border-radius: 18px;
+    padding: 16px 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .how-icon { font-size: 1.6rem; display: block; margin-bottom: 8px; }
+  .how-title { font-size: 0.82rem; font-weight: 900; color: var(--text); margin-bottom: 4px; }
+  .how-desc { font-size: 0.72rem; color: #bbb; font-weight: 600; line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 24px 20px 40px;
+    border-top: 2px solid #f5eef8;
+  }
+  .footer-cat { font-size: 2rem; display: block; margin-bottom: 8px; }
+  footer p { font-size: 0.75rem; color: #ccc; font-weight: 700; }
+  footer .footer-scripts {
+    margin-top: 8px;
+    font-size: 1rem;
+    opacity: 0.3;
+    letter-spacing: 8px;
+  }
+
+  /* ── COMING SOON CARD ── */
+  .coming-soon-card {
+    margin: 0 20px 16px;
+    background: white;
+    border-radius: 24px;
+    padding: 20px;
+    border: 2px dashed #e8e0f0;
+    text-align: center;
+    opacity: 0.7;
+  }
+  .coming-soon-card .cs-emoji { font-size: 2rem; display: block; margin-bottom: 8px; }
+  .coming-soon-card h3 { font-size: 0.9rem; font-weight: 900; color: #bbb; margin-bottom: 4px; }
+  .coming-soon-card p { font-size: 0.72rem; color: #ccc; font-weight: 600; }
+  .cs-chips { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+  .cs-chip { font-size: 0.65rem; font-weight: 800; padding: 3px 10px; border-radius: 20px; background: #f5f0ff; color: #bbb; }
+
+  /* ── ANIMATIONS ── */
+  .fade-in { animation: fadeIn 0.6s ease both; }
+  .fade-in-1 { animation-delay: 0.1s; }
+  .fade-in-2 { animation-delay: 0.2s; }
+  .fade-in-3 { animation-delay: 0.35s; }
+  .fade-in-4 { animation-delay: 0.5s; }
+  .fade-in-5 { animation-delay: 0.65s; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- BG -->
+<div class="bg-canvas">
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+  <div class="bg-blob blob3"></div>
+  <div class="bg-blob blob4"></div>
+</div>
+<div class="float-symbols" id="floatSymbols"></div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <section class="hero fade-in">
+    <span class="hero-cat">🐱</span>
+    <div class="hero-badge">Calico Series · Free Forever</div>
+    <p class="hero-sub">Learn Asian languages 1 card a day with your calico cat guide</p>
+    <div class="hero-script">あ 가 字</div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <div class="stats-strip fade-in fade-in-1">
+    <div class="strip-item">
+      <span class="strip-val" id="totalDone">0</span>
+      <span class="strip-label">Cards Done</span>
+    </div>
+    <div class="strip-item">
+      <span class="strip-val">180</span>
+      <span class="strip-label">Total Cards</span>
+    </div>
+    <div class="strip-item">
+      <span class="strip-val">2</span>
+      <span class="strip-label">Languages</span>
+    </div>
+    <div class="strip-item">
+      <span class="strip-val">90</span>
+      <span class="strip-label">Days Each</span>
+    </div>
+  </div>
+
+  <!-- LANGUAGE CARDS -->
+  <div class="section-head fade-in fade-in-2">
+    <h2>Choose your language ✨</h2>
+    <p>Tap a card to start your journey today</p>
+  </div>
+
+  <div class="lang-cards">
+
+    <!-- JAPANESE -->
+    <a href="japanese-flashcards.html" class="lang-card card-jp fade-in fade-in-3">
+      <div class="card-header">
+        <div class="card-flag-row">
+          <span class="card-flag">🇯🇵</span>
+          <div>
+            <div class="card-lang-name">Japanese</div>
+            <div class="card-lang-sub">日本語 · Nihongo</div>
+          </div>
+        </div>
+        <div class="card-script-preview">あいうえお</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta-row">
+          <span class="meta-chip">🌸 Sakura Series</span>
+          <span class="meta-chip">90 cards</span>
+          <span class="meta-chip">Beginner</span>
+        </div>
+        <div class="card-progress-row">
+          <div class="mini-bar-bg">
+            <div class="mini-bar-fill" id="jpBar" style="width:0%"></div>
+          </div>
+          <span class="mini-bar-label" id="jpProgress">0 / 90</span>
+        </div>
+        <div class="card-desc">Greetings, numbers, food, places, verbs, adjectives, Japanese culture & more — all with cute calico cat tips!</div>
+        <div class="card-topics">
+          <span class="topic-tag">👋 Greetings</span>
+          <span class="topic-tag">🔢 Numbers</span>
+          <span class="topic-tag">🍱 Food</span>
+          <span class="topic-tag">🏃 Verbs</span>
+          <span class="topic-tag">🎌 Culture</span>
+          <span class="topic-tag">+8 more</span>
+        </div>
+        <div class="card-cta">
+          <span>Start Japanese Journey</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- KOREAN -->
+    <a href="korean-flashcards.html" class="lang-card card-kr fade-in fade-in-4">
+      <div class="card-header">
+        <div class="card-flag-row">
+          <span class="card-flag">🇰🇷</span>
+          <div>
+            <div class="card-lang-name">Korean</div>
+            <div class="card-lang-sub">한국어 · Hangugeo</div>
+          </div>
+        </div>
+        <div class="card-script-preview">가나다라마</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta-row">
+          <span class="meta-chip">🌷 K-Drama Series</span>
+          <span class="meta-chip">90 cards</span>
+          <span class="meta-chip">Beginner</span>
+        </div>
+        <div class="card-progress-row">
+          <div class="mini-bar-bg">
+            <div class="mini-bar-fill" id="krBar" style="width:0%"></div>
+          </div>
+          <span class="mini-bar-label" id="krProgress">0 / 90</span>
+        </div>
+        <div class="card-desc">From K-drama phrases to K-pop culture — learn Korean with cozy pastel vibes and your calico companion!</div>
+        <div class="card-topics">
+          <span class="topic-tag">👋 Greetings</span>
+          <span class="topic-tag">🍜 Food</span>
+          <span class="topic-tag">👥 Social</span>
+          <span class="topic-tag">🎨 Colors</span>
+          <span class="topic-tag">🇰🇷 Culture</span>
+          <span class="topic-tag">+8 more</span>
+        </div>
+        <div class="card-cta">
+          <span>Start Korean Journey</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- COMING SOON -->
+  <div class="coming-soon-card fade-in fade-in-5">
+    <span class="cs-emoji">🔮</span>
+    <h3>More languages coming soon~</h3>
+    <p>Your calico cat is studying hard!</p>
+    <div class="cs-chips">
+      <span class="cs-chip">🇨🇳 Mandarin</span>
+      <span class="cs-chip">🇫🇷 French</span>
+      <span class="cs-chip">🇪🇸 Spanish</span>
+      <span class="cs-chip">🇻🇳 Vietnamese</span>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-section fade-in fade-in-5">
+    <div class="section-head" style="padding: 0 0 0;">
+      <h2>How it works 🐾</h2>
+      <p>Simple enough to stick with every day</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-card">
+        <span class="how-icon">📅</span>
+        <div class="how-title">1 Card a Day</div>
+        <div class="how-desc">Pick up one new word every morning. Small steps, big results!</div>
+      </div>
+      <div class="how-card">
+        <span class="how-icon">🗂️</span>
+        <div class="how-title">Flip & Learn</div>
+        <div class="how-desc">See the word, guess the meaning, flip for the answer!</div>
+      </div>
+      <div class="how-card">
+        <span class="how-icon">✓</span>
+        <div class="how-title">Track Progress</div>
+        <div class="how-desc">Mark cards done and watch your progress bar grow 🌱</div>
+      </div>
+      <div class="how-card">
+        <span class="how-icon">🐱</span>
+        <div class="how-title">Cat Approved</div>
+        <div class="how-desc">Nyanko the calico cat is your study buddy for every lesson!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-cat">🐱</span>
+    <p>Made with 🌸 by Nyanko Academy · Calico Series</p>
+    <p style="margin-top:4px;">がんばって！ · 화이팅！</p>
+    <div class="footer-scripts">あ 가</div>
+  </footer>
+
+</div>
+
+<script>
+// Floating symbols
+const symbols = ['🌸','🌷','🌼','✨','🌺','💐','⭐','🌻','🪷','あ','い','う','가','나','다'];
+const floatEl = document.getElementById('floatSymbols');
+for (let i = 0; i < 20; i++) {
+  const s = document.createElement('div');
+  s.className = 'fsym';
+  s.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  s.style.left = Math.random() * 100 + '%';
+  s.style.bottom = '-30px';
+  s.style.fontSize = (0.8 + Math.random() * 0.8) + 'rem';
+  s.style.animationDuration = (12 + Math.random() * 16) + 's';
+  s.style.animationDelay = (-Math.random() * 25) + 's';
+  floatEl.appendChild(s);
+}
+
+// Load progress from both apps
+const jpDone = JSON.parse(localStorage.getItem('jpCompleted') || '[]').length;
+const krDone = JSON.parse(localStorage.getItem('krCompleted') || '[]').length;
+const totalDone = jpDone + krDone;
+
+document.getElementById('totalDone').textContent = totalDone;
+document.getElementById('jpBar').style.width = Math.round(jpDone / 90 * 100) + '%';
+document.getElementById('krBar').style.width = Math.round(krDone / 90 * 100) + '%';
+document.getElementById('jpProgress').textContent = jpDone + ' / 90';
+document.getElementById('krProgress').textContent = krDone + ' / 90';
+</script>
+</body>
+</html>
