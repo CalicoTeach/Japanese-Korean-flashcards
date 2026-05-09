@@ -243,6 +243,15 @@
     background: linear-gradient(135deg, #96281b 0%, #c0392b 45%, #2980b9 80%, #1a5276 100%);
   }
 
+  /* English card */
+  .card-en {
+    background: linear-gradient(145deg, #f0f7ff 0%, #dbeafe 40%, #e8f8f0 100%);
+    border: 2px solid #bfdbfe;
+  }
+  .card-en .card-header {
+    background: linear-gradient(135deg, #1a5fb4 0%, #2e86de 45%, #54a0ff 80%, #48dbfb 100%);
+  }
+
   .card-header {
     padding: 20px 20px 16px;
     position: relative;
@@ -318,6 +327,7 @@
   .card-zh .meta-chip { background: #ffe8e8; color: #c42828; }
   .card-dz .meta-chip { background: #fff3d6; color: #b86a00; }
   .card-np .meta-chip { background: #fde8e6; color: #96281b; }
+  .card-en .meta-chip { background: #dbeafe; color: #1a5fb4; }
 
   .card-desc {
     font-size: 0.82rem;
@@ -359,6 +369,7 @@
   .card-zh .card-cta { background: linear-gradient(135deg, #c42828, #f5a020); box-shadow: 0 4px 16px rgba(196,40,40,0.35); }
   .card-dz .card-cta { background: linear-gradient(135deg, #b86a00, #f5c842); box-shadow: 0 4px 16px rgba(184,106,0,0.35); }
   .card-np .card-cta { background: linear-gradient(135deg, #96281b, #2980b9); box-shadow: 0 4px 16px rgba(150,40,27,0.35); }
+  .card-en .card-cta { background: linear-gradient(135deg, #1a5fb4, #48dbfb); box-shadow: 0 4px 16px rgba(26,95,180,0.35); }
   .cta-arrow { font-size: 1.2rem; }
 
   .card-progress-row {
@@ -374,6 +385,7 @@
   .card-zh .mini-bar-fill { background: linear-gradient(90deg, #c42828, #f5c842); }
   .card-dz .mini-bar-fill { background: linear-gradient(90deg, #b86a00, #3a7a4a); }
   .card-np .mini-bar-fill { background: linear-gradient(90deg, #96281b, #2980b9); }
+  .card-en .mini-bar-fill { background: linear-gradient(90deg, #1a5fb4, #48dbfb); }
   .mini-bar-label { font-size: 0.68rem; font-weight: 800; color: #bbb; white-space: nowrap; }
 
   /* ── HOW IT WORKS ── */
@@ -468,11 +480,11 @@
       <span class="strip-label">Cards Done</span>
     </div>
     <div class="strip-item">
-      <span class="strip-val">450</span>
+      <span class="strip-val">540</span>
       <span class="strip-label">Total Cards</span>
     </div>
     <div class="strip-item">
-      <span class="strip-val">5</span>
+      <span class="strip-val">6</span>
       <span class="strip-label">Languages</span>
     </div>
     <div class="strip-item">
@@ -689,6 +701,46 @@
       </div>
     </a>
 
+    <!-- ENGLISH -->
+    <a href="english-flashcards.html" class="lang-card card-en fade-in fade-in-5">
+      <div class="card-header">
+        <div class="card-flag-row">
+          <span class="card-flag">🇬🇧</span>
+          <div>
+            <div class="card-lang-name">English</div>
+            <div class="card-lang-sub">英语 · Yīngyǔ</div>
+          </div>
+        </div>
+        <div class="card-script-preview">Hello! 你好</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta-row">
+          <span class="meta-chip">🌟 Beginner Series</span>
+          <span class="meta-chip">90 cards</span>
+          <span class="meta-chip">为初学者</span>
+        </div>
+        <div class="card-progress-row">
+          <div class="mini-bar-bg">
+            <div class="mini-bar-fill" id="enBar" style="width:0%"></div>
+          </div>
+          <span class="mini-bar-label" id="enProgress">0 / 90</span>
+        </div>
+        <div class="card-desc">专为普通话学习者设计！每张卡片都有中文翻译和拼音。学习日常英语！</div>
+        <div class="card-topics">
+          <span class="topic-tag">👋 Greetings</span>
+          <span class="topic-tag">🛍️ Shopping</span>
+          <span class="topic-tag">👨‍👩‍👧 Family</span>
+          <span class="topic-tag">✈️ Travel</span>
+          <span class="topic-tag">💬 Phrases</span>
+          <span class="topic-tag">+8 more</span>
+        </div>
+        <div class="card-cta">
+          <span>Start English 开始学英语</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
   </div>
 
   <!-- COMING SOON -->
@@ -766,7 +818,8 @@ const krDone = JSON.parse(localStorage.getItem('krCompleted') || '[]').length;
 const zhDone = JSON.parse(localStorage.getItem('zhCompleted') || '[]').length;
 const dzDone = JSON.parse(localStorage.getItem('dzCompleted') || '[]').length;
 const npDone = JSON.parse(localStorage.getItem('npCompleted') || '[]').length;
-const totalDone = jpDone + krDone + zhDone + dzDone + npDone;
+const enDone = JSON.parse(localStorage.getItem('enCompleted') || '[]').length;
+const totalDone = jpDone + krDone + zhDone + dzDone + npDone + enDone;
 
 document.getElementById('totalDone').textContent = totalDone;
 document.getElementById('jpBar').style.width = Math.round(jpDone / 90 * 100) + '%';
@@ -774,11 +827,13 @@ document.getElementById('krBar').style.width = Math.round(krDone / 90 * 100) + '
 document.getElementById('zhBar').style.width = Math.round(zhDone / 90 * 100) + '%';
 document.getElementById('dzBar').style.width = Math.round(dzDone / 90 * 100) + '%';
 document.getElementById('npBar').style.width = Math.round(npDone / 90 * 100) + '%';
+document.getElementById('enBar').style.width = Math.round(enDone / 90 * 100) + '%';
 document.getElementById('jpProgress').textContent = jpDone + ' / 90';
 document.getElementById('krProgress').textContent = krDone + ' / 90';
 document.getElementById('zhProgress').textContent = zhDone + ' / 90';
 document.getElementById('dzProgress').textContent = dzDone + ' / 90';
 document.getElementById('npProgress').textContent = npDone + ' / 90';
+document.getElementById('enProgress').textContent = enDone + ' / 90';
 </script>
 
 <script>
