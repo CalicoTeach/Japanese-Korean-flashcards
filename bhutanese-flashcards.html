@@ -543,10 +543,12 @@ function speakWord() {
   if (!window.speechSynthesis) return;
   const c = cards[currentCardIdx];
   window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(c.dz);
-  utt.lang = "dz";
-  utt.rate = 0.85;
   const btn = document.getElementById("speakBtn");
+  // Dzongkha has no device voice — speak romanisation slowly in English
+  const utt = new SpeechSynthesisUtterance(c.rom);
+  utt.lang = "en-US";
+  utt.rate = 0.7;
+  utt.pitch = 1;
   if (btn) btn.classList.add("speaking");
   utt.onend = () => { if (btn) btn.classList.remove("speaking"); };
   utt.onerror = () => { if (btn) btn.classList.remove("speaking"); };
