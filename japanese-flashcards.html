@@ -689,6 +689,30 @@
   }
 
   .spacer { height: 80px; }
+
+  /* ── AUDIO BUTTON ── */
+  .speak-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: 2px solid rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.2);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .speak-btn:hover { background: rgba(255,255,255,0.35); transform: scale(1.05); }
+  .speak-btn:active { transform: scale(0.97); }
+  .speak-btn.speaking { animation: speakPulse 0.6s ease infinite alternate; }
+  @keyframes speakPulse { from { opacity: 1; } to { opacity: 0.6; } }
+
 </style>
 </head>
 <body>
@@ -755,6 +779,7 @@
         <div class="card-romaji" id="cardRomaji">Konnichiwa</div>
         <div class="card-pronunciation" id="cardPronunciation">kon-nee-chee-wah</div>
         <div class="card-meaning" id="cardMeaning">Hello / Good Afternoon</div>
+        <button class="speak-btn" onclick="event.stopPropagation(); speakWord()" id="speakBtn">🔊 Hear it</button>
         <div class="card-tap-hint">tap to flip 🐾</div>
       </div>
       <!-- BACK -->
@@ -1197,6 +1222,22 @@ function updateStats() {
 // ═══════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════
+
+// ── AUDIO / SPEAK ──
+function speakWord() {
+  if (!window.speechSynthesis) return;
+  const c = cards[currentCardIdx];
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(c.kana);
+  utt.lang = "ja-JP";
+  utt.rate = 0.85;
+  const btn = document.getElementById("speakBtn");
+  if (btn) btn.classList.add("speaking");
+  utt.onend = () => { if (btn) btn.classList.remove("speaking"); };
+  utt.onerror = () => { if (btn) btn.classList.remove("speaking"); };
+  window.speechSynthesis.speak(utt);
+}
+
 buildTimetable();
 updateCard();
 updateProgressBar();
