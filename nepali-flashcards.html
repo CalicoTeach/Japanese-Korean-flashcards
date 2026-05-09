@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>नेपाली 90-Day Journey 🏔️</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --crimson: #c0392b;
+    --crimson-deep: #96281b;
+    --crimson-light: #fde8e6;
+    --blue: #2980b9;
+    --blue-light: #d6eaf8;
+    --gold: #f0c040;
+    --gold-light: #fef9e7;
+    --forest: #27ae60;
+    --forest-light: #d5f5e3;
+    --cream: #fff8f6;
+    --warm-brown: #7b3a2e;
+    --text: #2c1008;
+    --card-shadow: 0 8px 32px rgba(150,40,27,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+  .petal-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+  .petal { position: absolute; opacity: 0; animation: floatUp linear infinite; font-size: 14px; }
+  @keyframes floatUp {
+    0% { transform: translateY(110vh) rotate(0deg) scale(0.8); opacity: 0; }
+    10% { opacity: 0.3; }
+    90% { opacity: 0.15; }
+    100% { transform: translateY(-10vh) rotate(360deg) scale(1.1); opacity: 0; }
+  }
+
+  header {
+    position: relative; z-index: 10;
+    background: linear-gradient(135deg, #96281b 0%, #c0392b 40%, #2980b9 80%, #1a5276 100%);
+    padding: 20px 24px 18px;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(150,40,27,0.35);
+  }
+  .header-cat { font-size: 3rem; display: block; animation: bounce 2.5s ease-in-out infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  header h1 { font-size: 1.5rem; font-weight: 900; color: white; text-shadow: 0 2px 8px rgba(0,0,0,0.2); letter-spacing: -0.5px; }
+  header p { color: rgba(255,255,255,0.9); font-size: 0.85rem; font-weight: 600; margin-top: 2px; }
+  .np-title { font-family: 'Noto Sans Devanagari', sans-serif; font-size: 1.1rem; color: rgba(255,255,255,0.85); }
+
+  .progress-wrap { position: relative; z-index: 10; background: white; padding: 12px 20px; border-bottom: 2px solid var(--crimson-light); }
+  .progress-label { font-size: 0.75rem; font-weight: 800; color: var(--crimson-deep); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .progress-bar-bg { background: var(--crimson-light); border-radius: 20px; height: 10px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--crimson-deep), var(--blue)); border-radius: 20px; transition: width 0.5s ease; }
+  .progress-stats { display: flex; justify-content: space-between; margin-top: 6px; font-size: 0.72rem; font-weight: 700; color: #999; }
+
+  .nav-tabs { position: relative; z-index: 10; display: flex; background: white; border-bottom: 2px solid var(--crimson-light); overflow-x: auto; scrollbar-width: none; }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab { flex: none; padding: 12px 18px; font-size: 0.8rem; font-weight: 800; color: #bbb; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; background: none; border-top: none; border-left: none; border-right: none; }
+  .nav-tab.active { color: var(--crimson-deep); border-bottom-color: var(--crimson-deep); }
+
+  .back-btn-wrap { position: relative; z-index: 10; background: white; padding: 10px 16px; border-bottom: 1px solid #f5e8e6; }
+  .back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 800; color: var(--crimson-deep); text-decoration: none; padding: 6px 14px; background: var(--crimson-light); border-radius: 20px; }
+
+  .view { display: none; padding: 16px; }
+  .view.active { display: block; }
+
+  /* TIMETABLE */
+  .week-section { margin-bottom: 20px; }
+  .week-label { font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #bbb; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .week-label::after { content: ''; flex: 1; height: 1px; background: #f0e0de; }
+  .days-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .day-pill { aspect-ratio: 1; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; background: white; border: 2px solid #f0e0de; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .day-pill:hover { border-color: var(--crimson); transform: scale(1.05); }
+  .day-pill.done { background: linear-gradient(135deg, var(--crimson-deep), var(--crimson)); border-color: var(--crimson-deep); }
+  .day-num { font-size: 0.75rem; font-weight: 900; color: var(--text); }
+  .day-pill.done .day-num { color: white; }
+  .day-check { font-size: 0.65rem; margin-top: 1px; }
+
+  /* FLASHCARD */
+  .flashcard-view { display: flex; flex-direction: column; align-items: center; padding: 16px; }
+  .card-nav { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 360px; margin-bottom: 12px; }
+  .card-nav-btn { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--crimson-light); background: white; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .card-nav-btn:hover { background: var(--crimson-light); }
+  .card-counter { font-size: 0.8rem; font-weight: 800; color: #bbb; }
+  .card-scene { width: 100%; max-width: 360px; perspective: 1000px; cursor: pointer; margin-bottom: 12px; }
+  .card-inner { width: 100%; min-height: 320px; position: relative; transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); border-radius: 28px; }
+  .card-inner.flipped { transform: rotateY(180deg); }
+  .card-face { position: absolute; inset: 0; border-radius: 28px; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px 24px; gap: 8px; }
+  .card-front { background: linear-gradient(145deg, #fff5f4 0%, #fde8e6 40%, #eaf4fd 100%); border: 2px solid #f5c0bc; box-shadow: var(--card-shadow); }
+  .card-back { background: linear-gradient(145deg, #eaf4fd 0%, #d6eaf8 50%, #fff5f4 100%); border: 2px solid #a8d0f0; box-shadow: var(--card-shadow); transform: rotateY(180deg); }
+  .card-deco { font-size: 1.4rem; }
+  .card-week-tag { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; background: var(--crimson-light); color: var(--crimson-deep); padding: 3px 12px; border-radius: 20px; }
+  .card-nepali { font-family: 'Noto Sans Devanagari', sans-serif; font-size: 3.2rem; font-weight: 700; color: var(--crimson-deep); line-height: 1.2; text-align: center; text-shadow: 0 2px 8px rgba(150,40,27,0.15); }
+  .card-romaji { font-size: 1.1rem; font-weight: 900; color: var(--warm-brown); letter-spacing: 1px; }
+  .card-pronunciation { font-size: 0.8rem; color: #aaa; font-style: italic; font-weight: 600; }
+  .card-meaning { font-size: 1.1rem; font-weight: 900; color: var(--text); text-align: center; }
+  .card-tap-hint { font-size: 0.7rem; color: #ccc; font-weight: 700; margin-top: 4px; }
+  .back-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #bbb; }
+  .back-try { font-family: 'Noto Sans Devanagari', sans-serif; font-size: 1rem; font-weight: 800; color: var(--warm-brown); text-align: center; }
+  .back-translation { font-size: 0.82rem; color: #888; font-style: italic; font-weight: 600; text-align: center; }
+  .back-divider { width: 40px; height: 2px; background: var(--crimson); border-radius: 2px; margin: 8px 0; }
+  .back-did-you-know { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #bbb; }
+  .back-fact { font-size: 0.8rem; color: var(--text); text-align: center; font-weight: 600; line-height: 1.5; }
+  .cat-mascot-card { font-size: 1.4rem; margin-top: 8px; }
+
+  .card-actions { display: flex; gap: 12px; margin-top: 16px; width: 100%; max-width: 360px; }
+  .action-btn { flex: 1; padding: 14px 12px; border-radius: 16px; border: none; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 900; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .btn-got-it { background: linear-gradient(135deg, var(--crimson-deep), var(--crimson)); color: white; box-shadow: 0 4px 16px rgba(150,40,27,0.35); }
+  .btn-got-it:hover { transform: translateY(-2px); }
+  .btn-again { background: white; color: var(--crimson-deep); border: 2px solid var(--crimson-light); }
+  .btn-again:hover { background: var(--crimson-light); }
+
+  /* CATEGORIES */
+  .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cat-card { background: white; border-radius: 20px; padding: 20px 16px; text-align: center; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.06); border: 2px solid transparent; transition: all 0.2s; }
+  .cat-card:hover { transform: translateY(-3px); box-shadow: var(--card-shadow); border-color: var(--crimson); }
+  .cat-emoji { font-size: 2.2rem; display: block; margin-bottom: 8px; }
+  .cat-name { font-size: 0.9rem; font-weight: 900; color: var(--text); }
+  .cat-count { font-size: 0.72rem; color: #bbb; font-weight: 700; margin-top: 2px; }
+  .cat-bar { margin-top: 8px; background: var(--crimson-light); border-radius: 10px; height: 6px; overflow: hidden; }
+  .cat-bar-fill { height: 100%; background: linear-gradient(90deg, var(--crimson-deep), var(--blue)); border-radius: 10px; transition: width 0.5s; }
+
+  /* STATS */
+  .stats-hero { background: linear-gradient(135deg, var(--crimson-deep) 0%, var(--crimson) 50%, var(--blue) 100%); border-radius: 24px; padding: 24px; text-align: center; color: white; margin-bottom: 16px; }
+  .stats-hero-cat { font-size: 3rem; display: block; margin-bottom: 8px; }
+  .stats-hero h2 { font-size: 1.3rem; font-weight: 900; }
+  .stats-hero p { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .stat-card { background: white; border-radius: 16px; padding: 16px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .stat-icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+  .stat-val { font-size: 1.6rem; font-weight: 900; color: var(--crimson-deep); }
+  .stat-label { font-size: 0.7rem; font-weight: 700; color: #bbb; text-transform: uppercase; letter-spacing: 0.5px; }
+  .streak-section { background: linear-gradient(135deg, var(--crimson-light) 0%, var(--gold-light) 100%); border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 16px; }
+  .streak-flame { font-size: 3rem; }
+  .streak-text h3 { font-size: 1.1rem; font-weight: 900; color: var(--text); }
+  .streak-text p { font-size: 0.8rem; color: rgba(44,16,8,0.7); font-weight: 600; }
+
+  /* BOTTOM NAV */
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 2px solid var(--crimson-light); display: flex; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
+  .bnav-btn { flex: 1; padding: 12px 8px 10px; border: none; background: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .bnav-icon { font-size: 1.4rem; line-height: 1; }
+  .bnav-label { font-size: 0.62rem; font-weight: 800; color: #ccc; text-transform: uppercase; letter-spacing: 0.5px; }
+  .bnav-btn.active .bnav-label { color: var(--crimson-deep); }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: flex-end; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal-sheet { background: white; border-radius: 28px 28px 0 0; padding: 24px 20px 40px; width: 100%; max-width: 480px; animation: slideUp 0.3s ease; }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 20px; }
+  .modal-nepali { font-family: 'Noto Sans Devanagari', sans-serif; font-size: 3.5rem; text-align: center; display: block; line-height: 1.2; margin-bottom: 8px; color: var(--crimson-deep); }
+  .modal-pinyin { text-align: center; font-size: 1.2rem; font-weight: 800; color: var(--warm-brown); margin-bottom: 4px; }
+  .modal-pronunciation { text-align: center; font-size: 0.85rem; color: #bbb; font-style: italic; margin-bottom: 12px; }
+  .modal-meaning { text-align: center; font-size: 1.5rem; font-weight: 900; color: var(--crimson-deep); margin-bottom: 16px; }
+  .modal-fact { background: var(--crimson-light); border-radius: 14px; padding: 14px; font-size: 0.82rem; color: var(--text); font-weight: 600; line-height: 1.6; margin-bottom: 16px; }
+  .modal-fact-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: var(--crimson-deep); margin-bottom: 6px; }
+  .modal-close-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--crimson-deep), var(--crimson)); color: white; border: none; border-radius: 16px; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 900; cursor: pointer; }
+
+  .section-title { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #bbb; margin-bottom: 12px; padding-top: 4px; }
+  .spacer { height: 80px; }
+</style>
+</head>
+<body>
+
+<div class="petal-bg" id="petalBg"></div>
+
+<header>
+  <span class="header-cat">🐱</span>
+  <h1>Nepali · नेपाली</h1>
+  <p class="np-title">90-Day Journey 🏔️ · Calico Series</p>
+</header>
+
+<div class="back-btn-wrap">
+  <a href="index.html" class="back-btn">← All Languages</a>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-label">🐾 Your Journey</div>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-stats">
+    <span id="progressDone">0 cards done</span>
+    <span id="progressLeft">90 remaining</span>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showView('timetable', this)">📅 90 Days</button>
+  <button class="nav-tab" onclick="showView('flashcard', this)">🗂️ Flashcard</button>
+  <button class="nav-tab" onclick="showView('categories', this)">📚 Topics</button>
+  <button class="nav-tab" onclick="showView('stats', this)">📊 Stats</button>
+</div>
+
+<div class="view timetable-view active" id="view-timetable">
+  <div id="timetableGrid"></div>
+  <div class="spacer"></div>
+</div>
+
+<div class="view flashcard-view" id="view-flashcard">
+  <div class="card-nav">
+    <button class="card-nav-btn" onclick="prevCard()">‹</button>
+    <span class="card-counter" id="cardCounter">Day 1 of 90</span>
+    <button class="card-nav-btn" onclick="nextCard()">›</button>
+  </div>
+  <div class="card-scene" onclick="flipCard()">
+    <div class="card-inner" id="cardInner">
+      <div class="card-face card-front">
+        <div class="card-deco">🏔️</div>
+        <div class="card-week-tag" id="cardWeek">Week 1</div>
+        <div class="card-nepali" id="cardNepali">नमस्ते</div>
+        <div class="card-romaji" id="cardRomaji">Namaste</div>
+        <div class="card-pronunciation" id="cardPronunciation">nah-mas-tay</div>
+        <div class="card-meaning" id="cardMeaning">Hello / Greetings</div>
+        <div class="card-tap-hint">tap to flip 🐾</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-deco">🌟</div>
+        <div class="back-label">Try Saying This!</div>
+        <div class="back-try" id="backTry">नमस्ते! तपाईंलाई कस्तो छ?</div>
+        <div class="back-translation" id="backTranslation">"Hello! How are you?"</div>
+        <div class="back-divider"></div>
+        <div class="back-did-you-know">🐱 Did You Know?</div>
+        <div class="back-fact" id="backFact">Namaste comes from Sanskrit meaning 'I bow to the divine in you'. It's used worldwide!</div>
+        <div class="cat-mascot-card">🏔️ जारी राख्नुस्!</div>
+      </div>
+    </div>
+  </div>
+  <div class="card-actions">
+    <button class="action-btn btn-again" onclick="markAgain()">🔄 Again</button>
+    <button class="action-btn btn-got-it" onclick="markGotIt()">✓ Got it!</button>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<div class="view categories-view" id="view-categories">
+  <p class="section-title">Browse by topic 📚</p>
+  <div class="cat-grid" id="catGrid"></div>
+  <div class="spacer"></div>
+</div>
+
+<div class="view stats-view" id="view-stats">
+  <div class="stats-hero">
+    <span class="stats-hero-cat">🐱</span>
+    <h2>Nyanko says जारी राख्नुस्!</h2>
+    <p>Your calico companion is cheering for you~</p>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><span class="stat-icon">📚</span><div class="stat-val" id="statDone">0</div><div class="stat-label">Cards Done</div></div>
+    <div class="stat-card"><span class="stat-icon">🎯</span><div class="stat-val" id="statLeft">90</div><div class="stat-label">Remaining</div></div>
+    <div class="stat-card"><span class="stat-icon">📅</span><div class="stat-val" id="statWeek">Wk 1</div><div class="stat-label">Current Week</div></div>
+    <div class="stat-card"><span class="stat-icon">🏔️</span><div class="stat-val" id="statPct">0%</div><div class="stat-label">Complete</div></div>
+  </div>
+  <div class="streak-section">
+    <div class="streak-flame">🔥</div>
+    <div class="streak-text">
+      <h3 id="streakVal">Keep going!</h3>
+      <p>Study 1 card every day. जारी राख्नुस्! You've got this! 🏔️</p>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <span class="modal-nepali" id="modalNepali">नमस्ते</span>
+    <div class="modal-pinyin" id="modalPinyin">Namaste</div>
+    <div class="modal-pronunciation" id="modalPronunciation">nah-mas-tay</div>
+    <div class="modal-meaning" id="modalMeaning">Hello</div>
+    <div class="modal-fact"><div class="modal-fact-label">🐱 Did You Know?</div><span id="modalFact">Nepali is spoken by over 17 million people and is the official language of Nepal!</span></div>
+    <button class="modal-close-btn" onclick="studyThisCard()">Study This Card 🗂️</button>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <button class="bnav-btn active" id="bnav-timetable" onclick="showView('timetable',null);setBottomNav('timetable')"><span class="bnav-icon">📅</span><span class="bnav-label">Days</span></button>
+  <button class="bnav-btn" id="bnav-flashcard" onclick="showView('flashcard',null);setBottomNav('flashcard')"><span class="bnav-icon">🗂️</span><span class="bnav-label">Study</span></button>
+  <button class="bnav-btn" id="bnav-categories" onclick="showView('categories',null);setBottomNav('categories')"><span class="bnav-icon">📚</span><span class="bnav-label">Topics</span></button>
+  <button class="bnav-btn" id="bnav-stats" onclick="showView('stats',null);setBottomNav('stats')"><span class="bnav-icon">📊</span><span class="bnav-label">Stats</span></button>
+</nav>
+
+<script>
+const cards = [
+  // WEEK 1 — Greetings
+  {day:1,week:1,np:"नमस्ते",rom:"Namaste",pron:"nah-mas-tay",meaning:"Hello / Greetings",category:"Greetings",try:"नमस्ते! तपाईंलाई कस्तो छ?",tryTrans:'"Hello! How are you?"',fact:"Namaste comes from Sanskrit: 'namas' (bow) + 'te' (to you). It's used worldwide as a respectful greeting!"},
+  {day:2,week:1,np:"धन्यवाद",rom:"Dhanyabad",pron:"dhun-ya-bad",meaning:"Thank You",category:"Greetings",try:"धेरै धन्यवाद!",tryTrans:'"Many thanks / Thank you very much!"',fact:"धेरै (dheri) = many/a lot. धेरै धन्यवाद is your warmest thank you! Nepali gratitude is sincere and heartfelt."},
+  {day:3,week:1,np:"अलविदा",rom:"Alwida",pron:"al-wi-da",meaning:"Goodbye",category:"Greetings",try:"अलविदा! फेरि भेटौंला!",tryTrans:'"Goodbye! Let\'s meet again!"',fact:"अलविदा is from Arabic via Urdu. फेरि भेटौंला means 'let's meet again' — a warm Nepali farewell!"},
+  {day:4,week:1,np:"माफ गर्नुस्",rom:"Maaf Garnus",pron:"maaf gar-noos",meaning:"Sorry / Excuse Me",category:"Greetings",try:"माफ गर्नुस्, म ढिलो भएँ।",tryTrans:'"Sorry, I am late."',fact:"माफ = forgiveness (from Arabic via Urdu), गर्नुस् = please do. Politeness in Nepali uses the verb गर्नुस्!"},
+  {day:5,week:1,np:"कस्तो छ?",rom:"Kasto Cha?",pron:"kas-to cha",meaning:"How Are You?",category:"Greetings",try:"तपाईंलाई कस्तो छ?",tryTrans:'"How are you? (polite)"',fact:"तपाईं is the polite 'you'. ञ (cha) = is/are. Nepali has three levels of politeness in pronouns!"},
+  {day:6,week:1,np:"राम्रो छ",rom:"Ramro Cha",pron:"ram-ro cha",meaning:"I'm Fine / It's Good",category:"Greetings",try:"म राम्रो छु, धन्यवाद!",tryTrans:'"I am fine, thank you!"',fact:"राम्रो means both 'good' and 'beautiful/nice'. It's one of the most versatile positive words in Nepali!"},
+  {day:7,week:1,np:"हजुर",rom:"Hajur",pron:"ha-joor",meaning:"Yes (respectful) / Sir/Ma'am",category:"Greetings",try:"हजुर, म बुझें।",tryTrans:'"Yes (respectful), I understand."',fact:"हजुर is an extremely polite 'yes' — also used to address elders respectfully. Essential for good manners!"},
+  // WEEK 2 — Numbers
+  {day:8,week:2,np:"एक",rom:"Ek",pron:"ek",meaning:"One",category:"Numbers",try:"एक कप चिया।",tryTrans:'"One cup of tea."',fact:"एक is also used in the phrase एक छिन (ek chhin) = one moment. Very handy when you need a pause!"},
+  {day:9,week:2,np:"दुई",rom:"Dui",pron:"doo-ee",meaning:"Two",category:"Numbers",try:"दुई जना छौं।",tryTrans:'"We are two people."',fact:"जना (jana) is the counter for people. दुई जना = two people. Nepali uses counters like Japanese and Korean!"},
+  {day:10,week:2,np:"तीन",rom:"Tin",pron:"teen",meaning:"Three",category:"Numbers",try:"तीन बजे भेटौं।",tryTrans:'"Let\'s meet at three o\'clock."',fact:"Nepali numbers are derived from Sanskrit. तीन → three, connecting to Latin 'tres' and English 'three'!"},
+  {day:11,week:2,np:"चार",rom:"Char",pron:"char",meaning:"Four",category:"Numbers",try:"चार किलो सुन्तला।",tryTrans:'"Four kilos of oranges."',fact:"सुन्तला (suntala) = orange, one of Nepal's famous fruits. Numbers + food = perfect market Nepali!"},
+  {day:12,week:2,np:"पाँच",rom:"Paanch",pron:"paanch",meaning:"Five",category:"Numbers",try:"पाँच मिनेट पर्खिनुस्।",tryTrans:'"Please wait five minutes."',fact:"पाँच has a chandrabindu (moon dot) for the nasal 'aa'. Nasals are important in Nepali pronunciation!"},
+  {day:13,week:2,np:"दस",rom:"Das",pron:"das",meaning:"Ten",category:"Numbers",try:"दस रुपैयाँ।",tryTrans:'"Ten rupees."',fact:"रुपैयाँ (rupaiyaa) is the Nepali currency! The word comes from Sanskrit rūpya meaning 'silver'. Shiny!"},
+  {day:14,week:2,np:"सय",rom:"Say",pron:"say",meaning:"Hundred",category:"Numbers",try:"एक सय रुपैयाँ।",tryTrans:'"One hundred rupees."',fact:"सय (hundred) is key for bigger numbers: दुई सय = 200, पाँच सय = 500. Great for shopping!"},
+  // WEEK 3 — Food
+  {day:15,week:3,np:"दाल भात",rom:"Dal Bhat",pron:"daal baat",meaning:"Lentil Soup & Rice",category:"Food",try:"दाल भात खाउँ!",tryTrans:'"Let\'s eat dal bhat!"',fact:"दाल भात is Nepal's national dish, eaten twice a day! Trekkers love the saying: 'Dal Bhat power, 24 hour!'"},
+  {day:16,week:3,np:"चिया",rom:"Chiya",pron:"chi-ya",meaning:"Tea",category:"Food",try:"एक कप चिया पाउँछु?",tryTrans:'"Can I get a cup of tea?"',fact:"Masala chiya (spiced tea with milk) is Nepal's beloved drink. Shared between friends daily — warm and spicy!"},
+  {day:17,week:3,np:"रोटी",rom:"Roti",pron:"ro-tee",meaning:"Flatbread",category:"Food",try:"रोटी र तरकारी खाउँ।",tryTrans:'"Let\'s eat roti and curry."',fact:"तरकारी (tarkari) = vegetable curry. रोटी + तरकारी is a classic Nepali combination — simple, wholesome, delicious!"},
+  {day:18,week:3,np:"मोमो",rom:"Momo",pron:"mo-mo",meaning:"Dumplings",category:"Food",try:"मोमो खाने?",tryTrans:'"Shall we eat momo?"',fact:"मोमो are Nepal's most beloved street food! Steamed dumplings filled with veg or meat, served with spicy sauce."},
+  {day:19,week:3,np:"पानी",rom:"Paani",pron:"paa-nee",meaning:"Water",category:"Food",try:"एक गिलास पानी दिनुस्।",tryTrans:'"Please give me a glass of water."',fact:"पानी is essential! In Nepal's trekking culture, staying hydrated at altitude is critical. Always ask for पानी!"},
+  {day:20,week:3,np:"मिठो",rom:"Mitho",pron:"mi-tho",meaning:"Delicious / Sweet",category:"Food",try:"यो खाना धेरै मिठो छ!",tryTrans:'"This food is very delicious!"',fact:"मिठो means both delicious and sweet — a true double compliment! The Nepali way of saying 'yum'!"},
+  {day:21,week:3,np:"फल",rom:"Phal",pron:"phal",meaning:"Fruit",category:"Food",try:"फल खानु राम्रो हुन्छ।",tryTrans:'"It is good to eat fruit."',fact:"Nepal grows incredible fruits — mangoes, guavas, lichees in the Terai; apples in the hills of Mustang!"},
+  // WEEK 4 — Family
+  {day:22,week:4,np:"बुबा",rom:"Buba",pron:"boo-ba",meaning:"Father / Dad",category:"Family",try:"मेरो बुबा राम्रो मान्छे हुनुहुन्छ।",tryTrans:'"My father is a good person."',fact:"बुबा is the affectionate form. The formal is पिता (pita). Respect for elders is central to Nepali culture!"},
+  {day:23,week:4,np:"आमा",rom:"Aama",pron:"aa-ma",meaning:"Mother / Mum",category:"Family",try:"आमा, म तपाईंलाई माया गर्छु!",tryTrans:'"Mum, I love you!"',fact:"आमा is one of the most warmly spoken words in Nepal. Mothers are deeply revered — her word is law at home!"},
+  {day:24,week:4,np:"दाई",rom:"Dai",pron:"dai",meaning:"Older Brother",category:"Family",try:"मेरो दाई धेरै मिलनसार छन्।",tryTrans:'"My older brother is very friendly."',fact:"दाई (older bro) and दिदी (older sis) are also used for older non-family members as a sign of respect!"},
+  {day:25,week:4,np:"दिदी",rom:"Didi",pron:"di-di",meaning:"Older Sister",category:"Family",try:"दिदीले खाना पकाउनुभयो।",tryTrans:'"Older sister cooked the food."',fact:"दिदी is also a respectful term for any older woman — shopkeepers, teachers, even strangers if older than you!"},
+  {day:26,week:4,np:"साथी",rom:"Saathi",pron:"saa-thi",meaning:"Friend",category:"Family",try:"तिमी मेरो राम्रो साथी हौ।",tryTrans:'"You are my good friend."',fact:"साथी means friend/companion. साथ (saath) = together. A साथी is literally 'one who walks with you'!"},
+  {day:27,week:4,np:"माया",rom:"Maya",pron:"maa-ya",meaning:"Love / Affection",category:"Family",try:"म तिमीलाई माया गर्छु।",tryTrans:'"I love you."',fact:"माया is a beautiful Nepali concept — deep affection and love. It's also a popular girl's name in Nepal!"},
+  {day:28,week:4,np:"परिवार",rom:"Pariwar",pron:"pa-ri-waar",meaning:"Family",category:"Family",try:"मेरो परिवार ठूलो छ।",tryTrans:'"My family is big."',fact:"Nepali families are often extended and close-knit. Joint families living together is still very common!"},
+  // WEEK 5 — Places
+  {day:29,week:5,np:"घर",rom:"Ghar",pron:"ghar",meaning:"House / Home",category:"Places",try:"घर जाउँ!",tryTrans:'"Let\'s go home!"',fact:"घर means home and house — like 家 in Chinese. Home is the heart of Nepali family life!"},
+  {day:30,week:5,np:"बजार",rom:"Bajar",pron:"ba-jaar",meaning:"Market / Bazaar",category:"Places",try:"बजार जाने?",tryTrans:'"Shall we go to the market?"',fact:"बजार comes from Persian! Nepali markets are vibrant, colorful, and full of spices, fabrics, and fresh produce!"},
+  {day:31,week:5,np:"मन्दिर",rom:"Mandir",pron:"man-dir",meaning:"Temple",category:"Places",try:"पशुपतिनाथ मन्दिर धेरै प्रसिद्ध छ।",tryTrans:'"Pashupatinath temple is very famous."',fact:"Nepal has thousands of temples! Pashupatinath in Kathmandu is one of the most sacred Hindu temples in the world."},
+  {day:32,week:5,np:"हिमाल",rom:"Himal",pron:"hi-mal",meaning:"Mountain (with snow)",category:"Places",try:"हिमाल धेरै अग्लो छ।",tryTrans:'"The mountain is very tall."',fact:"हिमाल means 'snow-abode' (hima = snow, alaya = home). The Himalayas! Nepal has 8 of the world's 14 highest peaks!"},
+  {day:33,week:5,np:"नदी",rom:"Nadi",pron:"na-dee",meaning:"River",category:"Places",try:"नदी किनारमा बस्नु राम्रो छ।",tryTrans:'"It is nice to sit by the river."',fact:"Nepal's rivers cascade from the Himalayas to the plains. White-water rafting on Nepal's rivers is world-famous!"},
+  {day:34,week:5,np:"सडक",rom:"Sadak",pron:"sa-dak",meaning:"Road / Street",category:"Places",try:"यो सडक कहाँ जान्छ?",tryTrans:'"Where does this road go?"',fact:"Sadak comes from Arabic! Nepal's mountain roads are engineering marvels — winding through stunning terrain!"},
+  {day:35,week:5,np:"काठमाडौं",rom:"Kathmandu",pron:"kaath-man-doo",meaning:"Kathmandu (Capital)",category:"Places",try:"काठमाडौं धेरै राम्रो शहर हो।",tryTrans:'"Kathmandu is a very beautiful city."',fact:"काठमाडौं = 'wooden temple' (kaastha = wood, mandap = temple). Named after a single-tree temple built in 1596!"},
+  // WEEK 6 — Time
+  {day:36,week:6,np:"आज",rom:"Aaja",pron:"aa-ja",meaning:"Today",category:"Time",try:"आज मौसम राम्रो छ।",tryTrans:'"The weather is nice today."',fact:"आज = today, हिजो (hijo) = yesterday, भोलि (bholi) = tomorrow. Three essential time words!"},
+  {day:37,week:6,np:"भोलि",rom:"Bholi",pron:"bho-li",meaning:"Tomorrow",category:"Time",try:"भोलि भेटौं!",tryTrans:'"Let\'s meet tomorrow!"',fact:"भोलि is one of Nepal's most-used words! Things can always happen भोलि — though today is even better!"},
+  {day:38,week:6,np:"अहिले",rom:"Ahile",pron:"a-hi-le",meaning:"Now",category:"Time",try:"अहिले के गर्ने?",tryTrans:'"What shall we do now?"',fact:"अहिले is the casual 'now'. For emphasis: अहिले नै (ahile nai) = right now! Both are very useful!"},
+  {day:39,week:6,np:"बिहान",rom:"Bihaan",pron:"bi-haan",meaning:"Morning",category:"Time",try:"बिहान सबेरै उठ्नुस्!",tryTrans:'"Wake up early in the morning!"',fact:"बिहान is the beautiful Nepali morning. In the hills, sunrise over the Himalayas at dawn is absolutely magical!"},
+  {day:40,week:6,np:"साँझ",rom:"Saanjh",pron:"saanjh",meaning:"Evening",category:"Time",try:"साँझमा भेटौं।",tryTrans:'"Let\'s meet in the evening."',fact:"साँझ is the golden hour in Nepal — when temples ring with bells and the mountains glow in the sunset!"},
+  {day:41,week:6,np:"रात",rom:"Raat",pron:"raat",meaning:"Night",category:"Time",try:"राम्रो रात!",tryTrans:'"Good night!"',fact:"Nepali nights in the Himalayas are spectacular — clear skies reveal a breathtaking sea of stars!"},
+  {day:42,week:6,np:"सन्",rom:"San",pron:"san",meaning:"Year / Anno",category:"Time",try:"नयाँ वर्ष मुबारक!",tryTrans:'"Happy New Year!"',fact:"Nepal uses the Bikram Sambat calendar — currently about 56-57 years ahead of the Gregorian calendar!"},
+  // WEEK 7 — Verbs
+  {day:43,week:7,np:"जाने",rom:"Jane",pron:"ja-ne",meaning:"To Go",category:"Verbs",try:"म बजार जाने छु।",tryTrans:'"I am going to the market."',fact:"जाने is the infinitive/verbal noun form. जान्छु (jaanchu) = I go. Verb forms change by tense and person!"},
+  {day:44,week:7,np:"आउने",rom:"Aaune",pron:"aa-oo-ne",meaning:"To Come",category:"Verbs",try:"तपाईं आउने हुनुहुन्छ?",tryTrans:'"Will you be coming?"',fact:"आउने is both 'to come' and 'the coming/next'. आउने साल = next year! Versatile and essential."},
+  {day:45,week:7,np:"खाने",rom:"Khane",pron:"kha-ne",meaning:"To Eat",category:"Verbs",try:"खाना खाने हो?",tryTrans:'"Shall we eat food?"',fact:"खाना खाने (khana khane) = eating food. Doubling the root-related word for emphasis is a Nepali pattern!"},
+  {day:46,week:7,np:"पिउने",rom:"Piune",pron:"pi-oo-ne",meaning:"To Drink",category:"Verbs",try:"पानी पिउने?",tryTrans:'"Shall we drink water?"',fact:"पिउने and खाने are your essential 'survival' verbs for food and drink. Master these and you'll never go hungry!"},
+  {day:47,week:7,np:"हेर्ने",rom:"Herne",pron:"her-ne",meaning:"To Look / Watch",category:"Verbs",try:"हेर्नुस्! हिमाल देखिन्छ!",tryTrans:'"Look! The mountain is visible!"',fact:"हेर्नुस् is the polite imperative: 'please look'. देखिन्छ (dekhinccha) = is visible/can be seen. Beautiful!"},
+  {day:48,week:7,np:"बोल्ने",rom:"Bolne",pron:"bol-ne",meaning:"To Speak",category:"Verbs",try:"नेपाली बोल्नुस्!",tryTrans:'"Please speak Nepali!"',fact:"बोल्नुस् = please speak (polite command). बोल्छु (bolchu) = I speak. You're already speaking Nepali!"},
+  {day:49,week:7,np:"गर्ने",rom:"Garne",pron:"gar-ne",meaning:"To Do",category:"Verbs",try:"के गर्ने?",tryTrans:'"What to do?"',fact:"के गर्ने? is a classic Nepali expression of mild resignation — 'what can you do?' Life's challenges, met with grace!"},
+  // WEEK 8 — Adjectives
+  {day:50,week:8,np:"राम्रो",rom:"Ramro",pron:"ram-ro",meaning:"Good / Beautiful / Nice",category:"Adjectives",try:"नेपाल धेरै राम्रो छ!",tryTrans:'"Nepal is very beautiful!"',fact:"राम्रो is Nepal's ultimate all-purpose positive word. Good food, beautiful scenery, a nice person — all राम्रो!"},
+  {day:51,week:8,np:"अग्लो",rom:"Aglo",pron:"ag-lo",meaning:"Tall / High",category:"Adjectives",try:"सगरमाथा सबभन्दा अग्लो हो।",tryTrans:'"Everest is the tallest of all."',fact:"Sagarmatha (सगरमाथा) is the Nepali name for Everest — meaning 'forehead of the sky'. What a poetic name!"},
+  {day:52,week:8,np:"सानो",rom:"Sano",pron:"saa-no",meaning:"Small / Little",category:"Adjectives",try:"यो सानो बच्चा धेरै प्यारो छ।",tryTrans:'"This small child is very cute."',fact:"सानो is also used affectionately. सानी (saani) = little girl, सानो केटो (sano keto) = little boy. So sweet!"},
+  {day:53,week:8,np:"धेरै",rom:"Dherai",pron:"dhe-rai",meaning:"Many / Very / A Lot",category:"Adjectives",try:"धेरै धन्यवाद! धेरै राम्रो!",tryTrans:'"Many thanks! Very nice!"',fact:"धेरै is the Nepali intensifier — put it before any adjective to say 'very'! One word, endless uses!"},
+  {day:54,week:8,np:"खुसी",rom:"Khushi",pron:"khu-shi",meaning:"Happy",category:"Adjectives",try:"म धेरै खुसी छु!",tryTrans:'"I am very happy!"',fact:"खुसी comes from Persian! Happiness is valued deeply in Nepali culture — simple joys are celebrated warmly."},
+  {day:55,week:8,np:"गर्मी",rom:"Garmi",pron:"gar-mi",meaning:"Hot / Warm",category:"Adjectives",try:"आज धेरै गर्मी छ।",tryTrans:'"It is very hot today."',fact:"Nepal's climate varies drastically — from tropical heat in the Terai to icy Himalayan cold. Gotta know weather words!"},
+  {day:56,week:8,np:"चिसो",rom:"Chiso",pron:"chi-so",meaning:"Cold",category:"Adjectives",try:"हिमालमा धेरै चिसो हुन्छ।",tryTrans:'"It is very cold in the Himalayas."',fact:"चिसो also means 'cool/refreshing' for drinks and weather. पानी चिसो छ = the water is cold/refreshing!"},
+  // WEEK 9 — Feelings
+  {day:57,week:9,np:"मन पर्छ",rom:"Man Parcha",pron:"man par-cha",meaning:"I Like It",category:"Feelings",try:"मलाई नेपाल धेरै मन पर्छ!",tryTrans:'"I like Nepal very much!"',fact:"मन (man) = heart/mind, पर्छ (parcha) = falls/lands. 'It falls on my heart' = I like it. So poetic!"},
+  {day:58,week:9,np:"मन पर्दैन",rom:"Man Pardaina",pron:"man par-dai-na",meaning:"I Don't Like It",category:"Feelings",try:"मलाई चिसो मौसम मन पर्दैन।",tryTrans:'"I don\'t like cold weather."',fact:"Add दैन (daina) to negate! मन पर्छ → मन पर्दैन. Negation in Nepali is logical and consistent!"},
+  {day:59,week:9,np:"थाकेको",rom:"Thakeko",pron:"tha-ke-ko",meaning:"Tired",category:"Feelings",try:"म धेरै थाकेको छु।",tryTrans:'"I am very tired."',fact:"Trekking in Nepal? You'll definitely need थाकेको! But the views are worth every bit of tiredness!"},
+  {day:60,week:9,np:"डर लाग्छ",rom:"Dar Laagcha",pron:"dar laag-cha",meaning:"I Am Scared / Afraid",category:"Feelings",try:"उचाइमा डर लाग्छ।",tryTrans:'"I am afraid of heights."',fact:"उचाइ (uchai) = height. A relatable feeling on Nepal's suspension bridges and narrow mountain paths!"},
+  {day:61,week:9,np:"अचम्म",rom:"Achamm",pron:"a-chamm",meaning:"Surprised / Amazing",category:"Feelings",try:"अचम्म! यो कति सुन्दर छ!",tryTrans:'"Amazing! How beautiful this is!"',fact:"अचम्म is an exclamation of wonder. Nepal constantly inspires अचम्म — from temples to mountain vistas!"},
+  {day:62,week:9,np:"सन्तुष्ट",rom:"Santusht",pron:"san-tusht",meaning:"Satisfied / Content",category:"Feelings",try:"म सन्तुष्ट छु।",tryTrans:'"I am satisfied/content."',fact:"Contentment is valued in Nepal's culture. Simple life, close family, and nature's beauty = true सन्तुष्ट!"},
+  {day:63,week:9,np:"जारी राख्नुस्",rom:"Jaari Rakhnos",pron:"jaa-ri rakh-nos",meaning:"Keep Going / Continue!",category:"Feelings",try:"जारी राख्नुस्! तपाईं सक्नुहुन्छ!",tryTrans:'"Keep going! You can do it!"',fact:"जारी राख्नुस् is Nepali's ultimate encouragement phrase! Use it to cheer on trekkers, students, and friends!"},
+  // WEEK 10 — Nature
+  {day:64,week:10,np:"सगरमाथा",rom:"Sagarmatha",pron:"sa-gar-maa-tha",meaning:"Mount Everest",category:"Nature",try:"सगरमाथा संसारकै अग्लो हो।",tryTrans:'"Sagarmatha is the tallest in the world."',fact:"सगरमाथा = 'forehead of the sky'. Nepal's national pride! Known internationally as Everest (8,849m)!"},
+  {day:65,week:10,np:"जंगल",rom:"Jangal",pron:"jang-gal",meaning:"Forest / Jungle",category:"Nature",try:"जंगलमा धेरै जनावर छन्।",tryTrans:'"There are many animals in the forest."',fact:"Nepal's Terai jungles are home to tigers, rhinos, elephants, and leopards. Chitwan National Park is world-famous!"},
+  {day:66,week:10,np:"माटो",rom:"Maato",pron:"maa-to",meaning:"Earth / Soil",category:"Nature",try:"माटो मलिलो छ।",tryTrans:'"The soil is fertile."',fact:"Nepal's varied soils support rice terraces, tea gardens, and high-altitude crops. Terrace farming is breathtaking art!"},
+  {day:67,week:10,np:"बादल",rom:"Baadal",pron:"baa-dal",meaning:"Cloud",category:"Nature",try:"हिमालमाथि बादल छ।",tryTrans:'"There are clouds above the mountain."',fact:"बादल (cloud) moves fast in Nepal's mountains. A clear morning can become misty by afternoon — always enchanting!"},
+  {day:68,week:10,np:"फूल",rom:"Phool",pron:"phool",meaning:"Flower",category:"Nature",try:"रोडोडेन्ड्रन नेपालको राष्ट्रिय फूल हो।",tryTrans:'"Rhododendron is Nepal\'s national flower."',fact:"The rhododendron (लालीगुराँस) blooms crimson and pink across Nepal's hills every spring — absolutely stunning!"},
+  {day:69,week:10,np:"पानी",rom:"Paani",pron:"paa-nee",meaning:"Water / Rain",category:"Nature",try:"वर्षाको पानी परिरहेको छ।",tryTrans:'"It is raining."',fact:"Nepal's monsoon (जुन-सेप्टेम्बर) brings life-giving rains. 80% of annual rainfall comes in just four months!"},
+  {day:70,week:10,np:"हावा",rom:"Haawa",pron:"haa-wa",meaning:"Wind / Air",category:"Nature",try:"चिसो हावा चलिरहेको छ।",tryTrans:'"Cold wind is blowing."',fact:"Himalayan winds can be fierce! The Khumbu Icefall and summit ridges have winds that shaped the landscape!"},
+  // WEEK 11 — Culture
+  {day:71,week:11,np:"दसैं",rom:"Dashain",pron:"da-shain",meaning:"Dashain Festival",category:"Culture",try:"दसैंमा टीका लगाउँछौं।",tryTrans:'"We apply tika (blessing) at Dashain."',fact:"दसैं is Nepal's biggest festival! Families reunite, elders give blessings (टीका) on the forehead, and there is feasting!"},
+  {day:72,week:11,np:"टीका",rom:"Tika",pron:"tee-ka",meaning:"Blessing Mark on Forehead",category:"Culture",try:"आमाले टीका लगाउनुभयो।",tryTrans:'"Mother applied the tika (blessing)."',fact:"टीका (red mark + rice + yogurt) is placed on the forehead as a blessing at Dashain. A deeply sacred tradition!"},
+  {day:73,week:11,np:"नमस्कार",rom:"Namaskar",pron:"na-mas-kaar",meaning:"Formal Greeting / Namaste (formal)",category:"Culture",try:"गुरुजीलाई नमस्कार!",tryTrans:'"Formal greeting to the teacher!"',fact:"नमस्कार is more formal than नमस्ते. Used with teachers, elders, and respected figures. Always accompanied by a bow!"},
+  {day:74,week:11,np:"संस्कृति",rom:"Sanskriti",pron:"san-skri-ti",meaning:"Culture",category:"Culture",try:"नेपालको संस्कृति धनी छ।",tryTrans:'"Nepal\'s culture is rich."',fact:"Nepal has dozens of ethnic groups — Sherpa, Tamang, Newari, Gurung and more — each with unique संस्कृति!"},
+  {day:75,week:11,np:"पूजा",rom:"Puja",pron:"poo-ja",meaning:"Prayer / Worship",category:"Culture",try:"बिहान पूजा गर्छु।",tryTrans:'"I do puja (prayer) in the morning."',fact:"पूजा is daily prayer ritual in Hindu and Buddhist homes. Incense, flowers, and lamps offered to deities at dawn!"},
+  {day:76,week:11,np:"सहयोग",rom:"Sahayog",pron:"sa-ha-yog",meaning:"Help / Cooperation",category:"Culture",try:"सहयोग गर्नुस्।",tryTrans:'"Please help / Let\'s cooperate."',fact:"सहयोग is a core Nepali value. Community cooperation — helping neighbours in farming, building, festivals — is essential!"},
+  {day:77,week:11,np:"शान्ति",rom:"Shanti",pron:"shaan-ti",meaning:"Peace",category:"Culture",try:"संसारमा शान्ति होस्।",tryTrans:'"May there be peace in the world."',fact:"शान्ति is both a word and a name. Nepal aspires to be a zone of peace — the Buddha was born here at Lumbini!"},
+  // WEEK 12 — Travel & Practical
+  {day:78,week:12,np:"कति",rom:"Kati",pron:"ka-ti",meaning:"How Much / How Many",category:"Travel",try:"यो कति पर्छ?",tryTrans:'"How much does this cost?"',fact:"कति पर्छ? is your essential shopping phrase! Use it confidently in Thamel markets and hillside teahouses!"},
+  {day:79,week:12,np:"कहाँ",rom:"Kahaan",pron:"ka-haan",meaning:"Where?",category:"Travel",try:"बाथरुम कहाँ छ?",tryTrans:'"Where is the bathroom?"',fact:"कहाँ छ? = where is it? The most useful question word for any traveller! Add any noun before छ?"},
+  {day:80,week:12,np:"अस्पताल",rom:"Aspataal",pron:"as-pa-taal",meaning:"Hospital",category:"Travel",try:"नजिकको अस्पताल कहाँ छ?",tryTrans:'"Where is the nearest hospital?"',fact:"अस्पताल (from English 'hospital'). Nepali has absorbed many English words — helpful for travellers!"},
+  {day:81,week:12,np:"होटल",rom:"Hotel",pron:"ho-tel",meaning:"Hotel / Restaurant",category:"Travel",try:"राम्रो होटल छ?",tryTrans:'"Is there a good hotel?"',fact:"In Nepal, होटल can mean both hotel and local restaurant/teahouse. Always check what you're getting!"},
+  {day:82,week:12,np:"बस",rom:"Bus",pron:"bus",meaning:"Bus",category:"Travel",try:"बस कहाँ छ?",tryTrans:'"Where is the bus?"',fact:"Buses are the main transport in Nepal! Local buses are crowded and adventurous — a true Nepali experience!"},
+  {day:83,week:12,np:"नक्सा",rom:"Naksha",pron:"nak-sha",meaning:"Map",category:"Travel",try:"नक्सा दिनुस् न!",tryTrans:'"Please give me a map!"',fact:"नक्सा comes from Arabic/Persian! Nepal's maps show incredible terrain — valleys, peaks, and ancient trade routes!"},
+  {day:84,week:12,np:"सहर",rom:"Sahar",pron:"sa-har",meaning:"City / Town",category:"Travel",try:"ठूलो सहर कुन हो?",tryTrans:'"Which is the big city?"',fact:"सहर (city) comes from Arabic/Persian शहर (shahr). A reminder of ancient Silk Road connections through South Asia!"},
+  // WEEK 13 — Wrap-Up & Culture
+  {day:85,week:13,np:"नेपाल",rom:"Nepal",pron:"ne-paal",meaning:"Nepal",category:"Culture",try:"नेपाल सुन्दर देश हो।",tryTrans:'"Nepal is a beautiful country."',fact:"The origin of 'Nepal' is debated — possibly from Sanskrit 'Nepa' (a place at the foot of the mountains) + ala!"},
+  {day:86,week:13,np:"नेपाली",rom:"Nepali",pron:"ne-paa-li",meaning:"Nepali Language / Person",category:"Culture",try:"म नेपाली सिकिरहेको छु!",tryTrans:'"I am learning Nepali!"',fact:"Nepali uses Devanagari script (same as Hindi). It's the lingua franca of Nepal — spoken by most as a second language!"},
+  {day:87,week:13,np:"हिमालय",rom:"Himalay",pron:"hi-maa-lay",meaning:"The Himalayas",category:"Culture",try:"हिमालय नेपालको गर्व हो।",tryTrans:'"The Himalayas are Nepal\'s pride."',fact:"हिमालय = hima (snow) + alaya (abode). The 'abode of snow'! Home to 8 of the world's 14 highest peaks!"},
+  {day:88,week:13,np:"लुम्बिनी",rom:"Lumbini",pron:"lum-bi-ni",meaning:"Lumbini (Buddha's Birthplace)",category:"Culture",try:"लुम्बिनी बुद्धको जन्मस्थान हो।",tryTrans:'"Lumbini is the birthplace of the Buddha."',fact:"The Buddha was born in Lumbini, Nepal, around 563 BCE! It's a UNESCO World Heritage Site and global pilgrimage site."},
+  {day:89,week:13,np:"आशा",rom:"Aasha",pron:"aa-sha",meaning:"Hope",category:"Culture",try:"आशा छ, भोलि राम्रो हुनेछ।",tryTrans:'"There is hope, tomorrow will be good."',fact:"आशा (hope) is also a beloved Nepali name for women. Hope is woven into Nepal's resilient, joyful spirit!"},
+  {day:90,week:13,np:"धन्यवाद नेपाल!",rom:"Dhanyabad Nepal!",pron:"dhun-ya-bad ne-paal",meaning:"Thank You Nepal!",category:"Culture",try:"धेरै धन्यवाद! म सफल भएँ!",tryTrans:'"Many thanks! I have succeeded!"',fact:"You completed 90 days of Nepali! तपाईं अद्भुत हुनुहुन्छ! (You are wonderful!) जारी राख्नुस्! 🎉"},
+];
+
+let completed = new Set(JSON.parse(localStorage.getItem('npCompleted') || '[]'));
+let currentCardIdx = 0;
+let isFlipped = false;
+let currentModalDay = null;
+
+function saveProgress() { localStorage.setItem('npCompleted', JSON.stringify([...completed])); }
+
+function spawnPetals() {
+  const bg = document.getElementById('petalBg');
+  const symbols = ['🏔️','❄️','🌸','✨','⭐','🪷','🌺','🌼','💫'];
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    p.style.left = Math.random() * 100 + '%';
+    p.style.fontSize = (10 + Math.random() * 8) + 'px';
+    p.style.animationDuration = (10 + Math.random() * 14) + 's';
+    p.style.animationDelay = (-Math.random() * 20) + 's';
+    bg.appendChild(p);
+  }
+}
+spawnPetals();
+
+function showView(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name === 'stats') updateStats();
+  if (name === 'categories') buildCategories();
+  if (name === 'flashcard') updateCard();
+  if (name === 'timetable') buildTimetable();
+  updateProgressBar();
+}
+
+function updateProgressBar() {
+  const done = completed.size;
+  const pct = Math.round(done / 90 * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressDone').textContent = done + ' cards done';
+  document.getElementById('progressLeft').textContent = (90 - done) + ' remaining';
+}
+
+function buildTimetable() {
+  const grid = document.getElementById('timetableGrid');
+  grid.innerHTML = '';
+  const weeks = {};
+  cards.forEach(c => { if (!weeks[c.week]) weeks[c.week] = []; weeks[c.week].push(c); });
+  Object.keys(weeks).forEach(wk => {
+    const sec = document.createElement('div');
+    sec.className = 'week-section';
+    sec.innerHTML = `<div class="week-label">Week ${wk}</div><div class="days-row" id="week-${wk}-row"></div>`;
+    grid.appendChild(sec);
+    const row = sec.querySelector('.days-row');
+    weeks[wk].forEach(c => {
+      const pill = document.createElement('div');
+      pill.className = 'day-pill' + (completed.has(c.day) ? ' done' : '');
+      pill.innerHTML = `<span class="day-num">${c.day}</span><span class="day-check">${completed.has(c.day) ? '✓' : ''}</span>`;
+      pill.onclick = () => openModal(c.day - 1);
+      row.appendChild(pill);
+    });
+  });
+}
+
+function updateCard() {
+  const c = cards[currentCardIdx];
+  document.getElementById('cardNepali').textContent = c.np;
+  document.getElementById('cardRomaji').textContent = c.rom;
+  document.getElementById('cardPronunciation').textContent = c.pron;
+  document.getElementById('cardMeaning').textContent = c.meaning;
+  document.getElementById('cardWeek').textContent = 'Week ' + c.week;
+  document.getElementById('backTry').textContent = c.try;
+  document.getElementById('backTranslation').textContent = c.tryTrans;
+  document.getElementById('backFact').textContent = c.fact;
+  document.getElementById('cardCounter').textContent = 'Day ' + c.day + ' of 90';
+  document.getElementById('cardInner').classList.remove('flipped');
+  isFlipped = false;
+}
+
+function flipCard() { isFlipped = !isFlipped; document.getElementById('cardInner').classList.toggle('flipped', isFlipped); }
+function nextCard() { currentCardIdx = (currentCardIdx + 1) % cards.length; updateCard(); }
+function prevCard() { currentCardIdx = (currentCardIdx - 1 + cards.length) % cards.length; updateCard(); }
+function markGotIt() { completed.add(cards[currentCardIdx].day); saveProgress(); updateProgressBar(); buildTimetable(); nextCard(); }
+function markAgain() { nextCard(); }
+
+const catEmojis = { Greetings:'👋', Numbers:'🔢', Food:'🍜', Family:'👨‍👩‍👧', Places:'📍', Time:'🕐', Verbs:'🏃', Adjectives:'✨', Feelings:'💭', Nature:'🏔️', Culture:'🙏', Travel:'✈️' };
+
+function buildCategories() {
+  const cats = {};
+  cards.forEach(c => { if (!cats[c.category]) cats[c.category] = []; cats[c.category].push(c); });
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = '';
+  Object.entries(cats).forEach(([name, arr]) => {
+    const done = arr.filter(c => completed.has(c.day)).length;
+    const pct = Math.round(done / arr.length * 100);
+    const el = document.createElement('div');
+    el.className = 'cat-card';
+    el.innerHTML = `<span class="cat-emoji">${catEmojis[name] || '📚'}</span><div class="cat-name">${name}</div><div class="cat-count">${done}/${arr.length} done</div><div class="cat-bar"><div class="cat-bar-fill" style="width:${pct}%"></div></div>`;
+    el.onclick = () => { currentCardIdx = cards.indexOf(arr[0]); showView('flashcard', null); setBottomNav('flashcard'); document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', i===1)); };
+    grid.appendChild(el);
+  });
+}
+
+function updateStats() {
+  const done = completed.size;
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('statLeft').textContent = 90 - done;
+  document.getElementById('statWeek').textContent = 'Wk ' + Math.min(Math.floor(done/7)+1, 13);
+  document.getElementById('statPct').textContent = Math.round(done/90*100) + '%';
+  const phrases = ['Start today!','Keep going!','जारी राख्नुस्!','So impressive!','Almost there!'];
+  document.getElementById('streakVal').textContent = phrases[Math.min(Math.floor(done/18), 4)];
+}
+
+function openModal(idx) {
+  currentModalDay = idx;
+  const c = cards[idx];
+  document.getElementById('modalNepali').textContent = c.np;
+  document.getElementById('modalPinyin').textContent = c.rom;
+  document.getElementById('modalPronunciation').textContent = c.pron;
+  document.getElementById('modalMeaning').textContent = c.meaning;
+  document.getElementById('modalFact').textContent = c.fact;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(e) { if (e.target === document.getElementById('modalOverlay')) document.getElementById('modalOverlay').classList.remove('open'); }
+function studyThisCard() { document.getElementById('modalOverlay').classList.remove('open'); currentCardIdx = currentModalDay; showView('flashcard', null); setBottomNav('flashcard'); document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', i===1)); }
+function setBottomNav(name) { ['timetable','flashcard','categories','stats'].forEach(n => { const btn = document.getElementById('bnav-'+n); if(btn) btn.classList.toggle('active', n===name); }); }
+
+buildTimetable();
+updateProgressBar();
+</script>
+</body>
+</html>

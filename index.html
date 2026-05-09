@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nyanko Academy 🐱 — Language Flashcards</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@700&family=Noto+Sans+KR:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@700&family=Noto+Sans+KR:wght@700&family=Noto+Sans+SC:wght@700&family=Noto+Sans+Devanagari:wght@700&display=swap" rel="stylesheet">
 <style>
   :root {
     --cream: #fff9f5;
@@ -210,6 +210,33 @@
     background: linear-gradient(135deg, #c96b8a 0%, #b89ad4 50%, #9b72c8 100%);
   }
 
+  /* Mandarin card */
+  .card-zh {
+    background: linear-gradient(145deg, #fff5f5 0%, #ffe8e8 40%, #fff8e0 100%);
+    border: 2px solid #ffd0d0;
+  }
+  .card-zh .card-header {
+    background: linear-gradient(135deg, #c42828 0%, #e84040 50%, #f5a020 80%, #f5c842 100%);
+  }
+
+  /* Bhutanese card */
+  .card-dz {
+    background: linear-gradient(145deg, #fffbf0 0%, #fff3d6 40%, #f0fff4 100%);
+    border: 2px solid #fce0a0;
+  }
+  .card-dz .card-header {
+    background: linear-gradient(135deg, #b86a00 0%, #e8920a 40%, #f5c842 75%, #3a7a4a 100%);
+  }
+
+  /* Nepali card */
+  .card-np {
+    background: linear-gradient(145deg, #fff5f4 0%, #fde8e6 40%, #eaf4fd 100%);
+    border: 2px solid #f5c0bc;
+  }
+  .card-np .card-header {
+    background: linear-gradient(135deg, #96281b 0%, #c0392b 45%, #2980b9 80%, #1a5276 100%);
+  }
+
   .card-header {
     padding: 20px 20px 16px;
     position: relative;
@@ -261,6 +288,8 @@
   }
   .card-jp .card-script-preview { font-family: 'Noto Sans JP', sans-serif; }
   .card-kr .card-script-preview { font-family: 'Noto Sans KR', sans-serif; }
+  .card-zh .card-script-preview { font-family: 'Noto Sans SC', sans-serif; }
+  .card-np .card-script-preview { font-family: 'Noto Sans Devanagari', sans-serif; }
 
   .card-body { padding: 16px 20px 20px; }
 
@@ -280,6 +309,9 @@
   }
   .card-jp .meta-chip { background: var(--sakura-light); color: var(--sakura); }
   .card-kr .meta-chip { background: #f0e8ff; color: var(--lavender); }
+  .card-zh .meta-chip { background: #ffe8e8; color: #c42828; }
+  .card-dz .meta-chip { background: #fff3d6; color: #b86a00; }
+  .card-np .meta-chip { background: #fde8e6; color: #96281b; }
 
   .card-desc {
     font-size: 0.82rem;
@@ -318,6 +350,9 @@
   }
   .card-jp .card-cta { background: linear-gradient(135deg, #e8678a, #f4a0b8); box-shadow: 0 4px 16px rgba(232,103,138,0.35); }
   .card-kr .card-cta { background: linear-gradient(135deg, #c96b8a, #9b72c8); box-shadow: 0 4px 16px rgba(155,114,200,0.35); }
+  .card-zh .card-cta { background: linear-gradient(135deg, #c42828, #f5a020); box-shadow: 0 4px 16px rgba(196,40,40,0.35); }
+  .card-dz .card-cta { background: linear-gradient(135deg, #b86a00, #f5c842); box-shadow: 0 4px 16px rgba(184,106,0,0.35); }
+  .card-np .card-cta { background: linear-gradient(135deg, #96281b, #2980b9); box-shadow: 0 4px 16px rgba(150,40,27,0.35); }
   .cta-arrow { font-size: 1.2rem; }
 
   .card-progress-row {
@@ -330,6 +365,9 @@
   .mini-bar-fill { height: 100%; border-radius: 10px; transition: width 0.5s; }
   .card-jp .mini-bar-fill { background: linear-gradient(90deg, var(--sakura), var(--gold)); }
   .card-kr .mini-bar-fill { background: linear-gradient(90deg, var(--rose), var(--lavender)); }
+  .card-zh .mini-bar-fill { background: linear-gradient(90deg, #c42828, #f5c842); }
+  .card-dz .mini-bar-fill { background: linear-gradient(90deg, #b86a00, #3a7a4a); }
+  .card-np .mini-bar-fill { background: linear-gradient(90deg, #96281b, #2980b9); }
   .mini-bar-label { font-size: 0.68rem; font-weight: 800; color: #bbb; white-space: nowrap; }
 
   /* ── HOW IT WORKS ── */
@@ -424,11 +462,11 @@
       <span class="strip-label">Cards Done</span>
     </div>
     <div class="strip-item">
-      <span class="strip-val">180</span>
+      <span class="strip-val">450</span>
       <span class="strip-label">Total Cards</span>
     </div>
     <div class="strip-item">
-      <span class="strip-val">2</span>
+      <span class="strip-val">5</span>
       <span class="strip-label">Languages</span>
     </div>
     <div class="strip-item">
@@ -525,6 +563,126 @@
       </div>
     </a>
 
+    <!-- MANDARIN -->
+    <a href="mandarin-flashcards.html" class="lang-card card-zh fade-in fade-in-5">
+      <div class="card-header">
+        <div class="card-flag-row">
+          <span class="card-flag">🇨🇳</span>
+          <div>
+            <div class="card-lang-name">Mandarin</div>
+            <div class="card-lang-sub">普通话 · Pǔtōnghuà</div>
+          </div>
+        </div>
+        <div class="card-script-preview">你好世界！</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta-row">
+          <span class="meta-chip">🐉 Dragon Series</span>
+          <span class="meta-chip">90 cards</span>
+          <span class="meta-chip">Beginner</span>
+        </div>
+        <div class="card-progress-row">
+          <div class="mini-bar-bg">
+            <div class="mini-bar-fill" id="zhBar" style="width:0%"></div>
+          </div>
+          <span class="mini-bar-label" id="zhProgress">0 / 90</span>
+        </div>
+        <div class="card-desc">Greetings, numbers, food, family, colours, culture & more — learn Mandarin with your calico cat guide and dragon flair!</div>
+        <div class="card-topics">
+          <span class="topic-tag">👋 Greetings</span>
+          <span class="topic-tag">🔢 Numbers</span>
+          <span class="topic-tag">🍜 Food</span>
+          <span class="topic-tag">🐉 Culture</span>
+          <span class="topic-tag">🛍️ Shopping</span>
+          <span class="topic-tag">+8 more</span>
+        </div>
+        <div class="card-cta">
+          <span>Start Mandarin Journey</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- BHUTANESE -->
+    <a href="bhutanese-flashcards.html" class="lang-card card-dz fade-in fade-in-5">
+      <div class="card-header">
+        <div class="card-flag-row">
+          <span class="card-flag">🇧🇹</span>
+          <div>
+            <div class="card-lang-name">Dzongkha</div>
+            <div class="card-lang-sub">རྫོང་ཁ · Bhutanese</div>
+          </div>
+        </div>
+        <div class="card-script-preview">རྫོང་ཁ</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta-row">
+          <span class="meta-chip">🏔️ Thunder Dragon Series</span>
+          <span class="meta-chip">90 cards</span>
+          <span class="meta-chip">Beginner</span>
+        </div>
+        <div class="card-progress-row">
+          <div class="mini-bar-bg">
+            <div class="mini-bar-fill" id="dzBar" style="width:0%"></div>
+          </div>
+          <span class="mini-bar-label" id="dzProgress">0 / 90</span>
+        </div>
+        <div class="card-desc">Greetings, food, family, nature, culture & more — explore the language of the Land of the Thunder Dragon with your calico guide!</div>
+        <div class="card-topics">
+          <span class="topic-tag">👋 Greetings</span>
+          <span class="topic-tag">🏔️ Nature</span>
+          <span class="topic-tag">🍵 Food</span>
+          <span class="topic-tag">🏯 Dzong</span>
+          <span class="topic-tag">🐉 Culture</span>
+          <span class="topic-tag">+7 more</span>
+        </div>
+        <div class="card-cta">
+          <span>Start Dzongkha Journey</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- NEPALI -->
+    <a href="nepali-flashcards.html" class="lang-card card-np fade-in fade-in-5">
+      <div class="card-header">
+        <div class="card-flag-row">
+          <span class="card-flag">🇳🇵</span>
+          <div>
+            <div class="card-lang-name">Nepali</div>
+            <div class="card-lang-sub">नेपाली · Nepali</div>
+          </div>
+        </div>
+        <div class="card-script-preview">नमस्ते</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta-row">
+          <span class="meta-chip">🙏 Namaste Series</span>
+          <span class="meta-chip">90 cards</span>
+          <span class="meta-chip">Beginner</span>
+        </div>
+        <div class="card-progress-row">
+          <div class="mini-bar-bg">
+            <div class="mini-bar-fill" id="npBar" style="width:0%"></div>
+          </div>
+          <span class="mini-bar-label" id="npProgress">0 / 90</span>
+        </div>
+        <div class="card-desc">From namaste to Everest — learn Nepali with dal bhat energy, Himalayan beauty, and your faithful calico companion!</div>
+        <div class="card-topics">
+          <span class="topic-tag">🙏 Namaste</span>
+          <span class="topic-tag">🍜 Dal Bhat</span>
+          <span class="topic-tag">🏔️ Himalaya</span>
+          <span class="topic-tag">👨‍👩‍👧 Family</span>
+          <span class="topic-tag">🎉 Culture</span>
+          <span class="topic-tag">+7 more</span>
+        </div>
+        <div class="card-cta">
+          <span>Start Nepali Journey</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
   </div>
 
   <!-- COMING SOON -->
@@ -533,10 +691,10 @@
     <h3>More languages coming soon~</h3>
     <p>Your calico cat is studying hard!</p>
     <div class="cs-chips">
-      <span class="cs-chip">🇨🇳 Mandarin</span>
       <span class="cs-chip">🇫🇷 French</span>
       <span class="cs-chip">🇪🇸 Spanish</span>
       <span class="cs-chip">🇻🇳 Vietnamese</span>
+      <span class="cs-chip">🇹🇭 Thai</span>
     </div>
   </div>
 
@@ -574,15 +732,15 @@
   <footer>
     <span class="footer-cat">🐱</span>
     <p>Made with 🌸 by Nyanko Academy · Calico Series</p>
-    <p style="margin-top:4px;">がんばって！ · 화이팅！</p>
-    <div class="footer-scripts">あ 가</div>
+    <p style="margin-top:4px;">がんばって！ · 화이팅！ · 加油！ · ལེགས་སོ། · जारी राख्नुस्!</p>
+    <div class="footer-scripts">あ 가 字 ར न</div>
   </footer>
 
 </div>
 
 <script>
 // Floating symbols
-const symbols = ['🌸','🌷','🌼','✨','🌺','💐','⭐','🌻','🪷','あ','い','う','가','나','다'];
+const symbols = ['🌸','🌷','🌼','✨','🌺','💐','⭐','🌻','🪷','🏮','あ','い','う','가','나','다','你','好','龙'];
 const floatEl = document.getElementById('floatSymbols');
 for (let i = 0; i < 20; i++) {
   const s = document.createElement('div');
@@ -596,16 +754,25 @@ for (let i = 0; i < 20; i++) {
   floatEl.appendChild(s);
 }
 
-// Load progress from both apps
+// Load progress from all apps
 const jpDone = JSON.parse(localStorage.getItem('jpCompleted') || '[]').length;
 const krDone = JSON.parse(localStorage.getItem('krCompleted') || '[]').length;
-const totalDone = jpDone + krDone;
+const zhDone = JSON.parse(localStorage.getItem('zhCompleted') || '[]').length;
+const dzDone = JSON.parse(localStorage.getItem('dzCompleted') || '[]').length;
+const npDone = JSON.parse(localStorage.getItem('npCompleted') || '[]').length;
+const totalDone = jpDone + krDone + zhDone + dzDone + npDone;
 
 document.getElementById('totalDone').textContent = totalDone;
 document.getElementById('jpBar').style.width = Math.round(jpDone / 90 * 100) + '%';
 document.getElementById('krBar').style.width = Math.round(krDone / 90 * 100) + '%';
+document.getElementById('zhBar').style.width = Math.round(zhDone / 90 * 100) + '%';
+document.getElementById('dzBar').style.width = Math.round(dzDone / 90 * 100) + '%';
+document.getElementById('npBar').style.width = Math.round(npDone / 90 * 100) + '%';
 document.getElementById('jpProgress').textContent = jpDone + ' / 90';
 document.getElementById('krProgress').textContent = krDone + ' / 90';
+document.getElementById('zhProgress').textContent = zhDone + ' / 90';
+document.getElementById('dzProgress').textContent = dzDone + ' / 90';
+document.getElementById('npProgress').textContent = npDone + ' / 90';
 </script>
 </body>
 </html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>རྫོང་ཁ 90-Day Journey 🏔️</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --saffron: #e8920a;
+    --saffron-deep: #b86a00;
+    --saffron-light: #fff3d6;
+    --orange: #f5a020;
+    --cream: #fff9f0;
+    --forest: #3a7a4a;
+    --forest-light: #d4edd8;
+    --sky: #4a90c4;
+    --sky-light: #d6eaf8;
+    --gold: #f5c842;
+    --warm-brown: #6b3a1f;
+    --text: #2a1500;
+    --card-shadow: 0 8px 32px rgba(184,106,0,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+  .snow-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+  .snowflake { position: absolute; opacity: 0; animation: snowfall linear infinite; font-size: 14px; }
+  @keyframes snowfall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.3; }
+    90% { opacity: 0.15; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  header {
+    position: relative; z-index: 10;
+    background: linear-gradient(135deg, #b86a00 0%, #e8920a 40%, #f5c842 80%, #3a7a4a 100%);
+    padding: 20px 24px 18px;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(184,106,0,0.35);
+  }
+  .header-cat { font-size: 3rem; display: block; animation: bounce 2.5s ease-in-out infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  header h1 { font-size: 1.5rem; font-weight: 900; color: white; text-shadow: 0 2px 8px rgba(0,0,0,0.2); letter-spacing: -0.5px; }
+  header p { color: rgba(255,255,255,0.9); font-size: 0.85rem; font-weight: 600; margin-top: 2px; }
+  .dz-title { font-size: 1.1rem; color: rgba(255,255,255,0.85); }
+
+  .progress-wrap { position: relative; z-index: 10; background: white; padding: 12px 20px; border-bottom: 2px solid var(--saffron-light); }
+  .progress-label { font-size: 0.75rem; font-weight: 800; color: var(--saffron-deep); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .progress-bar-bg { background: var(--saffron-light); border-radius: 20px; height: 10px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--saffron-deep), var(--gold)); border-radius: 20px; transition: width 0.5s ease; }
+  .progress-stats { display: flex; justify-content: space-between; margin-top: 6px; font-size: 0.72rem; font-weight: 700; color: #999; }
+
+  .nav-tabs { position: relative; z-index: 10; display: flex; background: white; border-bottom: 2px solid var(--saffron-light); overflow-x: auto; scrollbar-width: none; }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab { flex: none; padding: 12px 18px; font-size: 0.8rem; font-weight: 800; color: #bbb; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; background: none; border-top: none; border-left: none; border-right: none; }
+  .nav-tab.active { color: var(--saffron-deep); border-bottom-color: var(--saffron-deep); }
+
+  .back-btn-wrap { position: relative; z-index: 10; background: white; padding: 10px 16px; border-bottom: 1px solid #f5ece0; }
+  .back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 800; color: var(--saffron-deep); text-decoration: none; padding: 6px 14px; background: var(--saffron-light); border-radius: 20px; }
+
+  .view { display: none; padding: 16px; }
+  .view.active { display: block; }
+
+  /* TIMETABLE */
+  .week-section { margin-bottom: 20px; }
+  .week-label { font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #bbb; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .week-label::after { content: ''; flex: 1; height: 1px; background: #f0e8dc; }
+  .days-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .day-pill { aspect-ratio: 1; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; background: white; border: 2px solid #f0e8dc; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .day-pill:hover { border-color: var(--saffron); transform: scale(1.05); }
+  .day-pill.done { background: linear-gradient(135deg, var(--saffron-deep), var(--orange)); border-color: var(--saffron-deep); }
+  .day-num { font-size: 0.75rem; font-weight: 900; color: var(--text); }
+  .day-pill.done .day-num { color: white; }
+  .day-check { font-size: 0.65rem; margin-top: 1px; }
+
+  /* FLASHCARD */
+  .flashcard-view { display: flex; flex-direction: column; align-items: center; padding: 16px; }
+  .card-nav { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 360px; margin-bottom: 12px; }
+  .card-nav-btn { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--saffron-light); background: white; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .card-nav-btn:hover { background: var(--saffron-light); }
+  .card-counter { font-size: 0.8rem; font-weight: 800; color: #bbb; }
+  .card-scene { width: 100%; max-width: 360px; perspective: 1000px; cursor: pointer; margin-bottom: 12px; }
+  .card-inner { width: 100%; min-height: 320px; position: relative; transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); border-radius: 28px; }
+  .card-inner.flipped { transform: rotateY(180deg); }
+  .card-face { position: absolute; inset: 0; border-radius: 28px; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px 24px; gap: 8px; }
+  .card-front { background: linear-gradient(145deg, #fffbf0 0%, #fff3d6 40%, #f0fff4 100%); border: 2px solid #fce0a0; box-shadow: var(--card-shadow); }
+  .card-back { background: linear-gradient(145deg, #f0fff4 0%, #d4edd8 50%, #fffbf0 100%); border: 2px solid #a8d8b0; box-shadow: var(--card-shadow); transform: rotateY(180deg); }
+  .card-deco { font-size: 1.4rem; }
+  .card-week-tag { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; background: var(--saffron-light); color: var(--saffron-deep); padding: 3px 12px; border-radius: 20px; }
+  .card-dzongkha { font-size: 3rem; font-weight: 700; color: var(--saffron-deep); line-height: 1.2; text-align: center; text-shadow: 0 2px 8px rgba(184,106,0,0.15); }
+  .card-romaji { font-size: 1.1rem; font-weight: 900; color: var(--warm-brown); letter-spacing: 1px; }
+  .card-pronunciation { font-size: 0.8rem; color: #aaa; font-style: italic; font-weight: 600; }
+  .card-meaning { font-size: 1.1rem; font-weight: 900; color: var(--text); text-align: center; }
+  .card-tap-hint { font-size: 0.7rem; color: #ccc; font-weight: 700; margin-top: 4px; }
+  .back-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #bbb; }
+  .back-try { font-size: 1rem; font-weight: 800; color: var(--warm-brown); text-align: center; }
+  .back-translation { font-size: 0.82rem; color: #888; font-style: italic; font-weight: 600; text-align: center; }
+  .back-divider { width: 40px; height: 2px; background: var(--saffron); border-radius: 2px; margin: 8px 0; }
+  .back-did-you-know { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #bbb; }
+  .back-fact { font-size: 0.8rem; color: var(--text); text-align: center; font-weight: 600; line-height: 1.5; }
+  .cat-mascot-card { font-size: 1.4rem; margin-top: 8px; }
+
+  .card-actions { display: flex; gap: 12px; margin-top: 16px; width: 100%; max-width: 360px; }
+  .action-btn { flex: 1; padding: 14px 12px; border-radius: 16px; border: none; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 900; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .btn-got-it { background: linear-gradient(135deg, var(--saffron-deep), var(--orange)); color: white; box-shadow: 0 4px 16px rgba(184,106,0,0.35); }
+  .btn-got-it:hover { transform: translateY(-2px); }
+  .btn-again { background: white; color: var(--saffron-deep); border: 2px solid var(--saffron-light); }
+  .btn-again:hover { background: var(--saffron-light); }
+
+  /* CATEGORIES */
+  .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cat-card { background: white; border-radius: 20px; padding: 20px 16px; text-align: center; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.06); border: 2px solid transparent; transition: all 0.2s; }
+  .cat-card:hover { transform: translateY(-3px); box-shadow: var(--card-shadow); border-color: var(--saffron); }
+  .cat-emoji { font-size: 2.2rem; display: block; margin-bottom: 8px; }
+  .cat-name { font-size: 0.9rem; font-weight: 900; color: var(--text); }
+  .cat-count { font-size: 0.72rem; color: #bbb; font-weight: 700; margin-top: 2px; }
+  .cat-bar { margin-top: 8px; background: var(--saffron-light); border-radius: 10px; height: 6px; overflow: hidden; }
+  .cat-bar-fill { height: 100%; background: linear-gradient(90deg, var(--saffron-deep), var(--gold)); border-radius: 10px; transition: width 0.5s; }
+
+  /* STATS */
+  .stats-hero { background: linear-gradient(135deg, var(--saffron-deep) 0%, var(--orange) 50%, var(--gold) 100%); border-radius: 24px; padding: 24px; text-align: center; color: white; margin-bottom: 16px; }
+  .stats-hero-cat { font-size: 3rem; display: block; margin-bottom: 8px; }
+  .stats-hero h2 { font-size: 1.3rem; font-weight: 900; }
+  .stats-hero p { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .stat-card { background: white; border-radius: 16px; padding: 16px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .stat-icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+  .stat-val { font-size: 1.6rem; font-weight: 900; color: var(--saffron-deep); }
+  .stat-label { font-size: 0.7rem; font-weight: 700; color: #bbb; text-transform: uppercase; letter-spacing: 0.5px; }
+  .streak-section { background: linear-gradient(135deg, var(--saffron-light) 0%, var(--gold) 100%); border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 16px; }
+  .streak-flame { font-size: 3rem; }
+  .streak-text h3 { font-size: 1.1rem; font-weight: 900; color: var(--text); }
+  .streak-text p { font-size: 0.8rem; color: rgba(42,21,0,0.7); font-weight: 600; }
+
+  /* BOTTOM NAV */
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 2px solid var(--saffron-light); display: flex; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
+  .bnav-btn { flex: 1; padding: 12px 8px 10px; border: none; background: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .bnav-icon { font-size: 1.4rem; line-height: 1; }
+  .bnav-label { font-size: 0.62rem; font-weight: 800; color: #ccc; text-transform: uppercase; letter-spacing: 0.5px; }
+  .bnav-btn.active .bnav-label { color: var(--saffron-deep); }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: flex-end; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal-sheet { background: white; border-radius: 28px 28px 0 0; padding: 24px 20px 40px; width: 100%; max-width: 480px; animation: slideUp 0.3s ease; }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle { width: 40px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 20px; }
+  .modal-dzongkha { font-size: 3.5rem; text-align: center; display: block; line-height: 1.2; margin-bottom: 8px; color: var(--saffron-deep); }
+  .modal-pinyin { text-align: center; font-size: 1.2rem; font-weight: 800; color: var(--warm-brown); margin-bottom: 4px; }
+  .modal-pronunciation { text-align: center; font-size: 0.85rem; color: #bbb; font-style: italic; margin-bottom: 12px; }
+  .modal-meaning { text-align: center; font-size: 1.5rem; font-weight: 900; color: var(--saffron-deep); margin-bottom: 16px; }
+  .modal-fact { background: var(--saffron-light); border-radius: 14px; padding: 14px; font-size: 0.82rem; color: var(--text); font-weight: 600; line-height: 1.6; margin-bottom: 16px; }
+  .modal-fact-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: var(--saffron-deep); margin-bottom: 6px; }
+  .modal-close-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--saffron-deep), var(--orange)); color: white; border: none; border-radius: 16px; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 900; cursor: pointer; }
+
+  .section-title { font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #bbb; margin-bottom: 12px; padding-top: 4px; }
+  .spacer { height: 80px; }
+</style>
+</head>
+<body>
+
+<div class="snow-bg" id="snowBg"></div>
+
+<header>
+  <span class="header-cat">🐱</span>
+  <h1>Dzongkha · རྫོང་ཁ</h1>
+  <p class="dz-title">90-Day Journey 🏔️ · Calico Series</p>
+</header>
+
+<div class="back-btn-wrap">
+  <a href="index.html" class="back-btn">← All Languages</a>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-label">🐾 Your Journey</div>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-stats">
+    <span id="progressDone">0 cards done</span>
+    <span id="progressLeft">90 remaining</span>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showView('timetable', this)">📅 90 Days</button>
+  <button class="nav-tab" onclick="showView('flashcard', this)">🗂️ Flashcard</button>
+  <button class="nav-tab" onclick="showView('categories', this)">📚 Topics</button>
+  <button class="nav-tab" onclick="showView('stats', this)">📊 Stats</button>
+</div>
+
+<div class="view timetable-view active" id="view-timetable">
+  <div id="timetableGrid"></div>
+  <div class="spacer"></div>
+</div>
+
+<div class="view flashcard-view" id="view-flashcard">
+  <div class="card-nav">
+    <button class="card-nav-btn" onclick="prevCard()">‹</button>
+    <span class="card-counter" id="cardCounter">Day 1 of 90</span>
+    <button class="card-nav-btn" onclick="nextCard()">›</button>
+  </div>
+  <div class="card-scene" onclick="flipCard()">
+    <div class="card-inner" id="cardInner">
+      <div class="card-face card-front">
+        <div class="card-deco">🏔️</div>
+        <div class="card-week-tag" id="cardWeek">Week 1</div>
+        <div class="card-dzongkha" id="cardDzongkha">ཀུཟུ་ཟང་པོ</div>
+        <div class="card-romaji" id="cardRomaji">Kuzu Zangpo</div>
+        <div class="card-pronunciation" id="cardPronunciation">koo-zoo zang-po</div>
+        <div class="card-meaning" id="cardMeaning">Hello</div>
+        <div class="card-tap-hint">tap to flip 🐾</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-deco">🌟</div>
+        <div class="back-label">Try Saying This!</div>
+        <div class="back-try" id="backTry">ཀུཟུ་ཟང་པོ་ལགས།</div>
+        <div class="back-translation" id="backTranslation">"Hello (polite form)"</div>
+        <div class="back-divider"></div>
+        <div class="back-did-you-know">🐱 Did You Know?</div>
+        <div class="back-fact" id="backFact">Adding ལགས (lags) makes it more respectful — use it with elders and monks!</div>
+        <div class="cat-mascot-card">🏔️ ལེགས་སོ།</div>
+      </div>
+    </div>
+  </div>
+  <div class="card-actions">
+    <button class="action-btn btn-again" onclick="markAgain()">🔄 Again</button>
+    <button class="action-btn btn-got-it" onclick="markGotIt()">✓ Got it!</button>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<div class="view categories-view" id="view-categories">
+  <p class="section-title">Browse by topic 📚</p>
+  <div class="cat-grid" id="catGrid"></div>
+  <div class="spacer"></div>
+</div>
+
+<div class="view stats-view" id="view-stats">
+  <div class="stats-hero">
+    <span class="stats-hero-cat">🐱</span>
+    <h2>Nyanko says ལེགས་སོ།</h2>
+    <p>Your calico companion is so proud of you~</p>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><span class="stat-icon">📚</span><div class="stat-val" id="statDone">0</div><div class="stat-label">Cards Done</div></div>
+    <div class="stat-card"><span class="stat-icon">🎯</span><div class="stat-val" id="statLeft">90</div><div class="stat-label">Remaining</div></div>
+    <div class="stat-card"><span class="stat-icon">📅</span><div class="stat-val" id="statWeek">Wk 1</div><div class="stat-label">Current Week</div></div>
+    <div class="stat-card"><span class="stat-icon">🏔️</span><div class="stat-val" id="statPct">0%</div><div class="stat-label">Complete</div></div>
+  </div>
+  <div class="streak-section">
+    <div class="streak-flame">🔥</div>
+    <div class="streak-text">
+      <h3 id="streakVal">Keep going!</h3>
+      <p>Study 1 card every day. ལེགས་སོ། You've got this! 🏔️</p>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <span class="modal-dzongkha" id="modalDzongkha">ཀུཟུ་ཟང་པོ</span>
+    <div class="modal-pinyin" id="modalPinyin">Kuzu Zangpo</div>
+    <div class="modal-pronunciation" id="modalPronunciation">koo-zoo zang-po</div>
+    <div class="modal-meaning" id="modalMeaning">Hello</div>
+    <div class="modal-fact"><div class="modal-fact-label">🐱 Did You Know?</div><span id="modalFact">The official language of Bhutan, spoken by about 160,000 people!</span></div>
+    <button class="modal-close-btn" onclick="studyThisCard()">Study This Card 🗂️</button>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <button class="bnav-btn active" id="bnav-timetable" onclick="showView('timetable',null);setBottomNav('timetable')"><span class="bnav-icon">📅</span><span class="bnav-label">Days</span></button>
+  <button class="bnav-btn" id="bnav-flashcard" onclick="showView('flashcard',null);setBottomNav('flashcard')"><span class="bnav-icon">🗂️</span><span class="bnav-label">Study</span></button>
+  <button class="bnav-btn" id="bnav-categories" onclick="showView('categories',null);setBottomNav('categories')"><span class="bnav-icon">📚</span><span class="bnav-label">Topics</span></button>
+  <button class="bnav-btn" id="bnav-stats" onclick="showView('stats',null);setBottomNav('stats')"><span class="bnav-icon">📊</span><span class="bnav-label">Stats</span></button>
+</nav>
+
+<script>
+const cards = [
+  // WEEK 1 — Greetings
+  {day:1,week:1,dz:"ཀུཟུ་ཟང་པོ",rom:"Kuzu Zangpo",pron:"koo-zoo zang-po",meaning:"Hello",category:"Greetings",try:"ཀུཟུ་ཟང་པོ་ལགས།",tryTrans:'"Hello (polite)"',fact:"The standard Dzongkha greeting. Add ལགས (lags) for extra politeness with elders and monks!"},
+  {day:2,week:1,dz:"ཐུགས་རྗེ་ཆེ",rom:"Thuejay Che",pron:"thway-jay che",meaning:"Thank You",category:"Greetings",try:"ཐུགས་རྗེ་ཆེ་ལགས།",tryTrans:'"Thank you very much (polite)"',fact:"ཐུགས་རྗེ་ཆེ literally means 'great compassion' — gratitude expressed as a wish of blessings!"},
+  {day:3,week:1,dz:"ལོག་ཤོག",rom:"Log Shog",pron:"log shog",meaning:"Goodbye",category:"Greetings",try:"ལོག་ཤོག། ནཱ་མར་འབྱོན།",tryTrans:'"Goodbye! Come again!"',fact:"ལོག་ཤོག means 'go back/return well'. A warm farewell wishing the person a safe journey home."},
+  {day:4,week:1,dz:"གང་སྨོ་ཡོད་པ",rom:"Gang Mo Yopa",pron:"gang mo yo-pa",meaning:"How Are You?",category:"Greetings",try:"ཁྱོད་གང་སྨོ་ཡོད་པ？",tryTrans:'"How are you?"',fact:"A common check-in phrase. Bhutanese culture values asking after others' wellbeing warmly!"},
+  {day:5,week:1,dz:"ལེགས་སོ",rom:"Legso",pron:"leg-so",meaning:"Good / Well Done",category:"Greetings",try:"ལེགས་སོ། ཡག་པོ་ཡོད།",tryTrans:'"Good! I am well."',fact:"ལེགས་སོ is both 'I'm well' and 'well done/great'. One versatile, encouraging word!"},
+  {day:6,week:1,dz:"གདོང་འདི་ཤིང་ར",rom:"Dong Di Shingra",pron:"dong di shing-ra",meaning:"What Is Your Name?",category:"Greetings",try:"ཁྱོད་གི་གདོང་འདི་ཤིང་ར？",tryTrans:'"What is your name?"',fact:"Bhutanese names are given by lamas (Buddhist teachers) — names carry deep spiritual meaning!"},
+  {day:7,week:1,dz:"ང་གི་མིང",rom:"Nga Gi Ming",pron:"nga gi ming",meaning:"My Name Is",category:"Greetings",try:"ང་གི་མིང་[name] ཨིན།",tryTrans:'"My name is [name]."',fact:"ང (nga) = I/me in Dzongkha. མིང (ming) = name. Simple and direct!"},
+  // WEEK 2 — Numbers
+  {day:8,week:2,dz:"གཅིག",rom:"Chig",pron:"chig",meaning:"One",category:"Numbers",try:"གཅིག་ཅིག་ཡོད།",tryTrans:'"There is one."',fact:"Dzongkha numbers are based on Tibetan. གཅིག (one) is the foundation of counting!"},
+  {day:9,week:2,dz:"གཉིས",rom:"Nyi",pron:"nyee",meaning:"Two",category:"Numbers",try:"གཉིས་ཀ་ཡོད།",tryTrans:'"Both / There are two."',fact:"གཉིས་ཀ means 'both' — a common pairing word. Bhutan has two official scripts too!"},
+  {day:10,week:2,dz:"གསུམ",rom:"Sum",pron:"sum",meaning:"Three",category:"Numbers",try:"གསུམ་ཡོད།",tryTrans:'"There are three."',fact:"གསུམ appears in the Three Jewels of Buddhism: Buddha, Dharma, Sangha — central to Bhutanese life!"},
+  {day:11,week:2,dz:"བཞི",rom:"Zhi",pron:"zhee",meaning:"Four",category:"Numbers",try:"ར་བཞི་ཡོད།",tryTrans:'"There are four yaks."',fact:"བཞི (four) sounds like the word for 'four directions' — symbolically important in Buddhist culture!"},
+  {day:12,week:2,dz:"ལྔ",rom:"Nga",pron:"nga",meaning:"Five",category:"Numbers",try:"ལྔ་ཡོད།",tryTrans:'"There are five."',fact:"ལྔ sounds like ང (I/me) — careful in context! Five is auspicious in Buddhist teachings."},
+  {day:13,week:2,dz:"དྲུག",rom:"Drug",pron:"droog",meaning:"Six",category:"Numbers",try:"དྲུག་ཡོད།",tryTrans:'"There are six."',fact:"དྲུག་པ (sixth) is used for the 6th day of the lunar calendar — important in Bhutanese festivals!"},
+  {day:14,week:2,dz:"བཅུ",rom:"Chu",pron:"choo",meaning:"Ten",category:"Numbers",try:"བཅུ་ཡོད།",tryTrans:'"There are ten."',fact:"བཅུ is the base for teens: བཅུ་གཅིག=11, བཅུ་གཉིས=12. Learn 1–10 and you can count higher!"},
+  // WEEK 3 — Food
+  {day:15,week:3,dz:"ཟས",rom:"Zay",pron:"zay",meaning:"Food / Meal",category:"Food",try:"ཟས་ཤིག་ཟ།",tryTrans:'"Let\'s eat a meal!"',fact:"Food is sacred in Bhutan. Meals are offered to monks and shared with neighbours as a blessing!"},
+  {day:16,week:3,dz:"འབྲུ",rom:"Dru",pron:"droo",meaning:"Rice / Grain",category:"Food",try:"འབྲུ་ཡག་པོ་ཡོད།",tryTrans:'"The rice is good."',fact:"Red rice is Bhutan's staple grain! It grows at high altitudes and is uniquely nutty in flavour."},
+  {day:17,week:3,dz:"ཨེམ་དར",rom:"Em Dar",pron:"em dar",meaning:"Chilli",category:"Food",try:"ཨེམ་དར་མང་ཤོས་ཡོད།",tryTrans:'"There are many chillies!"',fact:"Bhutanese cuisine is famous for being extremely spicy. Chilli isn't a spice — it's a vegetable!"},
+  {day:18,week:3,dz:"དར་ཇ",rom:"Dha Ja",pron:"dha ja",meaning:"Butter Tea",category:"Food",try:"དར་ཇ་གཅིག་དགོ།",tryTrans:'"I want one (cup of) butter tea."',fact:"Butter tea (made with yak butter and salt!) is the traditional Bhutanese drink. Warming and nourishing!"},
+  {day:19,week:3,dz:"འོ་མ",rom:"O Ma",pron:"oh ma",meaning:"Milk",category:"Food",try:"འོ་མ་ཡག་པོ་ཡོད།",tryTrans:'"The milk is good."',fact:"Yak milk is used to make butter, cheese, and tea in Bhutan. Yaks are essential animals in the Himalayas!"},
+  {day:20,week:3,dz:"ཤ",rom:"Sha",pron:"sha",meaning:"Meat",category:"Food",try:"ཤ་མི་ཟ།",tryTrans:'"(I) don\'t eat meat."',fact:"Many Bhutanese Buddhists are vegetarian out of respect for all living beings — a core principle of Buddhism."},
+  {day:21,week:3,dz:"ཤིང་ཏོག",rom:"Shing Tog",pron:"shing tog",meaning:"Fruit",category:"Food",try:"ཤིང་ཏོག་ཡག་པོ་ཡོད།",tryTrans:'"The fruit is good."',fact:"Bhutan is known for its organic farming! Fruits grow abundantly in the warmer southern valleys."},
+  // WEEK 4 — Family
+  {day:22,week:4,dz:"ཕ",rom:"Pha",pron:"pha",meaning:"Father",category:"Family",try:"ང་གི་ཕ་ཡག་པོ་ཡོད།",tryTrans:'"My father is well."',fact:"ཕ (father) and མ (mother) are the simplest family terms. Respect for elders is deeply embedded in Bhutanese culture!"},
+  {day:23,week:4,dz:"མ",rom:"Ma",pron:"ma",meaning:"Mother",category:"Family",try:"ང་གི་མ་ཡག་པོ་ཡོད།",tryTrans:'"My mother is well."',fact:"མ also appears in many Dzongkha words related to care and compassion — mothers are highly revered!"},
+  {day:24,week:4,dz:"བུ",rom:"Bu",pron:"boo",meaning:"Son / Child (male)",category:"Family",try:"ང་གི་བུ་ལེགས་སོ་ཡོད།",tryTrans:'"My son is doing well."',fact:"བུ means son, while བུམ་སྐྱེས (bumskyes) means daughter. Families in Bhutan are traditionally matrilineal!"},
+  {day:25,week:4,dz:"གདུང་མ",rom:"Dungma",pron:"dung-ma",meaning:"Daughter",category:"Family",try:"ང་གི་གདུང་མ་ལེགས་སོ།",tryTrans:'"My daughter is doing well."',fact:"Bhutan has a matrilineal inheritance tradition — daughters often inherit the family home!"},
+  {day:26,week:4,dz:"གཟིམ་ཆུང",rom:"Zim Chung",pron:"zim chung",meaning:"Younger Sibling",category:"Family",try:"ང་གི་གཟིམ་ཆུང་ལེགས་སོ།",tryTrans:'"My younger sibling is well."',fact:"Family ties are very important in Bhutan. Extended families often live together in traditional farmhouses!"},
+  {day:27,week:4,dz:"གྲོགས་པོ",rom:"Dropa",pron:"dro-pa",meaning:"Friend",category:"Family",try:"ཁྱོད་ང་གི་གྲོགས་པོ་ཡིན།",tryTrans:'"You are my friend."',fact:"གྲོགས་པོ comes from གྲོགས (companion on a journey). In Bhutan, friendship is a lifelong bond!"},
+  {day:28,week:4,dz:"ཨ་ཞང",rom:"A Zhang",pron:"ah zhang",meaning:"Uncle",category:"Family",try:"ང་གི་ཨ་ཞང་ཡོད།",tryTrans:'"I have an uncle."',fact:"Bhutanese families use specific terms for maternal and paternal relatives. Extended family is very close-knit!"},
+  // WEEK 5 — Places
+  {day:29,week:5,dz:"རྫོང",rom:"Dzong",pron:"dzong",meaning:"Fortress / District",category:"Places",try:"རྫོང་ལུ་འགྱོ།",tryTrans:'"(Let\'s) go to the Dzong."',fact:"Dzongs are Bhutan's iconic fortress-monasteries! Every district has one — they are administrative and religious centres."},
+  {day:30,week:5,dz:"ཐིམ་ཕུ",rom:"Thimphu",pron:"thim-phu",meaning:"Capital City",category:"Places",try:"ཐིམ་ཕུ་ལུ་འགྱོ།",tryTrans:'"Let\'s go to Thimphu!"',fact:"Thimphu is one of the few capitals without traffic lights — a giant hand directs traffic at the main roundabout!"},
+  {day:31,week:5,dz:"གྲོང་ཁྱེར",rom:"Drong Khyer",pron:"drong khyer",meaning:"City / Town",category:"Places",try:"གྲོང་ཁྱེར་ལུ་འགྱོ་ནི་ཨིན།",tryTrans:'"I am going to town."',fact:"Bhutan has very few large cities — most people live in rural villages. Nature surrounds every settlement!"},
+  {day:32,week:5,dz:"རི",rom:"Ri",pron:"ree",meaning:"Mountain",category:"Places",try:"རི་མཐོ་ཤོས་ཡིན།",tryTrans:'"The mountain is very high."',fact:"Bhutan's mountains include some of the world's highest unclimbed peaks! The highest, Gangkhar Puensum, is sacred."},
+  {day:33,week:5,dz:"ཤིང་ནགས",rom:"Shing Nag",pron:"shing nag",meaning:"Forest",category:"Places",try:"ཤིང་ནགས་ལུ་མི་འགྱོ།",tryTrans:'"Don\'t go into the forest (alone)."',fact:"Over 70% of Bhutan is covered by forests! The constitution requires at least 60% forest cover to be maintained forever."},
+  {day:34,week:5,dz:"ལྷ་ཁང",rom:"Lhakhang",pron:"lha-khang",meaning:"Temple",category:"Places",try:"ལྷ་ཁང་ལུ་འགྱོ་ནི་ཨིན།",tryTrans:'"I am going to the temple."',fact:"Lhakhangs (temples) dot the Bhutanese landscape. The oldest, Kyichu Lhakhang, dates back to the 7th century!"},
+  {day:35,week:5,dz:"ཐང",rom:"Thang",pron:"thang",meaning:"Field / Plain",category:"Places",try:"ཐང་ལུ་རྩེད་མོ་རྩེ།",tryTrans:'"Play in the field!"',fact:"Open fields in Bhutan's valleys are used for archery — the national sport! Archery competitions are joyful community events."},
+  // WEEK 6 — Time
+  {day:36,week:6,dz:"དེ་རིང",rom:"Dering",pron:"day-ring",meaning:"Today",category:"Time",try:"དེ་རིང་ལེགས་པ་ཡིན།",tryTrans:'"Today is a good day."',fact:"དེ་རིང = today, ཁ་སང (khasang) = yesterday, ནང་ཉིན (nang nyin) = tomorrow. Easy time trio!"},
+  {day:37,week:6,dz:"ནང་ཉིན",rom:"Nang Nyin",pron:"nang nyin",meaning:"Tomorrow",category:"Time",try:"ནང་ཉིན་འབྱོན་ཤོག།",tryTrans:'"Please come tomorrow!"',fact:"ནང = inner/next, ཉིན = day. 'The next day' — a logical construction! Dzongkha is beautifully descriptive."},
+  {day:38,week:6,dz:"ད་ལྟ",rom:"Da Lta",pron:"da lta",meaning:"Now / Right Now",category:"Time",try:"ད་ལྟ་ལས་འགོ་བཙུགས།",tryTrans:'"Start now!"',fact:"ད་ལྟ is one of the most useful time words. Combine with any verb to express an action happening right now!"},
+  {day:39,week:6,dz:"སྔ་ཆ",rom:"Nga Cha",pron:"nga cha",meaning:"Morning",category:"Time",try:"སྔ་ཆ་ལེགས་སོ།",tryTrans:'"Good morning!"',fact:"Mornings in Bhutan begin with prayers and butter tea. The sound of monastery horns fills the crisp mountain air!"},
+  {day:40,week:6,dz:"གུང་ཆ",rom:"Gung Cha",pron:"gung cha",meaning:"Afternoon / Noon",category:"Time",try:"གུང་ཆ་ཅིག་ལུ།",tryTrans:'"At noon / in the afternoon."',fact:"Afternoon in Bhutan's mountain valleys can shift from warm sunshine to cold cloud cover very quickly!"},
+  {day:41,week:6,dz:"དགོང་ཆ",rom:"Gong Cha",pron:"gong cha",meaning:"Evening",category:"Time",try:"དགོང་ཆ་ལེགས་སོ།",tryTrans:'"Good evening!"',fact:"Evenings in rural Bhutan are lit by butter lamps in homes and monasteries — a magical, peaceful sight!"},
+  {day:42,week:6,dz:"ལོ",rom:"Lo",pron:"lo",meaning:"Year",category:"Time",try:"ལོ་གསར་ལེགས་སོ།",tryTrans:'"Happy New Year!"',fact:"Bhutan follows the lunar calendar. Losar (Tibetan New Year) is celebrated with archery, dancing, and feasting!"},
+  // WEEK 7 — Verbs
+  {day:43,week:7,dz:"འགྱོ",rom:"Gyo",pron:"gyo",meaning:"To Go",category:"Verbs",try:"ང་འགྱོ་ནི་ཨིན།",tryTrans:'"I am going."',fact:"འགྱོ is one of the most useful verbs in Dzongkha. Combine it with any place name to say you're going there!"},
+  {day:44,week:7,dz:"འབྱོན",rom:"Byon",pron:"byon",meaning:"To Come (respectful)",category:"Verbs",try:"ཤུལ་མར་འབྱོན་ཤོག།",tryTrans:'"Please come later."',fact:"འབྱོན is the respectful/polite form of 'come'. Dzongkha has honorific registers — very important culturally!"},
+  {day:45,week:7,dz:"ཟ",rom:"Za",pron:"za",meaning:"To Eat",category:"Verbs",try:"ཁྱིམ་ལུ་ཟས་ཟ།",tryTrans:'"Eat food at home."',fact:"ཟ (eat) is casual. The honorific form is མཆོད་པ (chodpa) — used when speaking about lamas and important people!"},
+  {day:46,week:7,dz:"ཐུང",rom:"Thung",pron:"thung",meaning:"To Drink",category:"Verbs",try:"དར་ཇ་ཐུང་།",tryTrans:'"Drink butter tea!"',fact:"ཐུང is used for all drinks. Butter tea drinking is a social ritual in Bhutan — cups are refilled constantly!"},
+  {day:47,week:7,dz:"ལྟ",rom:"Lta",pron:"lta",meaning:"To Look / See",category:"Verbs",try:"ལྟ་ལྟ་བལྟ།",tryTrans:'"Look and see!"',fact:"ལྟ means 'to look'. The Buddhist concept of clear seeing is very important — look with wisdom and compassion!"},
+  {day:48,week:7,dz:"གཏམ་བཤད",rom:"Tam Shed",pron:"tam shed",meaning:"To Speak / Talk",category:"Verbs",try:"རྫོང་ཁ་བཤད་ཤིག།",tryTrans:'"Speak Dzongkha!"',fact:"རྫོང་ཁ literally means 'language of the fortress'. Speaking it connects you to 1,000 years of Bhutanese culture!"},
+  {day:49,week:7,dz:"ཉན",rom:"Nyen",pron:"nyen",meaning:"To Listen",category:"Verbs",try:"ལེགས་པར་ཉན།",tryTrans:'"Listen carefully!"',fact:"ཉན also means 'to obey/follow'. In Bhutan, listening carefully to elders and teachers is a form of respect!"},
+  // WEEK 8 — Adjectives
+  {day:50,week:8,dz:"ཡག་པོ",rom:"Yago",pron:"ya-go",meaning:"Good / Nice",category:"Adjectives",try:"ཡག་པོ་ཡིན།",tryTrans:'"It is good."',fact:"ཡག་པོ is your go-to positive word! Use it to compliment food, weather, people — anything good!"},
+  {day:51,week:8,dz:"མཐོ",rom:"Tho",pron:"tho",meaning:"High / Tall",category:"Adjectives",try:"རི་མཐོ་ཤོས་ཡིན།",tryTrans:'"The mountain is the highest."',fact:"མཐོ is perfect for Bhutan — everything is high! High mountains, high valleys, high monasteries!"},
+  {day:52,week:8,dz:"ཆུང",rom:"Chung",pron:"chung",meaning:"Small / Young",category:"Adjectives",try:"བུ་ཆུང་ཆུང་ཡིན།",tryTrans:'"The child is small/young."',fact:"ཆུང་ཆུང (chung chung) = very small/very young. Repeating adjectives in Dzongkha intensifies them — so cute!"},
+  {day:53,week:8,dz:"འཇམ",rom:"Jam",pron:"jam",meaning:"Soft / Gentle",category:"Adjectives",try:"འཇམ་འཇམ་བཤད།",tryTrans:'"Speak softly/gently."',fact:"འཇམ describes both softness and gentleness of manner — a quality highly valued in Bhutanese culture!"},
+  {day:54,week:8,dz:"དགའ་བ",rom:"Gawa",pron:"ga-wa",meaning:"Happy / Joyful",category:"Adjectives",try:"ང་དགའ་བ་ཡིན།",tryTrans:'"I am happy."',fact:"Bhutan measures Gross National Happiness (GNH) — it's an official government policy to keep citizens happy!"},
+  {day:55,week:8,dz:"རྒྱལ",rom:"Gyal",pron:"gyal",meaning:"Victorious / Great",category:"Adjectives",try:"རྒྱལ་ཁབ་རྒྱལ།",tryTrans:'"The nation is victorious/great!"',fact:"རྒྱལ appears in the Bhutanese royal title: རྒྱལ་སྲས (Gyalse) = Prince. རྒྱལ་པོ (Gyalpo) = King!"},
+  {day:56,week:8,dz:"དཀར་པོ",rom:"Karpo",pron:"kar-po",meaning:"White",category:"Adjectives",try:"རི་དཀར་པོ་ཡིན།",tryTrans:'"The mountain is white."',fact:"White represents purity in Buddhist culture. Bhutan's sacred peaks are eternally snow-capped and white!"},
+  // WEEK 9 — Feelings
+  {day:57,week:9,dz:"སྣང་བ་ཡག་པོ",rom:"Nangwa Yago",pron:"nang-wa ya-go",meaning:"Feeling Good",category:"Feelings",try:"ང་སྣང་བ་ཡག་པོ་ཡིན།",tryTrans:'"I am feeling good."',fact:"Wellbeing is at the heart of Bhutanese culture. The government tracks national wellbeing through the GNH index!"},
+  {day:58,week:9,dz:"དགའ་བའི་སྙིང་སྟོབས",rom:"Gaway Nyingthob",pron:"ga-way nying-thob",meaning:"Enthusiasm / Courage",category:"Feelings",try:"དགའ་བའི་སྙིང་སྟོབས་ཡོད།",tryTrans:'"I have enthusiasm/courage."',fact:"སྙིང་སྟོབས literally means 'heart strength'. Courage in Bhutan comes from the heart and spiritual practice!"},
+  {day:59,week:9,dz:"གཞི་བདེ",rom:"Zhibde",pron:"zhib-de",meaning:"Peaceful / Calm",category:"Feelings",try:"སེམས་གཞི་བདེ་ཡིན།",tryTrans:'"The mind is peaceful."',fact:"Peace of mind is a central Buddhist goal. Bhutan's isolation from the modern world helps preserve this inner peace!"},
+  {day:60,week:9,dz:"ལྡང་མི་ཐུབ",rom:"Dang Mi Thub",pron:"dang mi thub",meaning:"Tired / Unable to Rise",category:"Feelings",try:"ང་ལྡང་མི་ཐུབ།",tryTrans:'"I am too tired (to get up)."',fact:"Bhutanese farmers and monks wake before dawn — so 'too tired' is earned! Hard work and devotion fill every day."},
+  {day:61,week:9,dz:"གཡེངས་བ",rom:"Yengwa",pron:"yeng-wa",meaning:"Distracted / Wandering Mind",category:"Feelings",try:"སེམས་གཡེངས་མ་བཞག།",tryTrans:'"Don\'t let your mind wander."',fact:"Buddhism teaches mindfulness to overcome གཡེངས་བ (distraction). Meditation practices are central to Bhutanese life!"},
+  {day:62,week:9,dz:"མི་དགའ",rom:"Mi Ga",pron:"mi ga",meaning:"Unhappy / Dislike",category:"Feelings",try:"ང་མི་དགའ།",tryTrans:'"I am unhappy / I don\'t like it."',fact:"མི་ = negation prefix. མི་དགའ = not happy. Learning negation opens up a whole world of expression!"},
+  {day:63,week:9,dz:"ཐུགས་རྗེ",rom:"Thugje",pron:"thug-je",meaning:"Compassion / Kindness",category:"Feelings",try:"ཐུགས་རྗེ་ཡོད།",tryTrans:'"(I/You have) compassion."',fact:"ཐུགས་རྗེ (compassion) is a core Buddhist value and is deeply embedded in Bhutanese society and governance!"},
+  // WEEK 10 — Nature & Animals
+  {day:64,week:10,dz:"ར་དོང",rom:"Ra Dong",pron:"ra dong",meaning:"Yak",category:"Nature",try:"ར་དོང་མི་གཙང་ཡིན།",tryTrans:'"The yak is not dirty (it is clean)!"',fact:"Yaks are essential in Bhutan — providing milk, butter, wool, and transport at high altitudes. A sacred animal!"},
+  {day:65,week:10,dz:"ཤིང་ཤ",rom:"Shing Sha",pron:"shing sha",meaning:"Tiger",category:"Nature",try:"ཤིང་ཤ་རི་ལུ་ཡོད།",tryTrans:'"There are tigers in the mountains."',fact:"Bhutan is one of the last places on Earth with wild Bengal tigers living at high Himalayan altitudes!"},
+  {day:66,week:10,dz:"ཆུ",rom:"Chu",pron:"choo",meaning:"Water / River",category:"Nature",try:"ཆུ་ཤིམ་ལིམ་འཛག་འཛག།",tryTrans:'"The water flows clear and clean."',fact:"ཆུ means both water and river. Bhutan's rivers are crystal clear and unpolluted — the country is pristine!"},
+  {day:67,week:10,dz:"ཤིང་ལྗོངས",rom:"Shing Jong",pron:"shing jong",meaning:"Forest Kingdom",category:"Nature",try:"འབྲུག་ཤིང་ལྗོངས་ཡིན།",tryTrans:'"Bhutan is a forest kingdom."',fact:"Bhutan's forests absorb more carbon than the country produces — it's the world's only carbon-negative country!"},
+  {day:68,week:10,dz:"གནམ་གྲུ",rom:"Nam Dru",pron:"nam droo",meaning:"Sky / Heavens",category:"Nature",try:"གནམ་གྲུ་མཐོ།",tryTrans:'"The sky is high."',fact:"གནམ = sky/heaven. In Bhutan, the sky is considered the home of protective deities and enlightened beings!"},
+  {day:69,week:10,dz:"མེ་ཏོག",rom:"Me Tog",pron:"may tog",meaning:"Flower",category:"Nature",try:"མེ་ཏོག་མཛེས་པ་ཡིན།",tryTrans:'"The flower is beautiful."',fact:"Bhutan is home to thousands of flower species including the famous Blue Poppy — the national flower!"},
+  {day:70,week:10,dz:"འབྲུག",rom:"Druk",pron:"drook",meaning:"Thunder Dragon / Bhutan",category:"Nature",try:"འབྲུག་རྒྱལ་ཁབ་ཡིན།",tryTrans:'"Bhutan is the Land of the Thunder Dragon."',fact:"Bhutan's name in Dzongkha is འབྲུག་ཡུལ (Druk Yul) = Land of the Thunder Dragon. The dragon is on the national flag!"},
+  // WEEK 11 — Culture & Daily Life
+  {day:71,week:11,dz:"གོས",rom:"Go",pron:"go",meaning:"Clothes / Dress",category:"Culture",try:"གོས་ཡག་པོ་གོན།",tryTrans:'"Wear nice clothes."',fact:"Traditional dress is required in Bhutan's dzongs and official places. Men wear a Gho, women wear a Kira!"},
+  {day:72,week:11,dz:"མདའ",rom:"Da",pron:"da",meaning:"Arrow / Archery",category:"Culture",try:"མདའ་མཁས་ཤིན་ཏུ་ཡག།",tryTrans:'"(The) archer is very skilled."',fact:"Archery (མདའ་རྩེད) is Bhutan's national sport! Competitions are colourful festivals with singing, dancing, and team spirit."},
+  {day:73,week:11,dz:"ཆོས",rom:"Cho",pron:"cho",meaning:"Religion / Buddhist Teaching",category:"Culture",try:"ཆོས་ལུ་གུས་པ་ཡོད།",tryTrans:'"There is respect for religion."',fact:"Bhutan is the only country that upholds Vajrayana Buddhism as the state religion. Dharma permeates all of life!"},
+  {day:74,week:11,dz:"ཚེ་རིང",rom:"Tsering",pron:"tse-ring",meaning:"Long Life",category:"Culture",try:"ཚེ་རིང་ཞིག་འདོད།",tryTrans:'"I wish for a long life."',fact:"ཚེ་རིང is also a common name in Bhutan! Wishing long life is a standard blessing between friends and family."},
+  {day:75,week:11,dz:"སྦས་ཡུལ",rom:"Bay Yul",pron:"bay yul",meaning:"Hidden Land",category:"Culture",try:"འབྲུག་སྦས་ཡུལ་ཡིན།",tryTrans:'"Bhutan is a hidden land."',fact:"Bhutan is often called a 'hidden land' or Shangri-La. It only opened to tourists in 1974 and strictly limits visitors!"},
+  {day:76,week:11,dz:"བཀྲ་ཤིས",rom:"Tashi",pron:"ta-shi",meaning:"Auspicious / Lucky",category:"Culture",try:"བཀྲ་ཤིས་བདེ་ལེགས།",tryTrans:'"Auspicious and good fortune!"',fact:"བཀྲ་ཤིས་བདེ་ལེགས is the traditional Bhutanese blessing/toast. Tashi is also one of the most popular names!"},
+  {day:77,week:11,dz:"མི་དམངས",rom:"Mi Dang",pron:"mi dang",meaning:"People / Citizens",category:"Culture",try:"མི་དམངས་དགའ་བ་ཡིན།",tryTrans:'"The people are happy."',fact:"Bhutan's Gross National Happiness policy puts the happiness of མི་དམངས (citizens) above economic growth!"},
+  // WEEK 12 — Travel & Practical
+  {day:78,week:12,dz:"ལམ",rom:"Lam",pron:"lam",meaning:"Road / Path",category:"Travel",try:"ལམ་གང་སྒྲིལ་ཡོད？",tryTrans:'"Which road should I take?"',fact:"ལམ also means 'the path' in a spiritual sense. The Buddhist path to enlightenment is the most important lam!"},
+  {day:79,week:12,dz:"འགྲུལ་སྐྱོད",rom:"Drul Kyod",pron:"drul kyod",meaning:"Travel / Journey",category:"Travel",try:"འགྲུལ་སྐྱོད་ལེགས་སོ།",tryTrans:'"Have a good journey!"',fact:"Travel in Bhutan is an adventure! Mountain roads wind through spectacular scenery — slow down and enjoy the view!"},
+  {day:80,week:12,dz:"ཤར",rom:"Shar",pron:"shar",meaning:"East",category:"Travel",try:"ཤར་ཕྱོགས་འགྱོ།",tryTrans:'"Go east."',fact:"ཤར = east, ནུབ = west, བྱང = north, ལྷོ = south. Cardinal directions are essential for navigating Bhutan's terrain!"},
+  {day:81,week:12,dz:"དངུལ",rom:"Ngul",pron:"ngool",meaning:"Money / Silver",category:"Travel",try:"དངུལ་ཅི་ཙམ？",tryTrans:'"How much money?"',fact:"Bhutan's currency is the Ngultrum (Nu). The word dngul originally meant silver — historically used as currency!"},
+  {day:82,week:12,dz:"གཞུང་ལམ",rom:"Zhung Lam",pron:"zhung lam",meaning:"Main Road / Highway",category:"Travel",try:"གཞུང་ལམ་ལུ་སོང་།",tryTrans:'"Go on the main road."',fact:"The Lateral Road crosses all of Bhutan east to west — a legendary drive through mountains, valleys, and passes!"},
+  {day:83,week:12,dz:"གནམ་གྲུ་ཐང",rom:"Nam Dru Thang",pron:"nam droo thang",meaning:"Airport",category:"Travel",try:"གནམ་གྲུ་ཐང་ལུ་འགྱོ།",tryTrans:'"Going to the airport."',fact:"Paro Airport is one of the world's most dangerous airports! Surrounded by steep mountains, only certified pilots can land there."},
+  {day:84,week:12,dz:"ཕྱག་བཀལ",rom:"Chag Kel",pron:"chag kel",meaning:"Welcome",category:"Travel",try:"ཕྱག་བཀལ་ལེགས་སོ།",tryTrans:'"Welcome! (You are welcome)"',fact:"Bhutanese hospitality is legendary. Visitors are always welcomed with butter tea and a warm, genuine smile!"},
+  // WEEK 13 — Culture & Farewell
+  {day:85,week:13,dz:"འབྲུག་ཡུལ",rom:"Druk Yul",pron:"drook yul",meaning:"Bhutan (Land of Thunder Dragon)",category:"Culture",try:"འབྲུག་ཡུལ་མཛེས་པ་ཡིན།",tryTrans:'"Bhutan is beautiful."',fact:"The official name of Bhutan is འབྲུག་རྒྱལ་ཁབ (Druk Gyal Khab) = Kingdom of the Thunder Dragon. Majestic!"},
+  {day:86,week:13,dz:"རྫོང་ཁ",rom:"Dzongkha",pron:"dzong-kha",meaning:"Dzongkha Language",category:"Culture",try:"རྫོང་ཁ་སྦྱང་ནི་ཡག་པོ་ཡིན།",tryTrans:'"Learning Dzongkha is good."',fact:"རྫོང = fortress, ཁ = language. 'Language of the fortress' — the official language of Bhutan since 1971!"},
+  {day:87,week:13,dz:"བསམ་གཏན",rom:"Samten",pron:"sam-ten",meaning:"Meditation",category:"Culture",try:"བསམ་གཏན་བྱེད་ཤིག།",tryTrans:'"Meditate!"',fact:"Meditation is practiced daily by monks and laypeople alike in Bhutan. Tiger's Nest monastery is a famous meditation site!"},
+  {day:88,week:13,dz:"རྒྱལ་གཞས",rom:"Gyal Zha",pron:"gyal zha",meaning:"National Anthem",category:"Culture",try:"རྒྱལ་གཞས་ལབ་ཤིག།",tryTrans:'"Sing the national anthem!"',fact:"Bhutan's national anthem praises the Thunder Dragon King and the dharma. It is sung with deep reverence!"},
+  {day:89,week:13,dz:"བདེ་སྐྱིད",rom:"De Kyid",pron:"day kyid",meaning:"Happiness / Wellbeing",category:"Culture",try:"བདེ་སྐྱིད་ལྡན་པ་ཞིག་ཡིན།",tryTrans:'"May you be one who has happiness."',fact:"བདེ་སྐྱིད is the root of Gross National Happiness (GNH) — Bhutan's unique development philosophy. Happiness first!"},
+  {day:90,week:13,dz:"བཀྲ་ཤིས་བདེ་ལེགས",rom:"Tashi Delek",pron:"ta-shi day-lek",meaning:"All Blessings & Good Luck",category:"Culture",try:"བཀྲ་ཤིས་བདེ་ལེགས། ལོ་ན་མང་།",tryTrans:'"All blessings and good luck! May you live long!"',fact:"བཀྲ་ཤིས་བདེ་ལེགས is the ultimate Bhutanese blessing — used for greetings, toasts, and farewells. You made it to Day 90! 🎉"},
+];
+
+let completed = new Set(JSON.parse(localStorage.getItem('dzCompleted') || '[]'));
+let currentCardIdx = 0;
+let isFlipped = false;
+let currentModalDay = null;
+
+function saveProgress() { localStorage.setItem('dzCompleted', JSON.stringify([...completed])); }
+
+function spawnSnow() {
+  const bg = document.getElementById('snowBg');
+  const symbols = ['❄️','🏔️','🌸','✨','⭐','🌟','🪷','🏮'];
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'snowflake';
+    p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    p.style.left = Math.random() * 100 + '%';
+    p.style.fontSize = (10 + Math.random() * 8) + 'px';
+    p.style.animationDuration = (12 + Math.random() * 14) + 's';
+    p.style.animationDelay = (-Math.random() * 20) + 's';
+    bg.appendChild(p);
+  }
+}
+spawnSnow();
+
+function showView(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name === 'stats') updateStats();
+  if (name === 'categories') buildCategories();
+  if (name === 'flashcard') updateCard();
+  if (name === 'timetable') buildTimetable();
+  updateProgressBar();
+}
+
+function updateProgressBar() {
+  const done = completed.size;
+  const pct = Math.round(done / 90 * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressDone').textContent = done + ' cards done';
+  document.getElementById('progressLeft').textContent = (90 - done) + ' remaining';
+}
+
+function buildTimetable() {
+  const grid = document.getElementById('timetableGrid');
+  grid.innerHTML = '';
+  const weeks = {};
+  cards.forEach(c => { if (!weeks[c.week]) weeks[c.week] = []; weeks[c.week].push(c); });
+  Object.keys(weeks).forEach(wk => {
+    const sec = document.createElement('div');
+    sec.className = 'week-section';
+    sec.innerHTML = `<div class="week-label">Week ${wk}</div><div class="days-row" id="week-${wk}-row"></div>`;
+    grid.appendChild(sec);
+    const row = sec.querySelector('.days-row');
+    weeks[wk].forEach(c => {
+      const pill = document.createElement('div');
+      pill.className = 'day-pill' + (completed.has(c.day) ? ' done' : '');
+      pill.innerHTML = `<span class="day-num">${c.day}</span><span class="day-check">${completed.has(c.day) ? '✓' : ''}</span>`;
+      pill.onclick = () => openModal(c.day - 1);
+      row.appendChild(pill);
+    });
+  });
+}
+
+function updateCard() {
+  const c = cards[currentCardIdx];
+  document.getElementById('cardDzongkha').textContent = c.dz;
+  document.getElementById('cardRomaji').textContent = c.rom;
+  document.getElementById('cardPronunciation').textContent = c.pron;
+  document.getElementById('cardMeaning').textContent = c.meaning;
+  document.getElementById('cardWeek').textContent = 'Week ' + c.week;
+  document.getElementById('backTry').textContent = c.try;
+  document.getElementById('backTranslation').textContent = c.tryTrans;
+  document.getElementById('backFact').textContent = c.fact;
+  document.getElementById('cardCounter').textContent = 'Day ' + c.day + ' of 90';
+  document.getElementById('cardInner').classList.remove('flipped');
+  isFlipped = false;
+}
+
+function flipCard() { isFlipped = !isFlipped; document.getElementById('cardInner').classList.toggle('flipped', isFlipped); }
+function nextCard() { currentCardIdx = (currentCardIdx + 1) % cards.length; updateCard(); }
+function prevCard() { currentCardIdx = (currentCardIdx - 1 + cards.length) % cards.length; updateCard(); }
+function markGotIt() { completed.add(cards[currentCardIdx].day); saveProgress(); updateProgressBar(); buildTimetable(); nextCard(); }
+function markAgain() { nextCard(); }
+
+const catEmojis = { Greetings:'👋', Numbers:'🔢', Food:'🍜', Family:'👨‍👩‍👧', Places:'📍', Time:'🕐', Verbs:'🏃', Adjectives:'✨', Feelings:'💭', Nature:'🏔️', Culture:'🐉', Travel:'✈️' };
+
+function buildCategories() {
+  const cats = {};
+  cards.forEach(c => { if (!cats[c.category]) cats[c.category] = []; cats[c.category].push(c); });
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = '';
+  Object.entries(cats).forEach(([name, arr]) => {
+    const done = arr.filter(c => completed.has(c.day)).length;
+    const pct = Math.round(done / arr.length * 100);
+    const el = document.createElement('div');
+    el.className = 'cat-card';
+    el.innerHTML = `<span class="cat-emoji">${catEmojis[name] || '📚'}</span><div class="cat-name">${name}</div><div class="cat-count">${done}/${arr.length} done</div><div class="cat-bar"><div class="cat-bar-fill" style="width:${pct}%"></div></div>`;
+    el.onclick = () => { currentCardIdx = cards.indexOf(arr[0]); showView('flashcard', null); setBottomNav('flashcard'); document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', i===1)); };
+    grid.appendChild(el);
+  });
+}
+
+function updateStats() {
+  const done = completed.size;
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('statLeft').textContent = 90 - done;
+  document.getElementById('statWeek').textContent = 'Wk ' + Math.min(Math.floor(done/7)+1, 13);
+  document.getElementById('statPct').textContent = Math.round(done/90*100) + '%';
+  const phrases = ['Start today!','Keep going!','ལེགས་སོ།!','So impressive!','Almost there!'];
+  document.getElementById('streakVal').textContent = phrases[Math.min(Math.floor(done/18), 4)];
+}
+
+function openModal(idx) {
+  currentModalDay = idx;
+  const c = cards[idx];
+  document.getElementById('modalDzongkha').textContent = c.dz;
+  document.getElementById('modalPinyin').textContent = c.rom;
+  document.getElementById('modalPronunciation').textContent = c.pron;
+  document.getElementById('modalMeaning').textContent = c.meaning;
+  document.getElementById('modalFact').textContent = c.fact;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(e) { if (e.target === document.getElementById('modalOverlay')) document.getElementById('modalOverlay').classList.remove('open'); }
+function studyThisCard() { document.getElementById('modalOverlay').classList.remove('open'); currentCardIdx = currentModalDay; showView('flashcard', null); setBottomNav('flashcard'); document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', i===1)); }
+function setBottomNav(name) { ['timetable','flashcard','categories','stats'].forEach(n => { const btn = document.getElementById('bnav-'+n); if(btn) btn.classList.toggle('active', n===name); }); }
+
+buildTimetable();
+updateProgressBar();
+</script>
+</body>
+</html>

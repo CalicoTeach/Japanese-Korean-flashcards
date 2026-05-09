@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>普通话 90-Day Journey 🐉</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #e84040;
+    --red-deep: #c42828;
+    --red-light: #ffe8e8;
+    --cream: #fff9f5;
+    --gold: #f5c842;
+    --gold-light: #fff8d6;
+    --jade: #5cb87a;
+    --jade-light: #d4f0de;
+    --warm-brown: #7a3a2e;
+    --text: #2d1204;
+    --card-shadow: 0 8px 32px rgba(196, 40, 40, 0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* LANTERN BACKGROUND */
+  .lantern-bg {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .lantern-piece {
+    position: absolute;
+    font-size: 14px;
+    opacity: 0;
+    animation: floatLantern linear infinite;
+  }
+  @keyframes floatLantern {
+    0% { transform: translateY(110vh) rotate(0deg) scale(0.8); opacity: 0; }
+    10% { opacity: 0.3; }
+    90% { opacity: 0.15; }
+    100% { transform: translateY(-10vh) rotate(360deg) scale(1.1); opacity: 0; }
+  }
+
+  /* HEADER */
+  header {
+    position: relative; z-index: 10;
+    background: linear-gradient(135deg, #c42828 0%, #e84040 40%, #f5a020 70%, var(--gold) 100%);
+    padding: 20px 24px 18px;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(196,40,40,0.35);
+  }
+  .header-cat {
+    font-size: 3rem;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+    animation: bounce 2.5s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  header h1 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    letter-spacing: -0.5px;
+  }
+  header p {
+    color: rgba(255,255,255,0.9);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .zh-title {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.85);
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    position: relative; z-index: 10;
+    background: white;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--red-light);
+  }
+  .progress-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--red-deep);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .progress-bar-bg {
+    background: var(--red-light);
+    border-radius: 20px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red-deep), var(--gold));
+    border-radius: 20px;
+    transition: width 0.5s ease;
+  }
+  .progress-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #999;
+  }
+
+  /* NAV TABS */
+  .nav-tabs {
+    position: relative; z-index: 10;
+    display: flex;
+    background: white;
+    border-bottom: 2px solid var(--red-light);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    flex: none;
+    padding: 12px 18px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #bbb;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none;
+    border-top: none; border-left: none; border-right: none;
+  }
+  .nav-tab.active {
+    color: var(--red-deep);
+    border-bottom-color: var(--red-deep);
+  }
+
+  /* BACK BUTTON */
+  .back-btn-wrap {
+    position: relative; z-index: 10;
+    background: white;
+    padding: 10px 16px;
+    border-bottom: 1px solid #f5eae8;
+  }
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--red-deep);
+    text-decoration: none;
+    padding: 6px 14px;
+    background: var(--red-light);
+    border-radius: 20px;
+  }
+
+  /* VIEWS */
+  .view { display: none; padding: 16px; }
+  .view.active { display: block; }
+
+  /* ═══════════════════════════
+     TIMETABLE VIEW
+  ═══════════════════════════ */
+  .timetable-view { padding: 16px; }
+  .week-section { margin-bottom: 20px; }
+  .week-label {
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #bbb;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .week-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #f0e8e4;
+  }
+  .days-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+  }
+  .day-pill {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: white;
+    border: 2px solid #f0e8e4;
+    transition: all 0.2s;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .day-pill:hover { border-color: var(--red); transform: scale(1.05); }
+  .day-pill.done {
+    background: linear-gradient(135deg, var(--red-deep), var(--red));
+    border-color: var(--red-deep);
+    color: white;
+  }
+  .day-pill.today {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px var(--gold);
+  }
+  .day-num {
+    font-size: 0.75rem;
+    font-weight: 900;
+    color: var(--text);
+  }
+  .day-pill.done .day-num { color: white; }
+  .day-check { font-size: 0.65rem; margin-top: 1px; }
+
+  /* ═══════════════════════════
+     FLASHCARD VIEW
+  ═══════════════════════════ */
+  .flashcard-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+  }
+  .card-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 360px;
+    margin-bottom: 12px;
+  }
+  .card-nav-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--red-light);
+    background: white;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .card-nav-btn:hover { background: var(--red-light); }
+  .card-counter {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #bbb;
+  }
+  .card-scene {
+    width: 100%;
+    max-width: 360px;
+    perspective: 1000px;
+    cursor: pointer;
+    margin-bottom: 12px;
+  }
+  .card-inner {
+    width: 100%;
+    min-height: 320px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+    border-radius: 28px;
+  }
+  .card-inner.flipped { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute; inset: 0;
+    border-radius: 28px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 24px;
+    gap: 8px;
+  }
+  .card-front {
+    background: linear-gradient(145deg, #fff5f5 0%, #ffe8e8 40%, #fff8e0 100%);
+    border: 2px solid #ffd0d0;
+    box-shadow: var(--card-shadow);
+  }
+  .card-back {
+    background: linear-gradient(145deg, #fff8e0 0%, var(--gold-light) 50%, #fff5f5 100%);
+    border: 2px solid #f5e0a0;
+    box-shadow: var(--card-shadow);
+    transform: rotateY(180deg);
+  }
+  .card-deco { font-size: 1.4rem; }
+  .card-week-tag {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: var(--red-light);
+    color: var(--red-deep);
+    padding: 3px 12px;
+    border-radius: 20px;
+  }
+  .card-hanzi {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 3.8rem;
+    font-weight: 700;
+    color: var(--red-deep);
+    line-height: 1;
+    text-shadow: 0 2px 8px rgba(196,40,40,0.15);
+  }
+  .card-pinyin {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--warm-brown);
+    letter-spacing: 1px;
+  }
+  .card-pronunciation {
+    font-size: 0.8rem;
+    color: #aaa;
+    font-style: italic;
+    font-weight: 600;
+  }
+  .card-meaning {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--text);
+    text-align: center;
+  }
+  .card-tap-hint {
+    font-size: 0.7rem;
+    color: #ccc;
+    font-weight: 700;
+    margin-top: 4px;
+  }
+  .back-label {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #bbb;
+  }
+  .back-try {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--warm-brown);
+    text-align: center;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .back-translation {
+    font-size: 0.82rem;
+    color: #888;
+    font-style: italic;
+    font-weight: 600;
+    text-align: center;
+  }
+  .back-divider {
+    width: 40px; height: 2px;
+    background: var(--red);
+    border-radius: 2px;
+    margin: 8px 0;
+  }
+  .back-did-you-know {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #bbb;
+  }
+  .back-fact {
+    font-size: 0.8rem;
+    color: var(--text);
+    text-align: center;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .cat-mascot-card { font-size: 1.4rem; margin-top: 8px; }
+
+  /* CARD ACTIONS */
+  .card-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    width: 100%;
+    max-width: 360px;
+  }
+  .action-btn {
+    flex: 1;
+    padding: 14px 12px;
+    border-radius: 16px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-got-it {
+    background: linear-gradient(135deg, var(--red-deep), var(--red));
+    color: white;
+    box-shadow: 0 4px 16px rgba(196,40,40,0.35);
+  }
+  .btn-got-it:hover { transform: translateY(-2px); }
+  .btn-again {
+    background: white;
+    color: var(--red-deep);
+    border: 2px solid var(--red-light);
+  }
+  .btn-again:hover { background: var(--red-light); }
+
+  /* ═══════════════════════════
+     CATEGORIES VIEW
+  ═══════════════════════════ */
+  .categories-view { padding: 16px; }
+  .cat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .cat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .cat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--card-shadow);
+    border-color: var(--red);
+  }
+  .cat-emoji { font-size: 2.2rem; display: block; margin-bottom: 8px; }
+  .cat-name { font-size: 0.9rem; font-weight: 900; color: var(--text); }
+  .cat-count { font-size: 0.72rem; color: #bbb; font-weight: 700; margin-top: 2px; }
+  .cat-bar {
+    margin-top: 8px;
+    background: var(--red-light);
+    border-radius: 10px;
+    height: 6px;
+    overflow: hidden;
+  }
+  .cat-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red-deep), var(--gold));
+    border-radius: 10px;
+    transition: width 0.5s;
+  }
+
+  /* ═══════════════════════════
+     STATS VIEW
+  ═══════════════════════════ */
+  .stats-view { padding: 16px; }
+  .stats-hero {
+    background: linear-gradient(135deg, var(--red-deep) 0%, var(--red) 50%, var(--gold) 100%);
+    border-radius: 24px;
+    padding: 24px;
+    text-align: center;
+    color: white;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stats-hero-cat { font-size: 3rem; display: block; margin-bottom: 8px; }
+  .stats-hero h2 { font-size: 1.3rem; font-weight: 900; }
+  .stats-hero p { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .stat-icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+  .stat-val { font-size: 1.6rem; font-weight: 900; color: var(--red-deep); }
+  .stat-label { font-size: 0.7rem; font-weight: 700; color: #bbb; text-transform: uppercase; letter-spacing: 0.5px; }
+  .streak-section {
+    background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .streak-flame { font-size: 3rem; }
+  .streak-text h3 { font-size: 1.1rem; font-weight: 900; color: var(--text); }
+  .streak-text p { font-size: 0.8rem; color: rgba(45,18,4,0.7); font-weight: 600; }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: white;
+    border-top: 2px solid var(--red-light);
+    display: flex;
+    z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .bnav-btn {
+    flex: 1;
+    padding: 12px 8px 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.2s;
+  }
+  .bnav-icon { font-size: 1.4rem; line-height: 1; }
+  .bnav-label { font-size: 0.62rem; font-weight: 800; color: #ccc; text-transform: uppercase; letter-spacing: 0.5px; }
+  .bnav-btn.active .bnav-label { color: var(--red-deep); }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-sheet {
+    background: white;
+    border-radius: 28px 28px 0 0;
+    padding: 24px 20px 40px;
+    width: 100%;
+    max-width: 480px;
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .modal-handle {
+    width: 40px; height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+  .modal-hanzi {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 3.5rem;
+    text-align: center;
+    display: block;
+    line-height: 1;
+    margin-bottom: 8px;
+    color: var(--red-deep);
+  }
+  .modal-pinyin {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--warm-brown);
+    margin-bottom: 4px;
+  }
+  .modal-pronunciation {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #bbb;
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+  .modal-meaning {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--red-deep);
+    margin-bottom: 16px;
+  }
+  .modal-fact {
+    background: var(--red-light);
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 0.82rem;
+    color: var(--text);
+    font-weight: 600;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .modal-fact-label {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--red-deep);
+    margin-bottom: 6px;
+  }
+  .modal-close-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--red-deep), var(--red));
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  .section-title {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #bbb;
+    margin-bottom: 12px;
+    padding-top: 4px;
+  }
+  .spacer { height: 80px; }
+</style>
+</head>
+<body>
+
+<!-- Lantern particles -->
+<div class="lantern-bg" id="lanternBg"></div>
+
+<!-- HEADER -->
+<header>
+  <span class="header-cat">🐱</span>
+  <h1>Mandarin · 普通话</h1>
+  <p class="zh-title">90-Day Journey 🐉 · Calico Series</p>
+</header>
+
+<!-- BACK BUTTON -->
+<div class="back-btn-wrap">
+  <a href="index.html" class="back-btn">← All Languages</a>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-wrap">
+  <div class="progress-label">🐾 Your Journey</div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-stats">
+    <span id="progressDone">0 cards done</span>
+    <span id="progressLeft">90 remaining</span>
+  </div>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showView('timetable', this)">📅 90 Days</button>
+  <button class="nav-tab" onclick="showView('flashcard', this)">🗂️ Flashcard</button>
+  <button class="nav-tab" onclick="showView('categories', this)">📚 Topics</button>
+  <button class="nav-tab" onclick="showView('stats', this)">📊 Stats</button>
+</div>
+
+<!-- ═══════════════════ TIMETABLE VIEW ═══════════════════ -->
+<div class="view timetable-view active" id="view-timetable">
+  <div id="timetableGrid"></div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ═══════════════════ FLASHCARD VIEW ═══════════════════ -->
+<div class="view flashcard-view" id="view-flashcard">
+  <div class="card-nav">
+    <button class="card-nav-btn" onclick="prevCard()">‹</button>
+    <span class="card-counter" id="cardCounter">Day 1 of 90</span>
+    <button class="card-nav-btn" onclick="nextCard()">›</button>
+  </div>
+
+  <div class="card-scene" onclick="flipCard()">
+    <div class="card-inner" id="cardInner">
+      <!-- FRONT -->
+      <div class="card-face card-front">
+        <div class="card-deco">🐉</div>
+        <div class="card-week-tag" id="cardWeek">Week 1</div>
+        <div class="card-hanzi" id="cardHanzi">你好</div>
+        <div class="card-pinyin" id="cardPinyin">Nǐ hǎo</div>
+        <div class="card-pronunciation" id="cardPronunciation">nee how</div>
+        <div class="card-meaning" id="cardMeaning">Hello</div>
+        <div class="card-tap-hint">tap to flip 🐾</div>
+      </div>
+      <!-- BACK -->
+      <div class="card-face card-back">
+        <div class="card-deco">🌟</div>
+        <div class="back-label">Try Saying This!</div>
+        <div class="back-try" id="backTry">你好！你好吗？</div>
+        <div class="back-translation" id="backTranslation">"Hello! How are you?"</div>
+        <div class="back-divider"></div>
+        <div class="back-did-you-know">🐱 Did You Know?</div>
+        <div class="back-fact" id="backFact">你好 is used any time of day — morning, noon, or night!</div>
+        <div class="cat-mascot-card">🐉 加油！</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-actions">
+    <button class="action-btn btn-again" onclick="markAgain()">🔄 Again</button>
+    <button class="action-btn btn-got-it" onclick="markGotIt()">✓ Got it!</button>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ═══════════════════ CATEGORIES VIEW ═══════════════════ -->
+<div class="view categories-view" id="view-categories">
+  <p class="section-title">Browse by topic 📚</p>
+  <div class="cat-grid" id="catGrid"></div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ═══════════════════ STATS VIEW ═══════════════════ -->
+<div class="view stats-view" id="view-stats">
+  <div class="stats-hero">
+    <span class="stats-hero-cat">🐱</span>
+    <h2>Nyanko says 加油！</h2>
+    <p>Your calico companion is cheering for you~</p>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-icon">📚</span>
+      <div class="stat-val" id="statDone">0</div>
+      <div class="stat-label">Cards Done</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">🎯</span>
+      <div class="stat-val" id="statLeft">90</div>
+      <div class="stat-label">Remaining</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">📅</span>
+      <div class="stat-val" id="statWeek">Wk 1</div>
+      <div class="stat-label">Current Week</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">🐉</span>
+      <div class="stat-val" id="statPct">0%</div>
+      <div class="stat-label">Complete</div>
+    </div>
+  </div>
+  <div class="streak-section">
+    <div class="streak-flame">🔥</div>
+    <div class="streak-text">
+      <h3 id="streakVal">Keep going!</h3>
+      <p>Study 1 card every day. 加油！You've got this! 🐉</p>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<!-- DAY MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <span class="modal-hanzi" id="modalHanzi">你好</span>
+    <div class="modal-pinyin" id="modalPinyin">Nǐ hǎo</div>
+    <div class="modal-pronunciation" id="modalPronunciation">nee how</div>
+    <div class="modal-meaning" id="modalMeaning">Hello</div>
+    <div class="modal-fact">
+      <div class="modal-fact-label">🐱 Did You Know?</div>
+      <span id="modalFact">你好 works any time of day!</span>
+    </div>
+    <button class="modal-close-btn" onclick="studyThisCard()">Study This Card 🗂️</button>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="bnav-btn active" id="bnav-timetable" onclick="showView('timetable', null); setBottomNav('timetable')">
+    <span class="bnav-icon">📅</span>
+    <span class="bnav-label">Days</span>
+  </button>
+  <button class="bnav-btn" id="bnav-flashcard" onclick="showView('flashcard', null); setBottomNav('flashcard')">
+    <span class="bnav-icon">🗂️</span>
+    <span class="bnav-label">Study</span>
+  </button>
+  <button class="bnav-btn" id="bnav-categories" onclick="showView('categories', null); setBottomNav('categories')">
+    <span class="bnav-icon">📚</span>
+    <span class="bnav-label">Topics</span>
+  </button>
+  <button class="bnav-btn" id="bnav-stats" onclick="showView('stats', null); setBottomNav('stats')">
+    <span class="bnav-icon">📊</span>
+    <span class="bnav-label">Stats</span>
+  </button>
+</nav>
+
+<script>
+// ═══════════════════════════════════════
+// FLASHCARD DATA — 90 Days of Mandarin
+// ═══════════════════════════════════════
+const cards = [
+  // WEEK 1 — Greetings
+  {day:1,week:1,hanzi:"你好",pinyin:"Nǐ hǎo",pron:"nee how",meaning:"Hello",category:"Greetings",try:"你好！你好吗？",tryTrans:'"Hello! How are you?"',fact:"你好 is used any time of day. 你 = you, 好 = good. 'You good!' is a hello!"},
+  {day:2,week:1,hanzi:"谢谢",pinyin:"Xièxiè",pron:"syeh syeh",meaning:"Thank You",category:"Greetings",try:"谢谢你！",tryTrans:'"Thank you!"',fact:"Said twice for emphasis! 谢谢 is one of the first words every Mandarin learner picks up."},
+  {day:3,week:1,hanzi:"再见",pinyin:"Zàijiàn",pron:"dzai jyen",meaning:"Goodbye",category:"Greetings",try:"再见！明天见！",tryTrans:'"Goodbye! See you tomorrow!"',fact:"再 = again, 见 = see. So 再见 literally means 'see again' — how sweet!"},
+  {day:4,week:1,hanzi:"对不起",pinyin:"Duìbuqǐ",pron:"dway boo chee",meaning:"Sorry / Excuse Me",category:"Greetings",try:"对不起，我迟到了。",tryTrans:'"Sorry, I was late."',fact:"对不起 shows sincere apology. For a lighter sorry, use 不好意思 (bù hǎoyìsi)."},
+  {day:5,week:1,hanzi:"没关系",pinyin:"Méiguānxi",pron:"may gwahn shee",meaning:"It's OK / No Problem",category:"Greetings",try:"没关系，没事的！",tryTrans:'"It\'s okay, no worries!"',fact:"The perfect reply to 对不起. 没 = no/none, 关系 = relation/matter. 'No big deal!'"},
+  {day:6,week:1,hanzi:"请",pinyin:"Qǐng",pron:"ching",meaning:"Please",category:"Greetings",try:"请进！请坐！",tryTrans:'"Please come in! Please sit!"',fact:"请 is super polite and versatile. Also means 'to invite' or 'to treat someone to a meal'."},
+  {day:7,week:1,hanzi:"好的",pinyin:"Hǎo de",pron:"how duh",meaning:"Okay / Alright",category:"Greetings",try:"好的，我知道了！",tryTrans:'"Okay, I got it!"',fact:"好的 is the friendly, casual 'okay'. You'll hear it constantly in everyday conversation!"},
+  // WEEK 2 — Numbers
+  {day:8,week:2,hanzi:"一",pinyin:"Yī",pron:"ee",meaning:"One",category:"Numbers",try:"一个苹果！",tryTrans:'"One apple!"',fact:"一 changes tone before 4th-tone syllables: 一个 = yī gè. Tones shift — watch out!"},
+  {day:9,week:2,hanzi:"二",pinyin:"Èr",pron:"ar",meaning:"Two",category:"Numbers",try:"两个或者二？",tryTrans:'"Two (counting) or two (before nouns)?"',fact:"二 is used for counting (1,2,3...) but 两 (liǎng) is used before nouns: 两个 = 2 of something."},
+  {day:10,week:2,hanzi:"三",pinyin:"Sān",pron:"sahn",meaning:"Three",category:"Numbers",try:"三个好朋友！",tryTrans:'"Three good friends!"',fact:"三 is considered lucky in many Chinese traditions — things come in threes!"},
+  {day:11,week:2,hanzi:"四",pinyin:"Sì",pron:"suh",meaning:"Four",category:"Numbers",try:"四楼！",tryTrans:'"Fourth floor!"',fact:"四 (sì) sounds like 死 (sǐ = death), so it's considered unlucky. Many buildings skip floor 4!"},
+  {day:12,week:2,hanzi:"五",pinyin:"Wǔ",pron:"woo",meaning:"Five",category:"Numbers",try:"五块钱！",tryTrans:'"Five yuan!"',fact:"五 (five) shows up everywhere: 五一 (May 1st holiday), 五环 (Olympic rings), 五星 (five stars)!"},
+  {day:13,week:2,hanzi:"六",pinyin:"Liù",pron:"lyoh",meaning:"Six",category:"Numbers",try:"六六大顺！",tryTrans:'"Everything going smoothly!"',fact:"六六大顺 is a popular phrase wishing good luck. 6 is a lucky number meaning smooth flow!"},
+  {day:14,week:2,hanzi:"十",pinyin:"Shí",pron:"shir",meaning:"Ten",category:"Numbers",try:"十全十美！",tryTrans:'"Absolutely perfect!"',fact:"十 is key for all higher numbers: 十一=11, 二十=20. Learn 1–10 and you've got all of them!"},
+  // WEEK 3 — Food & Drink
+  {day:15,week:3,hanzi:"好吃",pinyin:"Hǎochī",pron:"how chir",meaning:"Delicious",category:"Food",try:"这个好吃极了！",tryTrans:'"This is incredibly delicious!"',fact:"好 = good, 吃 = eat. Literally 'good to eat'. The ultimate food compliment in Chinese!"},
+  {day:16,week:3,hanzi:"米饭",pinyin:"Mǐfàn",pron:"mee fahn",meaning:"Rice",category:"Food",try:"我想吃米饭！",tryTrans:'"I want to eat rice!"',fact:"米饭 is steamed rice. 炒饭 (chǎofàn) is fried rice. Rice is the heart of Chinese cuisine!"},
+  {day:17,week:3,hanzi:"面条",pinyin:"Miàntiáo",pron:"myen tyow",meaning:"Noodles",category:"Food",try:"我要一碗面条！",tryTrans:'"I want a bowl of noodles!"',fact:"Long noodles symbolize long life in Chinese culture — never cut them at a birthday meal!"},
+  {day:18,week:3,hanzi:"水",pinyin:"Shuǐ",pron:"shway",meaning:"Water",category:"Food",try:"我想要一杯水。",tryTrans:'"I\'d like a glass of water."',fact:"水 appears in many words: 水果 (fruit), 洪水 (flood), 水平 (level/skill). Water = life!"},
+  {day:19,week:3,hanzi:"茶",pinyin:"Chá",pron:"chah",meaning:"Tea",category:"Food",try:"请来一杯茶！",tryTrans:'"Please bring a cup of tea!"',fact:"The word 'tea' in almost every language came from Chinese! 茶 (chá) or 'te' depending on dialect."},
+  {day:20,week:3,hanzi:"饺子",pinyin:"Jiǎozi",pron:"jyow dzuh",meaning:"Dumplings",category:"Food",try:"我最喜欢饺子！",tryTrans:'"Dumplings are my favourite!"',fact:"饺子 are eaten on Chinese New Year for good luck. Their shape resembles ancient gold ingots!"},
+  {day:21,week:3,hanzi:"辣",pinyin:"Là",pron:"lah",meaning:"Spicy",category:"Food",try:"这个太辣了！",tryTrans:'"This is too spicy!"',fact:"辣 is a key flavour in Sichuan cuisine. 麻辣 (málà) = numbing-spicy, the iconic Sichuan combo!"},
+  // WEEK 4 — Family
+  {day:22,week:4,hanzi:"妈妈",pinyin:"Māma",pron:"mah mah",meaning:"Mum / Mom",category:"Family",try:"妈妈，我爱你！",tryTrans:'"Mum, I love you!"',fact:"Both syllables are 1st tone (high flat). Easy to say and one of the first words babies say worldwide!"},
+  {day:23,week:4,hanzi:"爸爸",pinyin:"Bàba",pron:"bah bah",meaning:"Dad",category:"Family",try:"爸爸在哪里？",tryTrans:'"Where is Dad?"',fact:"爸爸 is the casual, warm term. The formal word is 父亲 (fùqīn). 爸 is all first syllable, daddy!"},
+  {day:24,week:4,hanzi:"哥哥",pinyin:"Gēgē",pron:"guh guh",meaning:"Older Brother",category:"Family",try:"我哥哥很高。",tryTrans:'"My older brother is very tall."',fact:"Chinese distinguishes older/younger siblings: 哥哥 (older bro), 弟弟 (younger bro). Respect matters!"},
+  {day:25,week:4,hanzi:"姐姐",pinyin:"Jiějie",pron:"jyeh jyeh",meaning:"Older Sister",category:"Family",try:"姐姐帮了我很多。",tryTrans:'"My older sister helped me a lot."',fact:"姐姐 = older sis, 妹妹 = younger sis. Age order always specified in Chinese family terms!"},
+  {day:26,week:4,hanzi:"朋友",pinyin:"Péngyǒu",pron:"pung yo",meaning:"Friend",category:"Family",try:"他是我的好朋友！",tryTrans:'"He is my good friend!"',fact:"朋 = friend (group of people together), 友 = friend (hand extended in friendship). Beautiful meaning!"},
+  {day:27,week:4,hanzi:"爱",pinyin:"Ài",pron:"eye",meaning:"Love",category:"Family",try:"我爱你！我爱中文！",tryTrans:'"I love you! I love Chinese!"',fact:"爱 is used for deep affection. For 'like', use 喜欢 (xǐhuān). 爱 is strong — use it meaningfully!"},
+  {day:28,week:4,hanzi:"我们",pinyin:"Wǒmen",pron:"woh mun",meaning:"We / Us",category:"Family",try:"我们是好朋友！",tryTrans:'"We are good friends!"',fact:"我 = I/me + 们 (plural marker) = 我们 (we). Add 们 to 你 or 他/她 for 你们 (you all) and 他们 (they)."},
+  // WEEK 5 — Places
+  {day:29,week:5,hanzi:"学校",pinyin:"Xuéxiào",pron:"shweh shyow",meaning:"School",category:"Places",try:"我去学校上课。",tryTrans:'"I go to school for class."',fact:"学 = study, 校 = school grounds. 大学 = university (big school), 小学 = primary school (small school)!"},
+  {day:30,week:5,hanzi:"医院",pinyin:"Yīyuàn",pron:"ee ywenn",meaning:"Hospital",category:"Places",try:"我需要去医院。",tryTrans:'"I need to go to the hospital."',fact:"医 = medicine/doctor, 院 = courtyard/institution. 医院 literally means 'medicine courtyard'!"},
+  {day:31,week:5,hanzi:"超市",pinyin:"Chāoshì",pron:"chow shir",meaning:"Supermarket",category:"Places",try:"我要去超市买东西。",tryTrans:'"I want to go to the supermarket."',fact:"超 = super/exceed, 市 = market. 超市 = supermarket. Simple, logical characters!"},
+  {day:32,week:5,hanzi:"餐厅",pinyin:"Cāntīng",pron:"tsahn ting",meaning:"Restaurant",category:"Places",try:"我们去餐厅吃饭吧！",tryTrans:'"Let\'s go to a restaurant to eat!"',fact:"餐 = meal, 厅 = hall. Chinese restaurants often have huge halls — perfect for big family meals!"},
+  {day:33,week:5,hanzi:"家",pinyin:"Jiā",pron:"jyah",meaning:"Home / Family",category:"Places",try:"回家了！",tryTrans:'"Going home!"',fact:"家 means both 'home' and 'family' — in Chinese culture, they're inseparable concepts!"},
+  {day:34,week:5,hanzi:"公园",pinyin:"Gōngyuán",pron:"gong ywenn",meaning:"Park",category:"Places",try:"我喜欢在公园散步。",tryTrans:'"I like to walk in the park."',fact:"公 = public, 园 = garden. Parks in China are social hubs — tai chi, dancing, and more happen daily!"},
+  {day:35,week:5,hanzi:"地铁",pinyin:"Dìtiě",pron:"dee tyeh",meaning:"Subway / Metro",category:"Places",try:"坐地铁去吧！",tryTrans:'"Let\'s take the subway!"',fact:"地 = underground/earth, 铁 = iron. Literally 'underground iron'. Chinese cities have huge metro networks!"},
+  // WEEK 6 — Time
+  {day:36,week:6,hanzi:"今天",pinyin:"Jīntiān",pron:"jin tyen",meaning:"Today",category:"Time",try:"今天天气真好！",tryTrans:'"The weather is great today!"',fact:"今 = now/present, 天 = sky/day. 今天 = today, 昨天 = yesterday (zuótiān), 明天 = tomorrow (míngtiān)!"},
+  {day:37,week:6,hanzi:"明天",pinyin:"Míngtiān",pron:"ming tyen",meaning:"Tomorrow",category:"Time",try:"明天见！",tryTrans:'"See you tomorrow!"',fact:"明 = bright/clear (sun + moon together!), 天 = day. Tomorrow is the bright new day!"},
+  {day:38,week:6,hanzi:"现在",pinyin:"Xiànzài",pron:"shyen dzai",meaning:"Now",category:"Time",try:"现在几点？",tryTrans:'"What time is it now?"',fact:"现 = present, 在 = at/exist. 现在 = right now. 现在开始！ = Start now!"},
+  {day:39,week:6,hanzi:"早上",pinyin:"Zǎoshang",pron:"dzow shahng",meaning:"Morning",category:"Time",try:"早上好！早上吃什么？",tryTrans:'"Good morning! What do you eat for breakfast?"',fact:"早 = early, 上 = above/up. 早上好 is the go-to morning greeting. 晚上 = evening (wǎnshang)!"},
+  {day:40,week:6,hanzi:"星期",pinyin:"Xīngqī",pron:"shing chee",meaning:"Week / Day of Week",category:"Time",try:"今天是星期几？",tryTrans:'"What day of the week is today?"',fact:"星期一=Mon, 星期二=Tue ... 星期日=Sun. Numbers 1-6 for Mon-Sat, then 日(sun) for Sunday!"},
+  {day:41,week:6,hanzi:"年",pinyin:"Nián",pron:"nyen",meaning:"Year",category:"Time",try:"新年快乐！",tryTrans:'"Happy New Year!"',fact:"新年 = New Year (literally: new year). 猪年, 龙年 — each Chinese New Year is named after an animal!"},
+  {day:42,week:6,hanzi:"多久",pinyin:"Duō jiǔ",pron:"dwoh jyo",meaning:"How Long",category:"Time",try:"要多久？",tryTrans:'"How long does it take?"',fact:"多 = how much/many, 久 = long time. 多久 is your go-to for asking about duration!"},
+  // WEEK 7 — Verbs
+  {day:43,week:7,hanzi:"吃",pinyin:"Chī",pron:"chir",meaning:"To Eat",category:"Verbs",try:"你吃饭了吗？",tryTrans:'"Have you eaten yet?"',fact:"你吃饭了吗？is a common greeting in Chinese — literally asking if you've eaten shows care!"},
+  {day:44,week:7,hanzi:"喝",pinyin:"Hē",pron:"huh",meaning:"To Drink",category:"Verbs",try:"你喝茶吗？",tryTrans:'"Do you drink tea?"',fact:"喝 (drink) is only one stroke from 歇 (rest) — drink and rest, the perfect combo!"},
+  {day:45,week:7,hanzi:"去",pinyin:"Qù",pron:"chyoo",meaning:"To Go",category:"Verbs",try:"我们去哪里？",tryTrans:'"Where are we going?"',fact:"去 is one of the most used verbs! 去 + place = going somewhere. 去超市 = going to the supermarket."},
+  {day:46,week:7,hanzi:"来",pinyin:"Lái",pron:"lye",meaning:"To Come",category:"Verbs",try:"快来！过来！",tryTrans:'"Come quickly! Come over!"',fact:"来 (come) vs 去 (go) — perspective is key in Chinese just like in English!"},
+  {day:47,week:7,hanzi:"看",pinyin:"Kàn",pron:"kahn",meaning:"To Look / Watch",category:"Verbs",try:"看电视！看书！",tryTrans:'"Watch TV! Read a book!"',fact:"看 covers both watching and reading. 看电影 = watch a movie, 看书 = read a book (look at book)!"},
+  {day:48,week:7,hanzi:"说",pinyin:"Shuō",pron:"shwoh",meaning:"To Speak / Say",category:"Verbs",try:"你说中文吗？",tryTrans:'"Do you speak Chinese?"',fact:"说 is the key verb for language skills! 说中文 = speak Chinese. 听 (tīng) = to listen!"},
+  {day:49,week:7,hanzi:"买",pinyin:"Mǎi",pron:"my",meaning:"To Buy",category:"Verbs",try:"我要买这个！",tryTrans:'"I want to buy this!"',fact:"买 (buy) vs 卖 (mài = sell) — almost the same character! The extra stroke in 卖 = giving away."},
+  // WEEK 8 — Adjectives
+  {day:50,week:8,hanzi:"大",pinyin:"Dà",pron:"dah",meaning:"Big / Large",category:"Adjectives",try:"这个太大了！",tryTrans:'"This is too big!"',fact:"大 appears everywhere: 大学 (university), 大家 (everyone), 大人 (adult). Big is important!"},
+  {day:51,week:8,hanzi:"小",pinyin:"Xiǎo",pron:"shyow",meaning:"Small / Little",category:"Adjectives",try:"小猫咪好可爱！",tryTrans:'"The little kitty is so cute!"',fact:"小 is used as an affectionate prefix: 小猫 (little cat), 小朋友 (little friend = child). So cute!"},
+  {day:52,week:8,hanzi:"漂亮",pinyin:"Piàoliang",pron:"pyow lyang",meaning:"Beautiful / Pretty",category:"Adjectives",try:"你真漂亮！",tryTrans:'"You are so beautiful!"',fact:"漂亮 means beautiful/pretty for people and things. 好看 (hǎokàn) is more casual and also common!"},
+  {day:53,week:8,hanzi:"可爱",pinyin:"Kě'ài",pron:"kuh eye",meaning:"Cute / Adorable",category:"Adjectives",try:"猫咪好可爱！",tryTrans:'"The kitty is so adorable!"',fact:"可爱 is the Chinese equivalent of kawaii! 可 = can/able, 爱 = love. Literally 'loveable'!"},
+  {day:54,week:8,hanzi:"快乐",pinyin:"Kuàilè",pron:"kwhy luh",meaning:"Happy / Joyful",category:"Adjectives",try:"生日快乐！新年快乐！",tryTrans:'"Happy Birthday! Happy New Year!"',fact:"快乐 is the classic happiness greeting! 快 = fast, 乐 = music/joy. Joy that comes quickly!"},
+  {day:55,week:8,hanzi:"累",pinyin:"Lèi",pron:"lay",meaning:"Tired",category:"Adjectives",try:"我很累，想睡觉。",tryTrans:'"I\'m very tired, I want to sleep."',fact:"累 is extremely relatable! 你累了吗？ = Are you tired? A common, caring question between friends."},
+  {day:56,week:8,hanzi:"忙",pinyin:"Máng",pron:"mahng",meaning:"Busy",category:"Adjectives",try:"我最近很忙！",tryTrans:'"I\'ve been really busy lately!"',fact:"你最近忙吗？(Are you busy lately?) is a very natural conversation starter in Chinese!"},
+  // WEEK 9 — Feelings & Expressions
+  {day:57,week:9,hanzi:"高兴",pinyin:"Gāoxìng",pron:"gow shing",meaning:"Happy / Glad",category:"Feelings",try:"很高兴认识你！",tryTrans:'"Very glad to meet you!"',fact:"很高兴认识你！is the standard 'Nice to meet you'. 高 = high, 兴 = interest/excitement. Elevated mood!"},
+  {day:58,week:9,hanzi:"喜欢",pinyin:"Xǐhuān",pron:"shee hwahn",meaning:"To Like",category:"Feelings",try:"我喜欢中国文化！",tryTrans:'"I like Chinese culture!"',fact:"喜欢 for 'like'. 爱 for 'love'. Start with 喜欢 — it's warm and safe for most situations!"},
+  {day:59,week:9,hanzi:"不好意思",pinyin:"Bù hǎoyìsi",pron:"boo how ee suh",meaning:"Excuse Me / I'm Embarrassed",category:"Feelings",try:"不好意思，打扰一下！",tryTrans:'"Excuse me, sorry to bother you!"',fact:"不好意思 is softer than 对不起. Use it for minor inconveniences, getting someone's attention, or mild embarrassment."},
+  {day:60,week:9,hanzi:"没事",pinyin:"Méishì",pron:"may shir",meaning:"It's Fine / No Worries",category:"Feelings",try:"没事，别担心！",tryTrans:'"It\'s fine, don\'t worry!"',fact:"没事 is the super casual 'no worries'. 没 = none, 事 = matter. Nothing's the matter!"},
+  {day:61,week:9,hanzi:"真的吗",pinyin:"Zhēn de ma",pron:"juhn duh mah",meaning:"Really? / Is That True?",category:"Feelings",try:"真的吗？太厉害了！",tryTrans:'"Really? That\'s incredible!"',fact:"真的吗 = Really? 是真的！= It's true! 吗 (ma) turns any statement into a yes/no question!"},
+  {day:62,week:9,hanzi:"当然",pinyin:"Dāngrán",pron:"dahng rahn",meaning:"Of Course",category:"Feelings",try:"当然！没问题！",tryTrans:'"Of course! No problem!"',fact:"当然 is confident and warm. Pair with 没问题 (no problem) for a very reassuring combination!"},
+  {day:63,week:9,hanzi:"加油",pinyin:"Jiāyóu",pron:"jyah yo",meaning:"Come On! / You've Got This!",category:"Feelings",try:"加油！你能做到！",tryTrans:'"You\'ve got this! You can do it!"',fact:"加 = add, 油 = oil/fuel. 'Add fuel!' — the ultimate Chinese cheer for encouragement! Like 'Go go go!'"},
+  // WEEK 10 — Colors
+  {day:64,week:10,hanzi:"红色",pinyin:"Hóngsè",pron:"hong suh",meaning:"Red",category:"Colors",try:"红色是我的最爱！",tryTrans:'"Red is my favourite!"',fact:"红色 = red. Red symbolizes luck, happiness, and prosperity in Chinese culture. Everywhere during festivals!"},
+  {day:65,week:10,hanzi:"金色",pinyin:"Jīnsè",pron:"jin suh",meaning:"Gold / Golden",category:"Colors",try:"金色的龙！",tryTrans:'"A golden dragon!"',fact:"金 = gold/metal, 色 = color. Gold + Red = the ultimate lucky Chinese color combination!"},
+  {day:66,week:10,hanzi:"白色",pinyin:"Báisè",pron:"bai suh",meaning:"White",category:"Colors",try:"白色的猫！",tryTrans:'"A white cat!"',fact:"白 = white. Note: white is associated with mourning in Chinese culture, unlike in Western traditions."},
+  {day:67,week:10,hanzi:"黑色",pinyin:"Hēisè",pron:"hay suh",meaning:"Black",category:"Colors",try:"我的猫是黑白色的。",tryTrans:'"My cat is black and white."',fact:"黑 = black, 白 = white, 灰 (huī) = gray. Mix your colors in Mandarin just like a painter!"},
+  {day:68,week:10,hanzi:"蓝色",pinyin:"Lánsè",pron:"lahn suh",meaning:"Blue",category:"Colors",try:"天空是蓝色的！",tryTrans:'"The sky is blue!"',fact:"蓝色 = blue. 天蓝 (sky blue) and 深蓝 (dark blue) are common shade variations!"},
+  {day:69,week:10,hanzi:"绿色",pinyin:"Lǜsè",pron:"lyoo suh",meaning:"Green",category:"Colors",try:"绿色的树！",tryTrans:'"Green trees!"',fact:"绿色 = green. Fun fact: 绿茶 = green tea! 绿 sounds like 旅 (travel) — 'go green and travel'!"},
+  {day:70,week:10,hanzi:"粉色",pinyin:"Fěnsè",pron:"fun suh",meaning:"Pink",category:"Colors",try:"粉色的花好漂亮！",tryTrans:'"Pink flowers are so beautiful!"',fact:"粉 = powder (like face powder), so 粉色 = powder color = pink. Very poetic!"},
+  // WEEK 11 — Social & Culture
+  {day:71,week:11,hanzi:"朋友圈",pinyin:"Péngyǒuquān",pron:"pung yo chywenn",meaning:"Social Circle / WeChat Moments",category:"Social",try:"发朋友圈！",tryTrans:'"Post to Moments!"',fact:"朋友圈 literally means 'friends circle'. In modern China it also refers to WeChat Moments (like Instagram stories)!"},
+  {day:72,week:11,hanzi:"红包",pinyin:"Hóngbāo",pron:"hong bow",meaning:"Red Envelope / Money Gift",category:"Culture",try:"过年收到红包了！",tryTrans:'"Got a red envelope for New Year!"',fact:"红包 = red envelope with money inside! A tradition at New Year and celebrations. Now also a digital WeChat feature!"},
+  {day:73,week:11,hanzi:"厉害",pinyin:"Lìhài",pron:"lee high",meaning:"Impressive / Amazing",category:"Social",try:"你太厉害了！",tryTrans:'"You are so impressive!"',fact:"厉害 is the highest compliment — skilled, fierce, awesome. You'll say it all the time in China!"},
+  {day:74,week:11,hanzi:"随便",pinyin:"Suíbiàn",pron:"sway byen",meaning:"Whatever / As You Like",category:"Social",try:"随便！你决定吧！",tryTrans:'"Whatever! You decide!"',fact:"随便 is wonderfully versatile — 'up to you', 'whatever', 'casually'. Very commonly heard!"},
+  {day:75,week:11,hanzi:"差不多",pinyin:"Chàbuduō",pron:"chah boo dwoh",meaning:"More or Less / About Right",category:"Social",try:"差不多就行了！",tryTrans:'"More or less is fine!"',fact:"差 = differ, 不多 = not much. 'Doesn't differ much' = roughly right. A very Chinese concept of 'good enough'!"},
+  {day:76,week:11,hanzi:"慢慢来",pinyin:"Màn màn lái",pron:"mahn mahn lye",meaning:"Take It Slow / No Rush",category:"Social",try:"慢慢来，不着急！",tryTrans:'"Take your time, no rush!"',fact:"慢慢来 is the ultimate chill phrase. 慢 = slow. 'Come slowly' is how Chinese say 'take your time'!"},
+  {day:77,week:11,hanzi:"没问题",pinyin:"Méi wèntí",pron:"may when tee",meaning:"No Problem",category:"Social",try:"没问题！交给我！",tryTrans:'"No problem! Leave it to me!"',fact:"没 = none, 问题 = problem. 没问题 is confident and reassuring. A crowd favourite phrase!"},
+  // WEEK 12 — Shopping & Money
+  {day:78,week:12,hanzi:"多少钱",pinyin:"Duōshǎo qián",pron:"dwoh show chyen",meaning:"How Much? (Price)",category:"Shopping",try:"这个多少钱？",tryTrans:'"How much is this?"',fact:"The most essential shopping phrase! 多少 = how much/many, 钱 = money. Say it with confidence!"},
+  {day:79,week:12,hanzi:"便宜",pinyin:"Piányí",pron:"pyen yee",meaning:"Cheap / Affordable",category:"Shopping",try:"这个好便宜！",tryTrans:'"This is so affordable!"',fact:"便宜 (cheap) vs 贵 (guì = expensive). Bargaining is a skill in Chinese markets — use both words!"},
+  {day:80,week:12,hanzi:"贵",pinyin:"Guì",pron:"gway",meaning:"Expensive",category:"Shopping",try:"太贵了！能便宜点吗？",tryTrans:'"Too expensive! Can it be cheaper?"',fact:"贵 = expensive. 贵 also means 'precious/noble'. Used in polite questions: 您贵姓？= Your honorable surname?"},
+  {day:81,week:12,hanzi:"打折",pinyin:"Dǎzhé",pron:"dah juh",meaning:"Discount / On Sale",category:"Shopping",try:"今天打折吗？",tryTrans:'"Is there a discount today?"',fact:"打折 = discount. 八折 = 80% of price (20% off). In China, 折 counts remaining price, not % off!"},
+  {day:82,week:12,hanzi:"刷卡",pinyin:"Shuākǎ",pron:"shwah kah",meaning:"Pay by Card / Scan",category:"Shopping",try:"可以刷卡吗？",tryTrans:'"Can I pay by card?"',fact:"刷卡 = swipe card. But in modern China, 扫码支付 (scan QR code to pay) is far more common!"},
+  {day:83,week:12,hanzi:"外卖",pinyin:"Wàimài",pron:"why my",meaning:"Food Delivery / Takeaway",category:"Shopping",try:"点外卖吧！",tryTrans:'"Let\'s order food delivery!"',fact:"外卖 culture is HUGE in China. Apps like Meituan and Eleme deliver anything in 30 minutes!"},
+  {day:84,week:12,hanzi:"收据",pinyin:"Shōujù",pron:"show jyoo",meaning:"Receipt",category:"Shopping",try:"请给我收据。",tryTrans:'"Please give me a receipt."',fact:"收 = receive, 据 = evidence/document. A receipt is literally 'received-evidence' — makes perfect sense!"},
+  // WEEK 13 — Culture & Wrap-Up
+  {day:85,week:13,hanzi:"中国",pinyin:"Zhōngguó",pron:"jong gwoh",meaning:"China",category:"Culture",try:"我爱中国文化！",tryTrans:'"I love Chinese culture!"',fact:"中 = middle/center, 国 = country. China is the 'Middle Kingdom' — the center of the ancient world!"},
+  {day:86,week:13,hanzi:"普通话",pinyin:"Pǔtōnghuà",pron:"poo tong hwah",meaning:"Mandarin Chinese",category:"Culture",try:"我在学普通话！",tryTrans:'"I am learning Mandarin!"',fact:"普通话 = 'common speech'. It's the official national language of China based on the Beijing dialect!"},
+  {day:87,week:13,hanzi:"汉字",pinyin:"Hànzì",pron:"hahn dzuh",meaning:"Chinese Characters",category:"Culture",try:"汉字很美！",tryTrans:'"Chinese characters are so beautiful!"',fact:"汉字 are one of the oldest writing systems still in use! Over 50,000 exist, but 2,500 cover daily life."},
+  {day:88,week:13,hanzi:"功夫",pinyin:"Gōngfu",pron:"gong foo",meaning:"Kung Fu / Skill",category:"Culture",try:"中国功夫很厉害！",tryTrans:'"Chinese kung fu is amazing!"',fact:"功夫 actually means 'skill achieved through time and effort' — not just martial arts! 'You have good 功夫!'"},
+  {day:89,week:13,hanzi:"春节",pinyin:"Chūnjié",pron:"chwin jyeh",meaning:"Chinese New Year / Spring Festival",category:"Culture",try:"春节快乐！恭喜发财！",tryTrans:'"Happy Spring Festival! Wishing you wealth!"',fact:"春节 is the biggest celebration in China! 恭喜发财 (gōngxǐ fācái) = May you be prosperous — the iconic CNY phrase!"},
+  {day:90,week:13,hanzi:"了不起",pinyin:"Liǎobuqǐ",pron:"lyow boo chee",meaning:"Amazing / Incredible",category:"Culture",try:"你太了不起了！坚持下去！",tryTrans:'"You are incredible! Keep going!"',fact:"了不起 = simply incredible. You completed 90 days of Mandarin! 你真的太了不起了！🎉"},
+];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let completed = new Set(JSON.parse(localStorage.getItem('zhCompleted') || '[]'));
+let currentCardIdx = 0;
+let isFlipped = false;
+let currentModalDay = null;
+
+function saveProgress() {
+  localStorage.setItem('zhCompleted', JSON.stringify([...completed]));
+}
+
+// ═══════════════════════════════════════
+// LANTERN PARTICLES
+// ═══════════════════════════════════════
+function spawnLanterns() {
+  const bg = document.getElementById('lanternBg');
+  const symbols = ['🏮','✨','🌟','⭐','🐉','🌸','🪷','字','福','好'];
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'lantern-piece';
+    p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    p.style.left = Math.random() * 100 + '%';
+    p.style.fontSize = (10 + Math.random() * 8) + 'px';
+    p.style.animationDuration = (10 + Math.random() * 14) + 's';
+    p.style.animationDelay = (-Math.random() * 20) + 's';
+    bg.appendChild(p);
+  }
+}
+spawnLanterns();
+
+// ═══════════════════════════════════════
+// VIEW SWITCHING
+// ═══════════════════════════════════════
+function showView(name, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (name === 'stats') updateStats();
+  if (name === 'categories') buildCategories();
+  if (name === 'flashcard') updateCard();
+  if (name === 'timetable') buildTimetable();
+  updateProgressBar();
+}
+
+// ═══════════════════════════════════════
+// PROGRESS
+// ═══════════════════════════════════════
+function updateProgressBar() {
+  const done = completed.size;
+  const pct = Math.round(done / 90 * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressDone').textContent = done + ' cards done';
+  document.getElementById('progressLeft').textContent = (90 - done) + ' remaining';
+}
+
+// ═══════════════════════════════════════
+// TIMETABLE
+// ═══════════════════════════════════════
+function buildTimetable() {
+  const grid = document.getElementById('timetableGrid');
+  grid.innerHTML = '';
+  const weeks = {};
+  cards.forEach(c => {
+    if (!weeks[c.week]) weeks[c.week] = [];
+    weeks[c.week].push(c);
+  });
+  Object.keys(weeks).forEach(wk => {
+    const sec = document.createElement('div');
+    sec.className = 'week-section';
+    sec.innerHTML = `<div class="week-label">Week ${wk}</div><div class="days-row" id="week-${wk}-row"></div>`;
+    grid.appendChild(sec);
+    const row = sec.querySelector('.days-row');
+    weeks[wk].forEach(c => {
+      const pill = document.createElement('div');
+      pill.className = 'day-pill' + (completed.has(c.day) ? ' done' : '');
+      pill.innerHTML = `<span class="day-num">${c.day}</span><span class="day-check">${completed.has(c.day) ? '✓' : ''}</span>`;
+      pill.onclick = () => openModal(c.day - 1);
+      row.appendChild(pill);
+    });
+  });
+}
+
+// ═══════════════════════════════════════
+// FLASHCARD
+// ═══════════════════════════════════════
+function updateCard() {
+  const c = cards[currentCardIdx];
+  document.getElementById('cardHanzi').textContent = c.hanzi;
+  document.getElementById('cardPinyin').textContent = c.pinyin;
+  document.getElementById('cardPronunciation').textContent = c.pron;
+  document.getElementById('cardMeaning').textContent = c.meaning;
+  document.getElementById('cardWeek').textContent = 'Week ' + c.week;
+  document.getElementById('backTry').textContent = c.try;
+  document.getElementById('backTranslation').textContent = c.tryTrans;
+  document.getElementById('backFact').textContent = c.fact;
+  document.getElementById('cardCounter').textContent = 'Day ' + c.day + ' of 90';
+  const inner = document.getElementById('cardInner');
+  inner.classList.remove('flipped');
+  isFlipped = false;
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('cardInner').classList.toggle('flipped', isFlipped);
+}
+
+function nextCard() {
+  currentCardIdx = (currentCardIdx + 1) % cards.length;
+  updateCard();
+}
+
+function prevCard() {
+  currentCardIdx = (currentCardIdx - 1 + cards.length) % cards.length;
+  updateCard();
+}
+
+function markGotIt() {
+  completed.add(cards[currentCardIdx].day);
+  saveProgress();
+  updateProgressBar();
+  buildTimetable();
+  nextCard();
+}
+
+function markAgain() {
+  nextCard();
+}
+
+// ═══════════════════════════════════════
+// CATEGORIES
+// ═══════════════════════════════════════
+const catEmojis = {
+  Greetings:'👋', Numbers:'🔢', Food:'🍜', Family:'👨‍👩‍👧', Places:'📍',
+  Time:'🕐', Verbs:'🏃', Adjectives:'✨', Feelings:'💭', Colors:'🎨',
+  Social:'👥', Culture:'🐉', Shopping:'🛍️'
+};
+
+function buildCategories() {
+  const cats = {};
+  cards.forEach(c => {
+    if (!cats[c.category]) cats[c.category] = [];
+    cats[c.category].push(c);
+  });
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = '';
+  Object.entries(cats).forEach(([name, arr]) => {
+    const done = arr.filter(c => completed.has(c.day)).length;
+    const pct = Math.round(done / arr.length * 100);
+    const el = document.createElement('div');
+    el.className = 'cat-card';
+    el.innerHTML = `
+      <span class="cat-emoji">${catEmojis[name] || '📚'}</span>
+      <div class="cat-name">${name}</div>
+      <div class="cat-count">${done}/${arr.length} done</div>
+      <div class="cat-bar"><div class="cat-bar-fill" style="width:${pct}%"></div></div>
+    `;
+    el.onclick = () => {
+      currentCardIdx = cards.indexOf(arr[0]);
+      showView('flashcard', null);
+      setBottomNav('flashcard');
+      document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', i===1));
+    };
+    grid.appendChild(el);
+  });
+}
+
+// ═══════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════
+function updateStats() {
+  const done = completed.size;
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('statLeft').textContent = 90 - done;
+  const week = done < 90 ? Math.floor(done / 7) + 1 : 13;
+  document.getElementById('statWeek').textContent = 'Wk ' + Math.min(week, 13);
+  document.getElementById('statPct').textContent = Math.round(done / 90 * 100) + '%';
+  const phrases = ['Keep going!','加油！','You got this!','So impressive!','Almost there!'];
+  document.getElementById('streakVal').textContent = done > 0 ? phrases[Math.min(Math.floor(done/18), 4)] : 'Start today!';
+}
+
+// ═══════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════
+function openModal(idx) {
+  currentModalDay = idx;
+  const c = cards[idx];
+  document.getElementById('modalHanzi').textContent = c.hanzi;
+  document.getElementById('modalPinyin').textContent = c.pinyin;
+  document.getElementById('modalPronunciation').textContent = c.pron;
+  document.getElementById('modalMeaning').textContent = c.meaning;
+  document.getElementById('modalFact').textContent = c.fact;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+}
+
+function studyThisCard() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  currentCardIdx = currentModalDay;
+  showView('flashcard', null);
+  setBottomNav('flashcard');
+  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', i===1));
+}
+
+// ═══════════════════════════════════════
+// BOTTOM NAV
+// ═══════════════════════════════════════
+function setBottomNav(name) {
+  ['timetable','flashcard','categories','stats'].forEach(n => {
+    const btn = document.getElementById('bnav-' + n);
+    if (btn) btn.classList.toggle('active', n === name);
+  });
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+buildTimetable();
+updateProgressBar();
+</script>
+</body>
+</html>
