@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nyanko Academy 🐱 — Language Flashcards</title>
+<meta name="description" content="Learn Asian languages 1 card a day with your calico cat guide 🐱">
+<meta name="theme-color" content="#e8678a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Nyanko Academy">
+<link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@700&family=Noto+Sans+KR:wght@700&family=Noto+Sans+SC:wght@700&family=Noto+Sans+Devanagari:wght@700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -773,6 +779,17 @@ document.getElementById('krProgress').textContent = krDone + ' / 90';
 document.getElementById('zhProgress').textContent = zhDone + ' / 90';
 document.getElementById('dzProgress').textContent = dzDone + ' / 90';
 document.getElementById('npProgress').textContent = npDone + ' / 90';
+</script>
+
+<script>
+// Register Service Worker for PWA / offline support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('Nyanko Academy: service worker registered 🐱', reg.scope))
+      .catch(err => console.log('Service worker registration failed:', err));
+  });
+}
 </script>
 </body>
 </html>

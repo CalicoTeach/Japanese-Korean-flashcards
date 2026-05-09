@@ -1,0 +1,56 @@
+{
+  "name": "Nyanko Academy — Language Flashcards",
+  "short_name": "Nyanko Academy",
+  "description": "Learn Asian languages 1 card a day with your calico cat guide 🐱",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#fff9f5",
+  "theme_color": "#e8678a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Japanese",
+      "short_name": "日本語",
+      "url": "/japanese-flashcards.html",
+      "description": "Open Japanese flashcards"
+    },
+    {
+      "name": "Korean",
+      "short_name": "한국어",
+      "url": "/korean-flashcards.html",
+      "description": "Open Korean flashcards"
+    },
+    {
+      "name": "Mandarin",
+      "short_name": "普通话",
+      "url": "/mandarin-flashcards.html",
+      "description": "Open Mandarin flashcards"
+    },
+    {
+      "name": "Dzongkha",
+      "short_name": "རྫོང་ཁ",
+      "url": "/bhutanese-flashcards.html",
+      "description": "Open Dzongkha flashcards"
+    },
+    {
+      "name": "Nepali",
+      "short_name": "नेपाली",
+      "url": "/nepali-flashcards.html",
+      "description": "Open Nepali flashcards"
+    }
+  ]
+}
