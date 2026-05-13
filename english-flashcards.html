@@ -503,22 +503,14 @@ function speakWord() {
   if (!window.speechSynthesis) return;
   const c = cards[currentCardIdx];
   window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(c.en);
+  utt.lang = 'en-US';
+  utt.rate = 0.8;
   const btn = document.getElementById('speakBtn');
   if (btn) btn.classList.add('speaking');
-  function doSpeak() {
-    const voices = window.speechSynthesis.getVoices();
-    const voice = voices.find(v => v.lang === 'en-US' || v.lang.startsWith('en'));
-    const utt = new SpeechSynthesisUtterance(c.n);
-    if (voice) utt.voice = voice;
-    utt.lang = 'en-US';
-    utt.rate = 0.85;
-    utt.onend = () => { if (btn) btn.classList.remove('speaking'); };
-    utt.onerror = () => { if (btn) btn.classList.remove('speaking'); };
-    window.speechSynthesis.speak(utt);
-  }
-  const voices = window.speechSynthesis.getVoices();
-  if (voices.length > 0) { doSpeak(); }
-  else { window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.onvoiceschanged = null; doSpeak(); }; setTimeout(doSpeak, 500); }
+  utt.onend = () => { if (btn) btn.classList.remove('speaking'); };
+  utt.onerror = () => { if (btn) btn.classList.remove('speaking'); };
+  window.speechSynthesis.speak(utt);
 }
 
 const catEmojis = { Greetings:'👋', Numbers:'🔢', Food:'🍽️', Family:'👨‍👩‍👧', Places:'📍', Time:'🕐', Verbs:'🏃', Adjectives:'✨', Phrases:'💬', Shopping:'🛍️', Health:'💊', Travel:'✈️', Final:'🎉' };
