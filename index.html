@@ -252,6 +252,47 @@
     background: linear-gradient(135deg, #1a5fb4 0%, #2e86de 45%, #54a0ff 80%, #48dbfb 100%);
   }
 
+  /* Vietnamese */
+  .card-vi {
+    background: linear-gradient(145deg, #fff5f0 0%, #ffddd0 40%, #fff8e8 100%);
+    border-color: #f5c8b0;
+  }
+  .card-vi .card-header {
+    background: linear-gradient(135deg, #b83a10 0%, #e8532a 50%, #f5a020 80%, #f5c842 100%);
+  }
+  /* Thai */
+  .card-th {
+    background: linear-gradient(145deg, #fdf5ff 0%, #f0e0ff 40%, #fff5f0 100%);
+    border-color: #d4b0f0;
+  }
+  .card-th .card-header {
+    background: linear-gradient(135deg, #6c3483 0%, #9b59b6 50%, #c39bd3 80%, #f0c080 100%);
+  }
+  /* French */
+  .card-fr {
+    background: linear-gradient(145deg, #f0f4ff 0%, #dce8ff 40%, #fff0f0 100%);
+    border-color: #b0c4f0;
+  }
+  .card-fr .card-header {
+    background: linear-gradient(135deg, #1a3a7a 0%, #2980b9 40%, #5fa8d3 75%, #c0392b 100%);
+  }
+  /* Portuguese */
+  .card-pt {
+    background: linear-gradient(145deg, #f0fff4 0%, #d6f5e4 40%, #fffde0 100%);
+    border-color: #a0d8b0;
+  }
+  .card-pt .card-header {
+    background: linear-gradient(135deg, #1a7a44 0%, #27ae60 45%, #55d98a 80%, #f5c842 100%);
+  }
+  /* German */
+  .card-de {
+    background: linear-gradient(145deg, #fff8f0 0%, #ffe8cc 40%, #f5f5f5 100%);
+    border-color: #f0c080;
+  }
+  .card-de .card-header {
+    background: linear-gradient(135deg, #2d2d2d 0%, #555 35%, #e67e22 65%, #f5c842 100%);
+  }
+
   .card-header {
     padding: 20px 20px 16px;
     position: relative;
@@ -480,11 +521,11 @@
       <span class="strip-label">Cards Done</span>
     </div>
     <div class="strip-item">
-      <span class="strip-val">540</span>
+      <span class="strip-val">990</span>
       <span class="strip-label">Total Cards</span>
     </div>
     <div class="strip-item">
-      <span class="strip-val">6</span>
+      <span class="strip-val">11</span>
       <span class="strip-label">Languages</span>
     </div>
     <div class="strip-item">
@@ -501,6 +542,7 @@
 
   <div class="lang-cards">
 
+    <!-- JAPANESE -->
     <!-- JAPANESE -->
     <a href="japanese-flashcards.html" class="lang-card card-jp fade-in fade-in-3">
       <div class="card-header">
@@ -621,6 +663,206 @@
       </div>
     </a>
 
+    <!-- VIETNAMESE -->
+    <a href="vietnamese-flashcards.html" class="lang-card card-vi fade-in fade-in-4">
+      <div class="card-header">
+        <div class="card-flag-row">
+          <span class="card-flag">🇻🇳</span>
+          <div>
+            <div class="card-lang-name">Vietnamese</div>
+            <div class="card-lang-sub">Tiếng Việt</div>
+          </div>
+        </div>
+        <div class="card-script-preview">Xin chào!</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta-row">
+          <span class="meta-chip">🌺 Lotus Series</span>
+          <span class="meta-chip">90 cards</span>
+          <span class="meta-chip">Beginner</span>
+        </div>
+        <div class="card-progress-row">
+          <div class="mini-bar-bg">
+            <div class="mini-bar-fill" id="viBar" style="width:0%"></div>
+          </div>
+          <span class="mini-bar-label" id="viProgress">0 / 90</span>
+        </div>
+        <div class="card-desc">Greetings, food, family, places & more — explore Vietnam's tonal language with your calico cat over 90 days!</div>
+        <div class="card-topics">
+          <span class="topic-tag">👋 Greetings</span>
+          <span class="topic-tag">🍜 Phở</span>
+          <span class="topic-tag">🏖️ Places</span>
+          <span class="topic-tag">👨‍👩‍👧 Family</span>
+          <span class="topic-tag">🌺 Culture</span>
+          <span class="topic-tag">+7 more</span>
+        </div>
+        <div class="card-cta">
+          <span>Start Vietnamese Journey</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- THAI -->
+    <a href="thai-flashcards.html" class="lang-card card-th fade-in fade-in-5">
+      <div class="card-header">
+        <div class="card-flag-row">
+          <span class="card-flag">🇹🇭</span>
+          <div>
+            <div class="card-lang-name">Thai</div>
+            <div class="card-lang-sub">ภาษาไทย · Phasa Thai</div>
+          </div>
+        </div>
+        <div class="card-script-preview">สวัสดี</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta-row">
+          <span class="meta-chip">🐘 Elephant Series</span>
+          <span class="meta-chip">90 cards</span>
+          <span class="meta-chip">Beginner</span>
+        </div>
+        <div class="card-progress-row">
+          <div class="mini-bar-bg">
+            <div class="mini-bar-fill" id="thBar" style="width:0%"></div>
+          </div>
+          <span class="mini-bar-label" id="thProgress">0 / 90</span>
+        </div>
+        <div class="card-desc">Greetings, street food, temples, family & more — learn beautiful Thai script with your calico elephant guide!</div>
+        <div class="card-topics">
+          <span class="topic-tag">👋 สวัสดี</span>
+          <span class="topic-tag">🍛 Food</span>
+          <span class="topic-tag">🛕 Temples</span>
+          <span class="topic-tag">🔢 Numbers</span>
+          <span class="topic-tag">🐘 Culture</span>
+          <span class="topic-tag">+7 more</span>
+        </div>
+        <div class="card-cta">
+          <span>Start Thai Journey</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- FRENCH -->
+    <a href="french-flashcards.html" class="lang-card card-fr fade-in fade-in-5">
+      <div class="card-header">
+        <div class="card-flag-row">
+          <span class="card-flag">🇫🇷</span>
+          <div>
+            <div class="card-lang-name">French</div>
+            <div class="card-lang-sub">Français · La Belle Langue</div>
+          </div>
+        </div>
+        <div class="card-script-preview">Bonjour!</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta-row">
+          <span class="meta-chip">🥐 Boulangerie Series</span>
+          <span class="meta-chip">90 cards</span>
+          <span class="meta-chip">Beginner</span>
+        </div>
+        <div class="card-progress-row">
+          <div class="mini-bar-bg">
+            <div class="mini-bar-fill" id="frBar" style="width:0%"></div>
+          </div>
+          <span class="mini-bar-label" id="frProgress">0 / 90</span>
+        </div>
+        <div class="card-desc">Greetings, café culture, food, travel, romance & more — learn the language of love with your Parisian calico!</div>
+        <div class="card-topics">
+          <span class="topic-tag">👋 Bonjour</span>
+          <span class="topic-tag">☕ Café</span>
+          <span class="topic-tag">🥖 Food</span>
+          <span class="topic-tag">🗼 Travel</span>
+          <span class="topic-tag">🥐 Culture</span>
+          <span class="topic-tag">+7 more</span>
+        </div>
+        <div class="card-cta">
+          <span>Start French Journey</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- PORTUGUESE -->
+    <a href="portuguese-flashcards.html" class="lang-card card-pt fade-in fade-in-5">
+      <div class="card-header">
+        <div class="card-flag-row">
+          <span class="card-flag">🇧🇷</span>
+          <div>
+            <div class="card-lang-name">Portuguese</div>
+            <div class="card-lang-sub">Português · Saudade</div>
+          </div>
+        </div>
+        <div class="card-script-preview">Olá!</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta-row">
+          <span class="meta-chip">🌊 Saudade Series</span>
+          <span class="meta-chip">90 cards</span>
+          <span class="meta-chip">Beginner</span>
+        </div>
+        <div class="card-progress-row">
+          <div class="mini-bar-bg">
+            <div class="mini-bar-fill" id="ptBar" style="width:0%"></div>
+          </div>
+          <span class="mini-bar-label" id="ptProgress">0 / 90</span>
+        </div>
+        <div class="card-desc">Greetings, beach life, food, family & more — learn Brazilian Portuguese with tropical calico energy!</div>
+        <div class="card-topics">
+          <span class="topic-tag">👋 Olá</span>
+          <span class="topic-tag">🏖️ Beach</span>
+          <span class="topic-tag">🍖 Food</span>
+          <span class="topic-tag">👨‍👩‍👧 Family</span>
+          <span class="topic-tag">🌊 Culture</span>
+          <span class="topic-tag">+7 more</span>
+        </div>
+        <div class="card-cta">
+          <span>Start Portuguese Journey</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- GERMAN -->
+    <a href="german-flashcards.html" class="lang-card card-de fade-in fade-in-5">
+      <div class="card-header">
+        <div class="card-flag-row">
+          <span class="card-flag">🇩🇪</span>
+          <div>
+            <div class="card-lang-name">German</div>
+            <div class="card-lang-sub">Deutsch · Wanderlust</div>
+          </div>
+        </div>
+        <div class="card-script-preview">Hallo!</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta-row">
+          <span class="meta-chip">🏔️ Wanderlust Series</span>
+          <span class="meta-chip">90 cards</span>
+          <span class="meta-chip">Beginner</span>
+        </div>
+        <div class="card-progress-row">
+          <div class="mini-bar-bg">
+            <div class="mini-bar-fill" id="deBar" style="width:0%"></div>
+          </div>
+          <span class="mini-bar-label" id="deProgress">0 / 90</span>
+        </div>
+        <div class="card-desc">Greetings, food, travel, culture & more — learn the language of philosophers and engineers with your alpine calico!</div>
+        <div class="card-topics">
+          <span class="topic-tag">👋 Hallo</span>
+          <span class="topic-tag">🍺 Food</span>
+          <span class="topic-tag">🚂 Travel</span>
+          <span class="topic-tag">🏔️ Nature</span>
+          <span class="topic-tag">🎭 Culture</span>
+          <span class="topic-tag">+7 more</span>
+        </div>
+        <div class="card-cta">
+          <span>Start German Journey</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
     <!-- BHUTANESE -->
     <a href="bhutanese-flashcards.html" class="lang-card card-dz fade-in fade-in-5">
       <div class="card-header">
@@ -701,14 +943,14 @@
       </div>
     </a>
 
-    <!-- ENGLISH -->
+    <!-- ENGLISH for Mandarin speakers -->
     <a href="english-flashcards.html" class="lang-card card-en fade-in fade-in-5">
       <div class="card-header">
         <div class="card-flag-row">
           <span class="card-flag">🇬🇧</span>
           <div>
             <div class="card-lang-name">English</div>
-            <div class="card-lang-sub">英语 · Yīngyǔ</div>
+            <div class="card-lang-sub">英语 · Yīngyǔ · for Mandarin speakers</div>
           </div>
         </div>
         <div class="card-script-preview">Hello! 你好</div>
@@ -741,19 +983,6 @@
       </div>
     </a>
 
-  </div>
-
-  <!-- COMING SOON -->
-  <div class="coming-soon-card fade-in fade-in-5">
-    <span class="cs-emoji">🔮</span>
-    <h3>More languages coming soon~</h3>
-    <p>Your calico cat is studying hard!</p>
-    <div class="cs-chips">
-      <span class="cs-chip">🇫🇷 French</span>
-      <span class="cs-chip">🇪🇸 Spanish</span>
-      <span class="cs-chip">🇻🇳 Vietnamese</span>
-      <span class="cs-chip">🇹🇭 Thai</span>
-    </div>
   </div>
 
   <!-- HOW IT WORKS -->
@@ -816,21 +1045,36 @@ for (let i = 0; i < 20; i++) {
 const jpDone = JSON.parse(localStorage.getItem('jpCompleted') || '[]').length;
 const krDone = JSON.parse(localStorage.getItem('krCompleted') || '[]').length;
 const zhDone = JSON.parse(localStorage.getItem('zhCompleted') || '[]').length;
+const viDone = JSON.parse(localStorage.getItem('viCompleted') || '[]').length;
+const thDone = JSON.parse(localStorage.getItem('thCompleted') || '[]').length;
+const frDone = JSON.parse(localStorage.getItem('frCompleted') || '[]').length;
+const ptDone = JSON.parse(localStorage.getItem('ptCompleted') || '[]').length;
+const deDone = JSON.parse(localStorage.getItem('deCompleted') || '[]').length;
 const dzDone = JSON.parse(localStorage.getItem('dzCompleted') || '[]').length;
 const npDone = JSON.parse(localStorage.getItem('npCompleted') || '[]').length;
 const enDone = JSON.parse(localStorage.getItem('enCompleted') || '[]').length;
-const totalDone = jpDone + krDone + zhDone + dzDone + npDone + enDone;
+const totalDone = jpDone + krDone + zhDone + viDone + thDone + frDone + ptDone + deDone + dzDone + npDone + enDone;
 
 document.getElementById('totalDone').textContent = totalDone;
 document.getElementById('jpBar').style.width = Math.round(jpDone / 90 * 100) + '%';
 document.getElementById('krBar').style.width = Math.round(krDone / 90 * 100) + '%';
 document.getElementById('zhBar').style.width = Math.round(zhDone / 90 * 100) + '%';
+document.getElementById('viBar').style.width = Math.round(viDone / 90 * 100) + '%';
+document.getElementById('thBar').style.width = Math.round(thDone / 90 * 100) + '%';
+document.getElementById('frBar').style.width = Math.round(frDone / 90 * 100) + '%';
+document.getElementById('ptBar').style.width = Math.round(ptDone / 90 * 100) + '%';
+document.getElementById('deBar').style.width = Math.round(deDone / 90 * 100) + '%';
 document.getElementById('dzBar').style.width = Math.round(dzDone / 90 * 100) + '%';
 document.getElementById('npBar').style.width = Math.round(npDone / 90 * 100) + '%';
 document.getElementById('enBar').style.width = Math.round(enDone / 90 * 100) + '%';
 document.getElementById('jpProgress').textContent = jpDone + ' / 90';
 document.getElementById('krProgress').textContent = krDone + ' / 90';
 document.getElementById('zhProgress').textContent = zhDone + ' / 90';
+document.getElementById('viProgress').textContent = viDone + ' / 90';
+document.getElementById('thProgress').textContent = thDone + ' / 90';
+document.getElementById('frProgress').textContent = frDone + ' / 90';
+document.getElementById('ptProgress').textContent = ptDone + ' / 90';
+document.getElementById('deProgress').textContent = deDone + ' / 90';
 document.getElementById('dzProgress').textContent = dzDone + ' / 90';
 document.getElementById('npProgress').textContent = npDone + ' / 90';
 document.getElementById('enProgress').textContent = enDone + ' / 90';
