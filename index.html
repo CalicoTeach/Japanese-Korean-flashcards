@@ -3,9 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nyanko Academy 🐱 — Language Flashcards</title>
-<meta name="description" content="Learn Asian languages 1 card a day with your calico cat guide 🐱">
+<title>Nyanko Academy 🐱 — Free Language Flashcards</title>
+<meta name="description" content="Learn 11 languages one card a day — Japanese, Korean, French, Thai, Vietnamese & more. Free forever, no app needed. Your calico cat guides you! 🐱">
 <meta name="theme-color" content="#e8678a">
+<!-- Open Graph (WhatsApp, Facebook, iMessage previews) -->
+<meta property="og:title" content="Nyanko Academy 🐱 — Free Language Flashcards">
+<meta property="og:description" content="Learn 11 languages one card a day — Japanese, Korean, French, Thai, Vietnamese & more. Free forever, no sign-up needed. Your calico cat guides you!">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calicoteach.github.io/Japanese-Korean-flashcards/">
+<meta property="og:image" content="https://calicoteach.github.io/Japanese-Korean-flashcards/icon-512.png">
+<!-- Twitter/X card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nyanko Academy 🐱 — Free Language Flashcards">
+<meta name="twitter:description" content="Learn 11 languages one card a day. Free forever, no sign-up. Your calico cat guides you!">
+<meta name="twitter:image" content="https://calicoteach.github.io/Japanese-Korean-flashcards/icon-512.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Nyanko Academy">
@@ -115,13 +126,52 @@
     margin-bottom: 12px;
   }
   .hero-sub {
-    font-size: 1rem;
+    font-size: 0.88rem;
     color: #999;
     font-weight: 600;
-    max-width: 300px;
+    max-width: 340px;
     margin: 0 auto 8px;
-    line-height: 1.6;
+    line-height: 1.65;
   }
+  .hero-title {
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--sakura) 0%, var(--lavender) 60%, #72c8b4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  /* ── STREAK BANNER ── */
+  .streak-banner {
+    margin: 0 20px 16px;
+    background: linear-gradient(135deg, #fff8e8, #fff3d0);
+    border: 2px solid #f5c842;
+    border-radius: 20px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .streak-fire { font-size: 2rem; }
+  .streak-text { flex: 1; }
+  .streak-days {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #b8860b;
+    line-height: 1;
+  }
+  .streak-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #c8a020;
+    margin-top: 2px;
+  }
+  .streak-zero { display: none; }
+
   .hero-script {
     font-size: 1.3rem;
     margin-top: 8px;
@@ -509,9 +559,10 @@
   <!-- HERO -->
   <section class="hero fade-in">
     <span class="hero-cat">🐱</span>
-    <div class="hero-badge">Calico Series · Free Forever</div>
-    <p class="hero-sub">Learn Asian languages 1 card a day with your calico cat guide</p>
-    <div class="hero-script">あ 가 字</div>
+    <div class="hero-badge">Free Forever · No Sign-up · 11 Languages</div>
+    <h1 class="hero-title">Learn a language,<br>one card a day</h1>
+    <p class="hero-sub">Nyanko Academy teaches you Japanese, Korean, French, Vietnamese, Thai and more — 90 beautifully crafted flashcards per language, with pronunciation, cultural facts, and your calico cat cheering you on. No app to install, no account needed.</p>
+    <div class="hero-script">あ 가 字 สวัสดี Bonjour</div>
   </section>
 
   <!-- STATS STRIP -->
@@ -533,6 +584,17 @@
       <span class="strip-label">Days Each</span>
     </div>
   </div>
+
+  <!-- STREAK BANNER -->
+  <div class="streak-banner fade-in fade-in-1" id="streakBanner">
+    <div class="streak-fire">🔥</div>
+    <div class="streak-text">
+      <div class="streak-days" id="streakDays">0</div>
+      <div class="streak-label" id="streakLabel">Start your streak today!</div>
+    </div>
+    <div style="font-size:1.5rem;">🐱</div>
+  </div>
+
 
   <!-- LANGUAGE CARDS -->
   <div class="section-head fade-in fade-in-2">
@@ -1078,6 +1140,43 @@ document.getElementById('deProgress').textContent = deDone + ' / 90';
 document.getElementById('dzProgress').textContent = dzDone + ' / 90';
 document.getElementById('npProgress').textContent = npDone + ' / 90';
 document.getElementById('enProgress').textContent = enDone + ' / 90';
+
+// ── STREAK LOGIC ──
+// We track a global streak: any card marked done on a given day counts.
+// Store: { lastDate: 'YYYY-MM-DD', streak: N }
+const today = new Date().toISOString().slice(0, 10);
+const streakData = JSON.parse(localStorage.getItem('nyankoStreak') || '{"lastDate":null,"streak":0}');
+
+function getYesterday() {
+  const d = new Date(); d.setDate(d.getDate() - 1);
+  return d.toISOString().slice(0, 10);
+}
+
+let currentStreak = streakData.streak;
+if (streakData.lastDate === today) {
+  // already studied today — streak intact
+} else if (streakData.lastDate === getYesterday()) {
+  // studied yesterday — keep streak, waiting for today's card
+} else if (streakData.lastDate !== null) {
+  // missed a day — reset
+  currentStreak = 0;
+  localStorage.setItem('nyankoStreak', JSON.stringify({ lastDate: null, streak: 0 }));
+}
+
+const streakEl = document.getElementById('streakDays');
+const streakLabel = document.getElementById('streakLabel');
+if (currentStreak === 0) {
+  streakEl.textContent = '🌱 New streak';
+  streakLabel.textContent = 'Study a card today to start your streak!';
+} else if (currentStreak === 1) {
+  streakEl.textContent = '1 day';
+  streakLabel.textContent = 'Streak started! Come back tomorrow 🔥';
+} else {
+  streakEl.textContent = currentStreak + ' days';
+  streakLabel.textContent = currentStreak >= 7
+    ? '🏆 Over a week! Nyanko is proud of you!'
+    : 'Keep it up — don\'t break the chain!';
+}
 </script>
 
 <script>

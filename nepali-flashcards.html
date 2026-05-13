@@ -415,7 +415,16 @@ let currentCardIdx = 0;
 let isFlipped = false;
 let currentModalDay = null;
 
-function saveProgress() { localStorage.setItem('npCompleted', JSON.stringify([...completed])); }
+function updateStreak() {
+  const today = new Date().toISOString().slice(0, 10);
+  const sd = JSON.parse(localStorage.getItem('nyankoStreak') || '{"lastDate":null,"streak":0}');
+  if (sd.lastDate === today) return;
+  const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+  const yStr = yesterday.toISOString().slice(0, 10);
+  const newStreak = (sd.lastDate === yStr) ? sd.streak + 1 : 1;
+  localStorage.setItem('nyankoStreak', JSON.stringify({ lastDate: today, streak: newStreak }));
+}
+function saveProgress() { localStorage.setItem('npCompleted', JSON.stringify([...completed])); updateStreak(); }
 
 function spawnPetals() {
   const bg = document.getElementById('petalBg');
@@ -572,5 +581,6 @@ function speakWord() {
 buildTimetable();
 updateProgressBar();
 </script>
+
 </body>
 </html>

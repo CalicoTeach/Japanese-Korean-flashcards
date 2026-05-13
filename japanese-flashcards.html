@@ -974,8 +974,19 @@ let currentCardIdx = 0;
 let isFlipped = false;
 let currentModalDay = null;
 
+function updateStreak() {
+  const today = new Date().toISOString().slice(0, 10);
+  const sd = JSON.parse(localStorage.getItem("nyankoStreak") || "{"lastDate":null,"streak":0}");
+  if (sd.lastDate === today) return; // already counted today
+  const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+  const yStr = yesterday.toISOString().slice(0, 10);
+  const newStreak = (sd.lastDate === yStr) ? sd.streak + 1 : 1;
+  localStorage.setItem("nyankoStreak", JSON.stringify({ lastDate: today, streak: newStreak }));
+}
+
 function saveProgress() {
   localStorage.setItem('jpCompleted', JSON.stringify([...completed]));
+  updateStreak();
 }
 
 // ═══════════════════════════════════════
@@ -1242,5 +1253,6 @@ buildTimetable();
 updateCard();
 updateProgressBar();
 </script>
+
 </body>
 </html>

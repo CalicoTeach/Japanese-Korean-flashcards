@@ -228,7 +228,16 @@ const STORAGE_KEY = 'frCompleted';
 const LANG_CODE = 'fr-FR';
 let completed=new Set(JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'));
 let currentCardIdx=0,isFlipped=false,currentModalDay=null;
-function saveProgress(){localStorage.setItem(STORAGE_KEY,JSON.stringify([...completed]));}
+function updateStreak() {
+  const today = new Date().toISOString().slice(0, 10);
+  const sd = JSON.parse(localStorage.getItem('nyankoStreak') || '{"lastDate":null,"streak":0}');
+  if (sd.lastDate === today) return;
+  const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+  const yStr = yesterday.toISOString().slice(0, 10);
+  const newStreak = (sd.lastDate === yStr) ? sd.streak + 1 : 1;
+  localStorage.setItem('nyankoStreak', JSON.stringify({ lastDate: today, streak: newStreak }));
+}
+function saveProgress(){localStorage.setItem(STORAGE_KEY,JSON.stringify([...completed]));updateStreak();}
 function spawnFloats(){
   const bg=document.getElementById('floatBg');
   const syms=['🥐','🗼','⭐','✨','🌟','🌸','🎨'];
@@ -337,5 +346,6 @@ function studyThisCard(){document.getElementById('modalOverlay').classList.remov
 function setBottomNav(name){['timetable','flashcard','categories','stats'].forEach(n=>{const btn=document.getElementById('bnav-'+n);if(btn)btn.classList.toggle('active',n===name);});}
 buildTimetable();updateCard();updateProgressBar();
 </script>
+
 </body>
 </html>
