@@ -552,16 +552,22 @@ function speakWord() {
   if (!window.speechSynthesis) return;
   const c = cards[currentCardIdx];
   window.speechSynthesis.cancel();
-  const btn = document.getElementById("speakBtn");
-  // Dzongkha has no device voice — speak romanisation slowly in English
-  const utt = new SpeechSynthesisUtterance(c.rom);
-  utt.lang = "en-US";
-  utt.rate = 0.7;
-  utt.pitch = 1;
-  if (btn) btn.classList.add("speaking");
-  utt.onend = () => { if (btn) btn.classList.remove("speaking"); };
-  utt.onerror = () => { if (btn) btn.classList.remove("speaking"); };
-  window.speechSynthesis.speak(utt);
+  const btn = document.getElementById('speakBtn');
+  if (btn) btn.classList.add('speaking');
+  function doSpeak() {
+    const voices = window.speechSynthesis.getVoices();
+    const voice = voices.find(v => v.lang === 'dz-BT' || v.lang.startsWith('dz'));
+    const utt = new SpeechSynthesisUtterance(c.n);
+    if (voice) utt.voice = voice;
+    utt.lang = 'dz-BT';
+    utt.rate = 0.85;
+    utt.onend = () => { if (btn) btn.classList.remove('speaking'); };
+    utt.onerror = () => { if (btn) btn.classList.remove('speaking'); };
+    window.speechSynthesis.speak(utt);
+  }
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length > 0) { doSpeak(); }
+  else { window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.onvoiceschanged = null; doSpeak(); }; setTimeout(doSpeak, 500); }
 }
 
 buildTimetable();

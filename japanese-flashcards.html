@@ -976,12 +976,12 @@ let currentModalDay = null;
 
 function updateStreak() {
   const today = new Date().toISOString().slice(0, 10);
-  const sd = JSON.parse(localStorage.getItem("nyankoStreak") || "{"lastDate":null,"streak":0}");
-  if (sd.lastDate === today) return; // already counted today
+  const sd = JSON.parse(localStorage.getItem('nyankoStreak') || '{"lastDate":null,"streak":0}');
+  if (sd.lastDate === today) return;
   const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
   const yStr = yesterday.toISOString().slice(0, 10);
   const newStreak = (sd.lastDate === yStr) ? sd.streak + 1 : 1;
-  localStorage.setItem("nyankoStreak", JSON.stringify({ lastDate: today, streak: newStreak }));
+  localStorage.setItem('nyankoStreak', JSON.stringify({ lastDate: today, streak: newStreak }));
 }
 
 function saveProgress() {
@@ -1239,14 +1239,22 @@ function speakWord() {
   if (!window.speechSynthesis) return;
   const c = cards[currentCardIdx];
   window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(c.kana);
-  utt.lang = "ja-JP";
-  utt.rate = 0.85;
-  const btn = document.getElementById("speakBtn");
-  if (btn) btn.classList.add("speaking");
-  utt.onend = () => { if (btn) btn.classList.remove("speaking"); };
-  utt.onerror = () => { if (btn) btn.classList.remove("speaking"); };
-  window.speechSynthesis.speak(utt);
+  const btn = document.getElementById('speakBtn');
+  if (btn) btn.classList.add('speaking');
+  function doSpeak() {
+    const voices = window.speechSynthesis.getVoices();
+    const voice = voices.find(v => v.lang === 'ja-JP' || v.lang.startsWith('ja'));
+    const utt = new SpeechSynthesisUtterance(c.kana);
+    if (voice) utt.voice = voice;
+    utt.lang = 'ja-JP';
+    utt.rate = 0.85;
+    utt.onend = () => { if (btn) btn.classList.remove('speaking'); };
+    utt.onerror = () => { if (btn) btn.classList.remove('speaking'); };
+    window.speechSynthesis.speak(utt);
+  }
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length > 0) { doSpeak(); }
+  else { window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.onvoiceschanged = null; doSpeak(); }; setTimeout(doSpeak, 500); }
 }
 
 buildTimetable();
