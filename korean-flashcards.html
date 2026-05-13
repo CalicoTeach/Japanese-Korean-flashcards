@@ -1040,14 +1040,22 @@ function speakWord() {
   if (!window.speechSynthesis) return;
   const c = cards[currentCardIdx];
   window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(c.hangul);
-  utt.lang = "ko-KR";
-  utt.rate = 0.85;
-  const btn = document.getElementById("speakBtn");
-  if (btn) btn.classList.add("speaking");
-  utt.onend = () => { if (btn) btn.classList.remove("speaking"); };
-  utt.onerror = () => { if (btn) btn.classList.remove("speaking"); };
-  window.speechSynthesis.speak(utt);
+  const btn = document.getElementById('speakBtn');
+  if (btn) btn.classList.add('speaking');
+  function doSpeak() {
+    const voices = window.speechSynthesis.getVoices();
+    const voice = voices.find(v => v.lang === 'ko-KR' || v.lang.startsWith('ko'));
+    const utt = new SpeechSynthesisUtterance(c.kana);
+    if (voice) utt.voice = voice;
+    utt.lang = 'ko-KR';
+    utt.rate = 0.85;
+    utt.onend = () => { if (btn) btn.classList.remove('speaking'); };
+    utt.onerror = () => { if (btn) btn.classList.remove('speaking'); };
+    window.speechSynthesis.speak(utt);
+  }
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length > 0) { doSpeak(); }
+  else { window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.onvoiceschanged = null; doSpeak(); }; setTimeout(doSpeak, 500); }
 }
 
 buildTimetable();
