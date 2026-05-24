@@ -549,37 +549,36 @@ function setBottomNav(name) { ['timetable','flashcard','categories','stats'].for
 
 // ── AUDIO / SPEAK ──
 function speakWord() {
-  if (!window.speechSynthesis) return;
+  if (!window.speechSynthesis) { alert('Audio not supported on this browser.'); return; }
   const c = cards[currentCardIdx];
   window.speechSynthesis.cancel();
   const btn = document.getElementById('speakBtn');
   if (btn) btn.classList.add('speaking');
   function doSpeak() {
     const voices = window.speechSynthesis.getVoices();
-    const voice = voices.find(v => v.lang === 'ne-NP' || v.lang.startsWith('ne'));
+    const voice = voices.find(v => v.lang === 'ne-NP')
+                || voices.find(v => v.lang.startsWith('ne'))
+                || null;
     const utt = new SpeechSynthesisUtterance(c.n);
-    if (voice) utt.voice = voice;
     utt.lang = 'ne-NP';
     utt.rate = 0.85;
+    if (voice) utt.voice = voice;
     utt.onend = () => { if (btn) btn.classList.remove('speaking'); };
     utt.onerror = () => { if (btn) btn.classList.remove('speaking'); };
     window.speechSynthesis.speak(utt);
   }
   const voices = window.speechSynthesis.getVoices();
-  if (voices.length > 0) { doSpeak(); }
-  else { window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.onvoiceschanged = null; doSpeak(); }; setTimeout(doSpeak, 500); }
-} else {
-    // No Nepali voice — speak romanisation slowly in English
-    const utt = new SpeechSynthesisUtterance(c.rom);
-    utt.lang = "en-US";
-    utt.rate = 0.7;
-    utt.pitch = 1;
-    if (btn) btn.classList.add("speaking");
-    utt.onend = () => { if (btn) btn.classList.remove("speaking"); };
-    utt.onerror = () => { if (btn) btn.classList.remove("speaking"); };
-    window.speechSynthesis.speak(utt);
+  if (voices && voices.length > 0) {
+    doSpeak();
+  } else {
+    window.speechSynthesis.addEventListener('voiceschanged', function handler() {
+      window.speechSynthesis.removeEventListener('voiceschanged', handler);
+      doSpeak();
+    });
+    setTimeout(doSpeak, 1000);
   }
 }
+
 
 buildTimetable();
 updateProgressBar();

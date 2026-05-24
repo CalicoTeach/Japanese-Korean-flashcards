@@ -299,27 +299,41 @@ function nextCard(){currentCardIdx=(currentCardIdx+1)%cards.length;updateCard();
 function prevCard(){currentCardIdx=(currentCardIdx-1+cards.length)%cards.length;updateCard();}
 function markGotIt(){completed.add(cards[currentCardIdx].day);saveProgress();updateProgressBar();buildTimetable();nextCard();}
 function markAgain(){nextCard();}
-function speakWord(){
-  if(!window.speechSynthesis)return;
-  const c=cards[currentCardIdx];
+function speakWord() {
+  if (!window.speechSynthesis) { alert('Audio not supported on this browser.'); return; }
+  const c = cards[currentCardIdx];
   window.speechSynthesis.cancel();
-  const btn=document.getElementById('speakBtn');
-  if(btn)btn.classList.add('speaking');
-  function doSpeak(){
-    const voices=window.speechSynthesis.getVoices();
-    const voice=voices.find(v=>v.lang===LANG_CODE||v.lang.startsWith(LANG_CODE.split('-')[0]));
-    const utt=new SpeechSynthesisUtterance(c.n);
-    if(voice)utt.voice=voice;
-    utt.lang=LANG_CODE;utt.rate=0.85;
-    utt.onend=()=>{if(btn)btn.classList.remove('speaking');};
-    utt.onerror=()=>{if(btn)btn.classList.remove('speaking');};
+  const btn = document.getElementById('speakBtn');
+  if (btn) btn.classList.add('speaking');
+  function doSpeak() {
+    const voices = window.speechSynthesis.getVoices();
+    // Try exact match first, then language prefix, then any voice
+    const voice = voices.find(v => v.lang === 'vi-VN')
+                || voices.find(v => v.lang.startsWith('vi'))
+                || null;
+    const utt = new SpeechSynthesisUtterance(c.n);
+    utt.lang = 'vi-VN';
+    utt.rate = 0.85;
+    if (voice) utt.voice = voice;
+    utt.onend = () => { if (btn) btn.classList.remove('speaking'); };
+    utt.onerror = (e) => { if (btn) btn.classList.remove('speaking'); };
     window.speechSynthesis.speak(utt);
   }
-  const voices=window.speechSynthesis.getVoices();
-  if(voices.length>0){doSpeak();}
-  else{window.speechSynthesis.onvoiceschanged=()=>{window.speechSynthesis.onvoiceschanged=null;doSpeak();};setTimeout(doSpeak,500);}
+  // Wait for voices to load if not ready yet
+  const voices = window.speechSynthesis.getVoices();
+  if (voices && voices.length > 0) {
+    doSpeak();
+  } else {
+    window.speechSynthesis.addEventListener('voiceschanged', function handler() {
+      window.speechSynthesis.removeEventListener('voiceschanged', handler);
+      doSpeak();
+    });
+    // Fallback timeout in case voiceschanged never fires
+    setTimeout(doSpeak, 1000);
+  }
 }
-const catEmojis={Greetings:'👋',Numbers:'🔢',Food:'🍽️',Family:'👨‍👩‍👧',Places:'📍',Time:'🕐',Verbs:'🏃',Adjectives:'✨',Feelings:'💭',Culture:'🎭',Travel:'✈️',Daily:'🌟'};
+
+
 function buildCategories(){
   const cats={};cards.forEach(c=>{if(!cats[c.cat])cats[c.cat]=[];cats[c.cat].push(c);});
   const grid=document.getElementById('catGrid');grid.innerHTML='';
