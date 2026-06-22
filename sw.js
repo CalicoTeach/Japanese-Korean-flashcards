@@ -1,16 +1,13 @@
-// Nyanko Academy Service Worker
+// Calico Service Worker
 // Caches all pages for offline use 🐱
 
-const CACHE_NAME = 'nyanko-academy-v1';
+const CACHE_NAME = 'calico-academy-v3';
 
 const PAGES_TO_CACHE = [
   '/',
   '/index.html',
   '/japanese-flashcards.html',
   '/korean-flashcards.html',
-  '/mandarin-flashcards.html',
-  '/bhutanese-flashcards.html',
-  '/nepali-flashcards.html',
   '/manifest.json'
 ];
 
@@ -18,7 +15,7 @@ const PAGES_TO_CACHE = [
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('Nyanko Academy: caching pages for offline use 🐱');
+      console.log('Calico: caching pages for offline use 🐱');
       return cache.addAll(PAGES_TO_CACHE);
     })
   );
