@@ -1,7 +1,7 @@
 // Calico Service Worker
 // Caches all pages for offline use 🐱
 
-const CACHE_NAME = 'calico-academy-v3';
+const CACHE_NAME = 'calico-academy-v4';
 
 const PAGES_TO_CACHE = [
   '/',

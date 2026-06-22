@@ -458,6 +458,111 @@
   .cat-bar { margin-top: 8px; background: var(--rose-light); border-radius: 10px; height: 6px; overflow: hidden; }
   .cat-bar-fill { height: 100%; background: linear-gradient(90deg, var(--rose-deep), var(--lavender-deep)); border-radius: 10px; transition: width 0.5s; }
 
+  /* ═══════════════════════════
+     VOCAB VIEW
+  ═══════════════════════════ */
+  .vocab-view { padding: 16px; }
+  .vocab-search-wrap {
+    position: sticky; top: 0; z-index: 6;
+    background: var(--cream);
+    padding-bottom: 8px;
+    margin-top: -4px;
+  }
+  .vocab-search {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 16px;
+    border: 2px solid var(--rose-light);
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text);
+    outline: none;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
+  .vocab-search:focus { border-color: var(--rose-deep); }
+  .vocab-chips {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .vocab-chips::-webkit-scrollbar { display: none; }
+  .vocab-chip {
+    flex: none;
+    padding: 6px 14px;
+    border-radius: 14px;
+    border: 2px solid var(--rose-light);
+    background: white;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #aaa;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .vocab-chip.active {
+    background: linear-gradient(135deg, var(--rose-deep), var(--lavender-deep));
+    color: white;
+    border-color: transparent;
+  }
+  .vocab-count {
+    font-size: 0.72rem;
+    color: #bbb;
+    font-weight: 700;
+    margin: 10px 2px 10px;
+  }
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .vocab-card {
+    background: white;
+    border-radius: 16px;
+    padding: 14px 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+    border: 2px solid transparent;
+    position: relative;
+  }
+  .vocab-word { font-size: 1.1rem; font-weight: 900; color: var(--text); margin-bottom: 2px; padding-right: 26px; }
+  .vocab-romaji { font-size: 0.74rem; color: var(--rose-deep); font-weight: 800; margin-bottom: 4px; }
+  .vocab-meaning { font-size: 0.74rem; color: #999; font-weight: 700; line-height: 1.4; }
+  .vocab-tag {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: var(--rose-deep);
+    background: var(--rose-light);
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-top: 6px;
+  }
+  .vocab-speak-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: none;
+    background: var(--rose-light);
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .vocab-speak-btn:hover { background: var(--rose); transform: scale(1.1); }
+  .vocab-speak-btn.speaking { animation: speakPulse 0.6s ease infinite alternate; }
+  .vocab-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #ccc;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
   /* ═══ STATS ═══ */
   .stats-view { padding: 16px; }
   .stats-hero {
@@ -584,6 +689,7 @@
   <button class="nav-tab" onclick="showView('flashcard',this)">🗂️ Study</button>
   <button class="nav-tab" onclick="showView('categories',this)">🏷️ Topics</button>
   <button class="nav-tab" onclick="showView('stats',this)">⭐ Stats</button>
+  <button class="nav-tab" onclick="showView('vocab',this)">📖 200 Words</button>
 </div>
 
 <!-- TIMETABLE -->
@@ -664,6 +770,21 @@
       <p>1 card a day keeps the forgetting away. 화이팅!</p>
     </div>
   </div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ═══════════════════════════
+     VOCAB VIEW
+═══════════════════════════ -->
+<div class="view vocab-view" id="view-vocab">
+  <p class="section-title">200 essential words to grow your vocabulary 📖</p>
+  <div class="vocab-search-wrap">
+    <input type="text" class="vocab-search" id="vocabSearch" placeholder="🔍 Search words, romaji, or meaning..." oninput="filterVocab()">
+    <div class="vocab-chips" id="vocabChips"></div>
+  </div>
+  <div class="vocab-count" id="vocabCount">200 words</div>
+  <div class="vocab-grid" id="vocabGrid"></div>
+  <div class="vocab-empty" id="vocabEmpty" style="display:none;">No words found — try a different search 🐱</div>
   <div class="spacer"></div>
 </div>
 
@@ -803,6 +924,229 @@ const cards = [
 ];
 
 // ═══════════════════════════════════════
+// VOCAB LIST (200 bonus words)
+// ═══════════════════════════════════════
+const vocabWords = [
+  {word:"안녕하세요", romaji:"Annyeonghaseyo", meaning:"Hello", category:"Greetings"},
+  {word:"안녕히 가세요", romaji:"Annyeonghi gaseyo", meaning:"Goodbye (to one leaving)", category:"Greetings"},
+  {word:"안녕히 계세요", romaji:"Annyeonghi gyeseyo", meaning:"Goodbye (staying behind)", category:"Greetings"},
+  {word:"감사합니다", romaji:"Gamsahamnida", meaning:"Thank you (formal)", category:"Greetings"},
+  {word:"고마워요", romaji:"Gomawoyo", meaning:"Thank you (casual)", category:"Greetings"},
+  {word:"죄송합니다", romaji:"Joesonghamnida", meaning:"I'm sorry (formal)", category:"Greetings"},
+  {word:"네", romaji:"Ne", meaning:"Yes", category:"Greetings"},
+  {word:"아니요", romaji:"Aniyo", meaning:"No", category:"Greetings"},
+  {word:"주세요", romaji:"Juseyo", meaning:"Please (give me)", category:"Greetings"},
+  {word:"괜찮아요", romaji:"Gwaenchanayo", meaning:"It's okay", category:"Greetings"},
+  {word:"반가워요", romaji:"Bangawoyo", meaning:"Nice to meet you", category:"Greetings"},
+  {word:"잘 자요", romaji:"Jal jayo", meaning:"Good night", category:"Greetings"},
+
+  {word:"일", romaji:"Il", meaning:"One", category:"Numbers"},
+  {word:"이", romaji:"I", meaning:"Two", category:"Numbers"},
+  {word:"삼", romaji:"Sam", meaning:"Three", category:"Numbers"},
+  {word:"사", romaji:"Sa", meaning:"Four", category:"Numbers"},
+  {word:"오", romaji:"O", meaning:"Five", category:"Numbers"},
+  {word:"육", romaji:"Yuk", meaning:"Six", category:"Numbers"},
+  {word:"칠", romaji:"Chil", meaning:"Seven", category:"Numbers"},
+  {word:"팔", romaji:"Pal", meaning:"Eight", category:"Numbers"},
+  {word:"구", romaji:"Gu", meaning:"Nine", category:"Numbers"},
+  {word:"십", romaji:"Sip", meaning:"Ten", category:"Numbers"},
+  {word:"영", romaji:"Yeong", meaning:"Zero", category:"Numbers"},
+  {word:"이십", romaji:"Isip", meaning:"Twenty", category:"Numbers"},
+  {word:"삼십", romaji:"Samsip", meaning:"Thirty", category:"Numbers"},
+  {word:"오십", romaji:"Osip", meaning:"Fifty", category:"Numbers"},
+  {word:"백", romaji:"Baek", meaning:"Hundred", category:"Numbers"},
+
+  {word:"오늘", romaji:"Oneul", meaning:"Today", category:"Time"},
+  {word:"내일", romaji:"Naeil", meaning:"Tomorrow", category:"Time"},
+  {word:"어제", romaji:"Eoje", meaning:"Yesterday", category:"Time"},
+  {word:"지금", romaji:"Jigeum", meaning:"Now", category:"Time"},
+  {word:"아침", romaji:"Achim", meaning:"Morning", category:"Time"},
+  {word:"낮", romaji:"Nat", meaning:"Daytime / Noon", category:"Time"},
+  {word:"밤", romaji:"Bam", meaning:"Night", category:"Time"},
+  {word:"월요일", romaji:"Woryoil", meaning:"Monday", category:"Time"},
+  {word:"화요일", romaji:"Hwayoil", meaning:"Tuesday", category:"Time"},
+  {word:"수요일", romaji:"Suyoil", meaning:"Wednesday", category:"Time"},
+  {word:"목요일", romaji:"Mogyoil", meaning:"Thursday", category:"Time"},
+  {word:"금요일", romaji:"Geumyoil", meaning:"Friday", category:"Time"},
+  {word:"토요일", romaji:"Toyoil", meaning:"Saturday", category:"Time"},
+  {word:"일요일", romaji:"Iryoil", meaning:"Sunday", category:"Time"},
+  {word:"주말", romaji:"Jumal", meaning:"Weekend", category:"Time"},
+
+  {word:"가족", romaji:"Gajok", meaning:"Family", category:"Family"},
+  {word:"어머니", romaji:"Eomeoni", meaning:"Mother", category:"Family"},
+  {word:"아버지", romaji:"Abeoji", meaning:"Father", category:"Family"},
+  {word:"형", romaji:"Hyeong", meaning:"Older brother (of a male)", category:"Family"},
+  {word:"누나", romaji:"Nuna", meaning:"Older sister (of a male)", category:"Family"},
+  {word:"언니", romaji:"Eonni", meaning:"Older sister (of a female)", category:"Family"},
+  {word:"동생", romaji:"Dongsaeng", meaning:"Younger sibling", category:"Family"},
+  {word:"아이", romaji:"Ai", meaning:"Child", category:"Family"},
+  {word:"할아버지", romaji:"Harabeoji", meaning:"Grandfather", category:"Family"},
+  {word:"할머니", romaji:"Halmeoni", meaning:"Grandmother", category:"Family"},
+  {word:"남편", romaji:"Nampyeon", meaning:"Husband", category:"Family"},
+  {word:"아내", romaji:"Anae", meaning:"Wife", category:"Family"},
+
+  {word:"밥", romaji:"Bap", meaning:"Rice / Meal", category:"Food"},
+  {word:"물", romaji:"Mul", meaning:"Water", category:"Food"},
+  {word:"차", romaji:"Cha", meaning:"Tea", category:"Food"},
+  {word:"커피", romaji:"Keopi", meaning:"Coffee", category:"Food"},
+  {word:"빵", romaji:"Ppang", meaning:"Bread", category:"Food"},
+  {word:"고기", romaji:"Gogi", meaning:"Meat", category:"Food"},
+  {word:"생선", romaji:"Saengseon", meaning:"Fish", category:"Food"},
+  {word:"채소", romaji:"Chaeso", meaning:"Vegetable", category:"Food"},
+  {word:"과일", romaji:"Gwail", meaning:"Fruit", category:"Food"},
+  {word:"계란", romaji:"Gyeran", meaning:"Egg", category:"Food"},
+  {word:"우유", romaji:"Uyu", meaning:"Milk", category:"Food"},
+  {word:"김치", romaji:"Gimchi", meaning:"Kimchi", category:"Food"},
+  {word:"김밥", romaji:"Gimbap", meaning:"Gimbap", category:"Food"},
+  {word:"된장국", romaji:"Doenjangguk", meaning:"Soybean paste soup", category:"Food"},
+  {word:"간장", romaji:"Ganjang", meaning:"Soy sauce", category:"Food"},
+  {word:"설탕", romaji:"Seoltang", meaning:"Sugar", category:"Food"},
+  {word:"소금", romaji:"Sogeum", meaning:"Salt", category:"Food"},
+  {word:"식당", romaji:"Sikdang", meaning:"Restaurant", category:"Food"},
+  {word:"맛있어요", romaji:"Masisseoyo", meaning:"It's delicious", category:"Food"},
+  {word:"배고파요", romaji:"Baegopayo", meaning:"I'm hungry", category:"Food"},
+
+  {word:"빨간색", romaji:"Ppalgansaek", meaning:"Red", category:"Colors"},
+  {word:"파란색", romaji:"Paransaek", meaning:"Blue", category:"Colors"},
+  {word:"노란색", romaji:"Noransaek", meaning:"Yellow", category:"Colors"},
+  {word:"초록색", romaji:"Choroksaek", meaning:"Green", category:"Colors"},
+  {word:"흰색", romaji:"Huinsaek", meaning:"White", category:"Colors"},
+  {word:"검은색", romaji:"Geomeunsaek", meaning:"Black", category:"Colors"},
+  {word:"보라색", romaji:"Borasaek", meaning:"Purple", category:"Colors"},
+  {word:"주황색", romaji:"Juhwangsaek", meaning:"Orange", category:"Colors"},
+  {word:"분홍색", romaji:"Bunhongsaek", meaning:"Pink", category:"Colors"},
+  {word:"갈색", romaji:"Galsaek", meaning:"Brown", category:"Colors"},
+
+  {word:"머리", romaji:"Meori", meaning:"Head", category:"Body"},
+  {word:"얼굴", romaji:"Eolgul", meaning:"Face", category:"Body"},
+  {word:"눈", romaji:"Nun", meaning:"Eye", category:"Body"},
+  {word:"귀", romaji:"Gwi", meaning:"Ear", category:"Body"},
+  {word:"코", romaji:"Ko", meaning:"Nose", category:"Body"},
+  {word:"입", romaji:"Ip", meaning:"Mouth", category:"Body"},
+  {word:"손", romaji:"Son", meaning:"Hand", category:"Body"},
+  {word:"발", romaji:"Bal", meaning:"Foot", category:"Body"},
+  {word:"배", romaji:"Bae", meaning:"Stomach", category:"Body"},
+  {word:"마음", romaji:"Maeum", meaning:"Heart / Mind", category:"Body"},
+
+  {word:"고양이", romaji:"Goyangi", meaning:"Cat", category:"Animals"},
+  {word:"개", romaji:"Gae", meaning:"Dog", category:"Animals"},
+  {word:"새", romaji:"Sae", meaning:"Bird", category:"Animals"},
+  {word:"말", romaji:"Mal", meaning:"Horse", category:"Animals"},
+  {word:"소", romaji:"So", meaning:"Cow", category:"Animals"},
+  {word:"돼지", romaji:"Dwaeji", meaning:"Pig", category:"Animals"},
+  {word:"토끼", romaji:"Tokki", meaning:"Rabbit", category:"Animals"},
+  {word:"곰", romaji:"Gom", meaning:"Bear", category:"Animals"},
+  {word:"사자", romaji:"Saja", meaning:"Lion", category:"Animals"},
+  {word:"코끼리", romaji:"Kokkiri", meaning:"Elephant", category:"Animals"},
+
+  {word:"날씨", romaji:"Nalssi", meaning:"Weather", category:"Nature"},
+  {word:"비", romaji:"Bi", meaning:"Rain", category:"Nature"},
+  {word:"눈", romaji:"Nun", meaning:"Snow (same word as 'eye'!)", category:"Nature"},
+  {word:"바람", romaji:"Baram", meaning:"Wind", category:"Nature"},
+  {word:"해", romaji:"Hae", meaning:"Sun", category:"Nature"},
+  {word:"달", romaji:"Dal", meaning:"Moon", category:"Nature"},
+  {word:"별", romaji:"Byeol", meaning:"Star", category:"Nature"},
+  {word:"산", romaji:"San", meaning:"Mountain", category:"Nature"},
+  {word:"강", romaji:"Gang", meaning:"River", category:"Nature"},
+  {word:"바다", romaji:"Bada", meaning:"Sea / Ocean", category:"Nature"},
+
+  {word:"학교", romaji:"Hakgyo", meaning:"School", category:"Places"},
+  {word:"집", romaji:"Jip", meaning:"House / Home", category:"Places"},
+  {word:"역", romaji:"Yeok", meaning:"Station", category:"Places"},
+  {word:"병원", romaji:"Byeongwon", meaning:"Hospital", category:"Places"},
+  {word:"은행", romaji:"Eunhaeng", meaning:"Bank", category:"Places"},
+  {word:"공원", romaji:"Gongwon", meaning:"Park", category:"Places"},
+  {word:"도서관", romaji:"Doseogwan", meaning:"Library", category:"Places"},
+  {word:"가게", romaji:"Gage", meaning:"Shop / Store", category:"Places"},
+  {word:"회사", romaji:"Hoesa", meaning:"Company / Office", category:"Places"},
+  {word:"화장실", romaji:"Hwajangsil", meaning:"Restroom", category:"Places"},
+
+  {word:"기차", romaji:"Gicha", meaning:"Train", category:"Transport"},
+  {word:"버스", romaji:"Beoseu", meaning:"Bus", category:"Transport"},
+  {word:"자동차", romaji:"Jadongcha", meaning:"Car", category:"Transport"},
+  {word:"자전거", romaji:"Jajeongeo", meaning:"Bicycle", category:"Transport"},
+  {word:"비행기", romaji:"Bihaenggi", meaning:"Airplane", category:"Transport"},
+  {word:"택시", romaji:"Taeksi", meaning:"Taxi", category:"Transport"},
+  {word:"지하철", romaji:"Jihacheol", meaning:"Subway", category:"Transport"},
+  {word:"길", romaji:"Gil", meaning:"Road / Street", category:"Transport"},
+
+  {word:"돈", romaji:"Don", meaning:"Money", category:"Shopping"},
+  {word:"비싸요", romaji:"Bissayo", meaning:"Expensive", category:"Shopping"},
+  {word:"싸요", romaji:"Ssayo", meaning:"Cheap", category:"Shopping"},
+  {word:"사다", romaji:"Sada", meaning:"To buy", category:"Shopping"},
+  {word:"팔다", romaji:"Palda", meaning:"To sell", category:"Shopping"},
+  {word:"가격", romaji:"Gagyeok", meaning:"Price", category:"Shopping"},
+  {word:"신용카드", romaji:"Sinyongkadeu", meaning:"Credit card", category:"Shopping"},
+  {word:"영수증", romaji:"Yeongsujeung", meaning:"Receipt", category:"Shopping"},
+
+  {word:"옷", romaji:"Ot", meaning:"Clothes", category:"Clothing"},
+  {word:"신발", romaji:"Sinbal", meaning:"Shoes", category:"Clothing"},
+  {word:"모자", romaji:"Moja", meaning:"Hat", category:"Clothing"},
+  {word:"셔츠", romaji:"Syeocheu", meaning:"Shirt", category:"Clothing"},
+  {word:"바지", romaji:"Baji", meaning:"Pants", category:"Clothing"},
+  {word:"양말", romaji:"Yangmal", meaning:"Socks", category:"Clothing"},
+
+  {word:"먹다", romaji:"Meokda", meaning:"To eat", category:"Verbs"},
+  {word:"마시다", romaji:"Masida", meaning:"To drink", category:"Verbs"},
+  {word:"가다", romaji:"Gada", meaning:"To go", category:"Verbs"},
+  {word:"오다", romaji:"Oda", meaning:"To come", category:"Verbs"},
+  {word:"보다", romaji:"Boda", meaning:"To see / watch", category:"Verbs"},
+  {word:"듣다", romaji:"Deutda", meaning:"To listen / hear", category:"Verbs"},
+  {word:"말하다", romaji:"Malhada", meaning:"To speak", category:"Verbs"},
+  {word:"읽다", romaji:"Ilgda", meaning:"To read", category:"Verbs"},
+  {word:"쓰다", romaji:"Sseuda", meaning:"To write", category:"Verbs"},
+  {word:"자다", romaji:"Jada", meaning:"To sleep", category:"Verbs"},
+  {word:"일어나다", romaji:"Ireonada", meaning:"To wake up", category:"Verbs"},
+  {word:"일하다", romaji:"Ilhada", meaning:"To work", category:"Verbs"},
+  {word:"공부하다", romaji:"Gongbuhada", meaning:"To study", category:"Verbs"},
+  {word:"만들다", romaji:"Mandeulda", meaning:"To make", category:"Verbs"},
+  {word:"뛰다", romaji:"Ttwida", meaning:"To run", category:"Verbs"},
+  {word:"걷다", romaji:"Geotda", meaning:"To walk", category:"Verbs"},
+  {word:"기다리다", romaji:"Gidarida", meaning:"To wait", category:"Verbs"},
+  {word:"시작하다", romaji:"Sijakhada", meaning:"To begin", category:"Verbs"},
+  {word:"끝나다", romaji:"Kkeutnada", meaning:"To end", category:"Verbs"},
+  {word:"가르치다", romaji:"Gareuchida", meaning:"To teach", category:"Verbs"},
+
+  {word:"크다", romaji:"Keuda", meaning:"Big", category:"Adjectives"},
+  {word:"작다", romaji:"Jakda", meaning:"Small", category:"Adjectives"},
+  {word:"새롭다", romaji:"Saeropda", meaning:"New", category:"Adjectives"},
+  {word:"오래되다", romaji:"Oraedoeda", meaning:"Old", category:"Adjectives"},
+  {word:"좋다", romaji:"Jota", meaning:"Good", category:"Adjectives"},
+  {word:"나쁘다", romaji:"Nappeuda", meaning:"Bad", category:"Adjectives"},
+  {word:"재미있다", romaji:"Jaemiitda", meaning:"Fun", category:"Adjectives"},
+  {word:"어렵다", romaji:"Eoryeopda", meaning:"Difficult", category:"Adjectives"},
+  {word:"쉽다", romaji:"Swipda", meaning:"Easy", category:"Adjectives"},
+  {word:"덥다", romaji:"Deopda", meaning:"Hot", category:"Adjectives"},
+  {word:"춥다", romaji:"Chupda", meaning:"Cold", category:"Adjectives"},
+  {word:"빠르다", romaji:"Ppareuda", meaning:"Fast", category:"Adjectives"},
+  {word:"느리다", romaji:"Neurida", meaning:"Slow", category:"Adjectives"},
+  {word:"귀엽다", romaji:"Gwiyeopda", meaning:"Cute", category:"Adjectives"},
+  {word:"예쁘다", romaji:"Yeppeuda", meaning:"Pretty / Beautiful", category:"Adjectives"},
+
+  {word:"무엇", romaji:"Mueot", meaning:"What", category:"Questions"},
+  {word:"어디", romaji:"Eodi", meaning:"Where", category:"Questions"},
+  {word:"언제", romaji:"Eonje", meaning:"When", category:"Questions"},
+  {word:"누구", romaji:"Nugu", meaning:"Who", category:"Questions"},
+  {word:"왜", romaji:"Wae", meaning:"Why", category:"Questions"},
+  {word:"어떻게", romaji:"Eotteoke", meaning:"How", category:"Questions"},
+  {word:"어느", romaji:"Eoneu", meaning:"Which", category:"Questions"},
+  {word:"몇", romaji:"Myeot", meaning:"How many", category:"Questions"},
+
+  {word:"기쁘다", romaji:"Gippeuda", meaning:"Happy", category:"Emotions"},
+  {word:"슬프다", romaji:"Seulpeuda", meaning:"Sad", category:"Emotions"},
+  {word:"화나다", romaji:"Hwanada", meaning:"To get angry", category:"Emotions"},
+  {word:"걱정되다", romaji:"Geokjeongdoeda", meaning:"Worried", category:"Emotions"},
+  {word:"외롭다", romaji:"Oeropda", meaning:"Lonely", category:"Emotions"},
+  {word:"무섭다", romaji:"Museopda", meaning:"Scared", category:"Emotions"},
+
+  {word:"선생님", romaji:"Seonsaengnim", meaning:"Teacher", category:"School"},
+  {word:"학생", romaji:"Haksaeng", meaning:"Student", category:"School"},
+  {word:"숙제", romaji:"Sukje", meaning:"Homework", category:"School"},
+  {word:"시험", romaji:"Siheom", meaning:"Test", category:"School"},
+  {word:"직업", romaji:"Jigeop", meaning:"Job / Occupation", category:"School"},
+];
+
+// ═══════════════════════════════════════
 // CATEGORY EMOJIS & FLORALS
 // ═══════════════════════════════════════
 const catEmojis = {
@@ -863,6 +1207,7 @@ function showView(name, btn) {
   if (name === 'stats') updateStats();
   if (name === 'categories') buildCategories();
   if (name === 'flashcard') updateCard();
+  if (name === 'vocab') buildVocab();
   updateProgressBar();
 }
 
@@ -1047,7 +1392,89 @@ function speakWord() {
     const voice = voices.find(v => v.lang === 'ko-KR')
                 || voices.find(v => v.lang.startsWith('ko'))
                 || null;
-    const utt = new SpeechSynthesisUtterance(c.kana);
+    const utt = new SpeechSynthesisUtterance(c.hangul);
+    utt.lang = 'ko-KR';
+    utt.rate = 0.85;
+    if (voice) utt.voice = voice;
+    utt.onend = () => { if (btn) btn.classList.remove('speaking'); };
+    utt.onerror = () => { if (btn) btn.classList.remove('speaking'); };
+    window.speechSynthesis.speak(utt);
+  }
+  const voices = window.speechSynthesis.getVoices();
+  if (voices && voices.length > 0) {
+    doSpeak();
+  } else {
+    window.speechSynthesis.addEventListener('voiceschanged', function handler() {
+      window.speechSynthesis.removeEventListener('voiceschanged', handler);
+      doSpeak();
+    });
+    setTimeout(doSpeak, 1000);
+  }
+}
+
+
+// ═══════════════════════════════════════
+// VOCAB LIST
+// ═══════════════════════════════════════
+let vocabBuilt = false;
+function buildVocab() {
+  if (vocabBuilt) return;
+  vocabBuilt = true;
+  const chipWrap = document.getElementById('vocabChips');
+  const categories = ['All', ...new Set(vocabWords.map(w => w.category))];
+  chipWrap.innerHTML = categories.map((c, i) =>
+    `<button class="vocab-chip${i === 0 ? ' active' : ''}" data-cat="${c}" onclick="selectVocabChip(this)">${c}</button>`
+  ).join('');
+  renderVocab(vocabWords);
+}
+
+function selectVocabChip(btn) {
+  document.querySelectorAll('.vocab-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  filterVocab();
+}
+
+function filterVocab() {
+  const q = document.getElementById('vocabSearch').value.trim().toLowerCase();
+  const activeChip = document.querySelector('.vocab-chip.active');
+  const cat = activeChip ? activeChip.dataset.cat : 'All';
+  const filtered = vocabWords.filter(w => {
+    const matchesCat = cat === 'All' || w.category === cat;
+    const matchesQuery = !q || w.word.toLowerCase().includes(q) || w.romaji.toLowerCase().includes(q) || w.meaning.toLowerCase().includes(q);
+    return matchesCat && matchesQuery;
+  });
+  renderVocab(filtered);
+}
+
+function renderVocab(list) {
+  const grid = document.getElementById('vocabGrid');
+  const empty = document.getElementById('vocabEmpty');
+  document.getElementById('vocabCount').textContent = list.length + (list.length === 1 ? ' word' : ' words');
+  if (list.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = list.map(w => `
+    <div class="vocab-card">
+      <button class="vocab-speak-btn" onclick="speakVocab(${JSON.stringify(w.word)}, this)">🔊</button>
+      <div class="vocab-word">${w.word}</div>
+      <div class="vocab-romaji">${w.romaji}</div>
+      <div class="vocab-meaning">${w.meaning}</div>
+      <span class="vocab-tag">${w.category}</span>
+    </div>
+  `).join('');
+}
+
+function speakVocab(text, btn) {
+  if (!window.speechSynthesis) { alert('Audio not supported on this browser.'); return; }
+  window.speechSynthesis.cancel();
+  if (btn) btn.classList.add('speaking');
+  function doSpeak() {
+    const voices = window.speechSynthesis.getVoices();
+    const voice = voices.find(v => v.lang === 'ko-KR') || voices.find(v => v.lang.startsWith('ko')) || null;
+    const utt = new SpeechSynthesisUtterance(text);
     utt.lang = 'ko-KR';
     utt.rate = 0.85;
     if (voice) utt.voice = voice;

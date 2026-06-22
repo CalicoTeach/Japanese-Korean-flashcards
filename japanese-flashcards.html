@@ -515,6 +515,111 @@
   }
 
   /* ═══════════════════════════
+     VOCAB VIEW
+  ═══════════════════════════ */
+  .vocab-view { padding: 16px; }
+  .vocab-search-wrap {
+    position: sticky; top: 0; z-index: 6;
+    background: var(--cream);
+    padding-bottom: 8px;
+    margin-top: -4px;
+  }
+  .vocab-search {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 16px;
+    border: 2px solid var(--sakura-light);
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text);
+    outline: none;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
+  .vocab-search:focus { border-color: var(--sakura-deep); }
+  .vocab-chips {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .vocab-chips::-webkit-scrollbar { display: none; }
+  .vocab-chip {
+    flex: none;
+    padding: 6px 14px;
+    border-radius: 14px;
+    border: 2px solid var(--sakura-light);
+    background: white;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #aaa;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .vocab-chip.active {
+    background: linear-gradient(135deg, var(--sakura-deep), var(--soft-orange));
+    color: white;
+    border-color: transparent;
+  }
+  .vocab-count {
+    font-size: 0.72rem;
+    color: #bbb;
+    font-weight: 700;
+    margin: 10px 2px 10px;
+  }
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .vocab-card {
+    background: white;
+    border-radius: 16px;
+    padding: 14px 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+    border: 2px solid transparent;
+    position: relative;
+  }
+  .vocab-word { font-size: 1.15rem; font-weight: 900; color: var(--text); margin-bottom: 2px; padding-right: 26px; }
+  .vocab-romaji { font-size: 0.74rem; color: var(--sakura-deep); font-weight: 800; margin-bottom: 4px; }
+  .vocab-meaning { font-size: 0.74rem; color: #999; font-weight: 700; line-height: 1.4; }
+  .vocab-tag {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: var(--sakura-deep);
+    background: var(--sakura-light);
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-top: 6px;
+  }
+  .vocab-speak-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: none;
+    background: var(--sakura-light);
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .vocab-speak-btn:hover { background: var(--sakura); transform: scale(1.1); }
+  .vocab-speak-btn.speaking { animation: speakPulse 0.6s ease infinite alternate; }
+  .vocab-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #ccc;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  /* ═══════════════════════════
      STATS VIEW
   ═══════════════════════════ */
   .stats-view {
@@ -745,6 +850,7 @@
   <button class="nav-tab" onclick="showView('flashcard', this)">🗂️ Study</button>
   <button class="nav-tab" onclick="showView('categories', this)">🏷️ Topics</button>
   <button class="nav-tab" onclick="showView('stats', this)">⭐ Stats</button>
+  <button class="nav-tab" onclick="showView('vocab', this)">📖 200 Words</button>
 </div>
 
 <!-- ═══════════════════════════
@@ -850,6 +956,21 @@
       <p>Study 1 card every day. You've got this, senpai! 🌸</p>
     </div>
   </div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ═══════════════════════════
+     VOCAB VIEW
+═══════════════════════════ -->
+<div class="view vocab-view" id="view-vocab">
+  <p class="section-title">200 essential words to grow your vocabulary 📖</p>
+  <div class="vocab-search-wrap">
+    <input type="text" class="vocab-search" id="vocabSearch" placeholder="🔍 Search words, romaji, or meaning..." oninput="filterVocab()">
+    <div class="vocab-chips" id="vocabChips"></div>
+  </div>
+  <div class="vocab-count" id="vocabCount">200 words</div>
+  <div class="vocab-grid" id="vocabGrid"></div>
+  <div class="vocab-empty" id="vocabEmpty" style="display:none;">No words found — try a different search 🐱</div>
   <div class="spacer"></div>
 </div>
 
@@ -963,7 +1084,229 @@ const cards = [
   {day:87,week:13,kana:"アニメ",romaji:"Anime",pron:"ah-nee-meh",meaning:"Anime",category:"Culture",try:"Anime ga daisuki desu!",tryTrans:'"I love anime!"',fact:"Short for アニメーション (animation). Japan's greatest cultural export!"},
   {day:88,week:13,kana:"まんが",romaji:"Manga",pron:"mahn-gah",meaning:"Manga",category:"Culture",try:"Manga wo yonde imasu!",tryTrans:'"I am reading manga!"',fact:"まんが = Japanese comics. まん = involuntary, が = picture. 'Whimsical pictures'!"},
   {day:89,week:13,kana:"おつかれさま",romaji:"Otsukaresama",pron:"oh-tsoo-kah-reh-sah-mah",meaning:"Great Work / Well Done",category:"Culture",try:"Otsukaresama deshita!",tryTrans:'"Good work today! You did great!"',fact:"Said to coworkers at end of day. おつかれ = tiredness. 'You must be tired!' = respect!"},
-  {day:90,week:13,kana:"がんばって",romaji:"Ganbatte",pron:"gahn-bah-teh",meaning:"Do Your Best! / You Got This!",category:"Culture",try:"Ganbatte ne! Ouen shite iru yo!",tryTrans:'"Do your best! I\'m cheering for you!"',fact:"The motto of all Japanese learners. You made it to Day 90! がんばって！🎉"},
+];
+
+// ═══════════════════════════════════════
+// VOCAB LIST (200 bonus words)
+// ═══════════════════════════════════════
+const vocabWords = [
+  {word:"こんにちは", romaji:"Konnichiwa", meaning:"Hello / Good afternoon", category:"Greetings"},
+  {word:"おはようございます", romaji:"Ohayou gozaimasu", meaning:"Good morning", category:"Greetings"},
+  {word:"こんばんは", romaji:"Konbanwa", meaning:"Good evening", category:"Greetings"},
+  {word:"おやすみなさい", romaji:"Oyasuminasai", meaning:"Good night", category:"Greetings"},
+  {word:"さようなら", romaji:"Sayounara", meaning:"Goodbye", category:"Greetings"},
+  {word:"ありがとう", romaji:"Arigatou", meaning:"Thank you", category:"Greetings"},
+  {word:"すみません", romaji:"Sumimasen", meaning:"Excuse me / Sorry", category:"Greetings"},
+  {word:"はい", romaji:"Hai", meaning:"Yes", category:"Greetings"},
+  {word:"いいえ", romaji:"Iie", meaning:"No", category:"Greetings"},
+  {word:"お願いします", romaji:"Onegaishimasu", meaning:"Please", category:"Greetings"},
+  {word:"どういたしまして", romaji:"Dou itashimashite", meaning:"You're welcome", category:"Greetings"},
+  {word:"はじめまして", romaji:"Hajimemashite", meaning:"Nice to meet you", category:"Greetings"},
+
+  {word:"一", romaji:"Ichi", meaning:"One", category:"Numbers"},
+  {word:"二", romaji:"Ni", meaning:"Two", category:"Numbers"},
+  {word:"三", romaji:"San", meaning:"Three", category:"Numbers"},
+  {word:"四", romaji:"Yon", meaning:"Four", category:"Numbers"},
+  {word:"五", romaji:"Go", meaning:"Five", category:"Numbers"},
+  {word:"六", romaji:"Roku", meaning:"Six", category:"Numbers"},
+  {word:"七", romaji:"Nana", meaning:"Seven", category:"Numbers"},
+  {word:"八", romaji:"Hachi", meaning:"Eight", category:"Numbers"},
+  {word:"九", romaji:"Kyuu", meaning:"Nine", category:"Numbers"},
+  {word:"十", romaji:"Juu", meaning:"Ten", category:"Numbers"},
+  {word:"ゼロ", romaji:"Zero", meaning:"Zero", category:"Numbers"},
+  {word:"二十", romaji:"Nijuu", meaning:"Twenty", category:"Numbers"},
+  {word:"三十", romaji:"Sanjuu", meaning:"Thirty", category:"Numbers"},
+  {word:"五十", romaji:"Gojuu", meaning:"Fifty", category:"Numbers"},
+  {word:"百", romaji:"Hyaku", meaning:"Hundred", category:"Numbers"},
+
+  {word:"今日", romaji:"Kyou", meaning:"Today", category:"Time"},
+  {word:"明日", romaji:"Ashita", meaning:"Tomorrow", category:"Time"},
+  {word:"昨日", romaji:"Kinou", meaning:"Yesterday", category:"Time"},
+  {word:"今", romaji:"Ima", meaning:"Now", category:"Time"},
+  {word:"朝", romaji:"Asa", meaning:"Morning", category:"Time"},
+  {word:"昼", romaji:"Hiru", meaning:"Noon / Daytime", category:"Time"},
+  {word:"夜", romaji:"Yoru", meaning:"Night", category:"Time"},
+  {word:"月曜日", romaji:"Getsuyoubi", meaning:"Monday", category:"Time"},
+  {word:"火曜日", romaji:"Kayoubi", meaning:"Tuesday", category:"Time"},
+  {word:"水曜日", romaji:"Suiyoubi", meaning:"Wednesday", category:"Time"},
+  {word:"木曜日", romaji:"Mokuyoubi", meaning:"Thursday", category:"Time"},
+  {word:"金曜日", romaji:"Kin'youbi", meaning:"Friday", category:"Time"},
+  {word:"土曜日", romaji:"Doyoubi", meaning:"Saturday", category:"Time"},
+  {word:"日曜日", romaji:"Nichiyoubi", meaning:"Sunday", category:"Time"},
+  {word:"週末", romaji:"Shuumatsu", meaning:"Weekend", category:"Time"},
+
+  {word:"家族", romaji:"Kazoku", meaning:"Family", category:"Family"},
+  {word:"お母さん", romaji:"Okaasan", meaning:"Mother", category:"Family"},
+  {word:"お父さん", romaji:"Otousan", meaning:"Father", category:"Family"},
+  {word:"兄", romaji:"Ani", meaning:"Older brother", category:"Family"},
+  {word:"姉", romaji:"Ane", meaning:"Older sister", category:"Family"},
+  {word:"弟", romaji:"Otouto", meaning:"Younger brother", category:"Family"},
+  {word:"妹", romaji:"Imouto", meaning:"Younger sister", category:"Family"},
+  {word:"子供", romaji:"Kodomo", meaning:"Child", category:"Family"},
+  {word:"おじいさん", romaji:"Ojiisan", meaning:"Grandfather", category:"Family"},
+  {word:"おばあさん", romaji:"Obaasan", meaning:"Grandmother", category:"Family"},
+  {word:"夫", romaji:"Otto", meaning:"Husband", category:"Family"},
+  {word:"妻", romaji:"Tsuma", meaning:"Wife", category:"Family"},
+
+  {word:"ご飯", romaji:"Gohan", meaning:"Rice / Meal", category:"Food"},
+  {word:"水", romaji:"Mizu", meaning:"Water", category:"Food"},
+  {word:"お茶", romaji:"Ocha", meaning:"Tea", category:"Food"},
+  {word:"コーヒー", romaji:"Koohii", meaning:"Coffee", category:"Food"},
+  {word:"パン", romaji:"Pan", meaning:"Bread", category:"Food"},
+  {word:"肉", romaji:"Niku", meaning:"Meat", category:"Food"},
+  {word:"魚", romaji:"Sakana", meaning:"Fish", category:"Food"},
+  {word:"野菜", romaji:"Yasai", meaning:"Vegetable", category:"Food"},
+  {word:"果物", romaji:"Kudamono", meaning:"Fruit", category:"Food"},
+  {word:"卵", romaji:"Tamago", meaning:"Egg", category:"Food"},
+  {word:"牛乳", romaji:"Gyuunyuu", meaning:"Milk", category:"Food"},
+  {word:"お寿司", romaji:"Osushi", meaning:"Sushi", category:"Food"},
+  {word:"ラーメン", romaji:"Raamen", meaning:"Ramen", category:"Food"},
+  {word:"みそ汁", romaji:"Misoshiru", meaning:"Miso soup", category:"Food"},
+  {word:"醤油", romaji:"Shouyu", meaning:"Soy sauce", category:"Food"},
+  {word:"砂糖", romaji:"Satou", meaning:"Sugar", category:"Food"},
+  {word:"塩", romaji:"Shio", meaning:"Salt", category:"Food"},
+  {word:"レストラン", romaji:"Resutoran", meaning:"Restaurant", category:"Food"},
+  {word:"おいしい", romaji:"Oishii", meaning:"Delicious", category:"Food"},
+  {word:"お腹がすいた", romaji:"Onaka ga suita", meaning:"I'm hungry", category:"Food"},
+
+  {word:"赤", romaji:"Aka", meaning:"Red", category:"Colors"},
+  {word:"青", romaji:"Ao", meaning:"Blue", category:"Colors"},
+  {word:"黄色", romaji:"Kiiro", meaning:"Yellow", category:"Colors"},
+  {word:"緑", romaji:"Midori", meaning:"Green", category:"Colors"},
+  {word:"白", romaji:"Shiro", meaning:"White", category:"Colors"},
+  {word:"黒", romaji:"Kuro", meaning:"Black", category:"Colors"},
+  {word:"紫", romaji:"Murasaki", meaning:"Purple", category:"Colors"},
+  {word:"オレンジ", romaji:"Orenji", meaning:"Orange", category:"Colors"},
+  {word:"ピンク", romaji:"Pinku", meaning:"Pink", category:"Colors"},
+  {word:"茶色", romaji:"Chairo", meaning:"Brown", category:"Colors"},
+
+  {word:"頭", romaji:"Atama", meaning:"Head", category:"Body"},
+  {word:"顔", romaji:"Kao", meaning:"Face", category:"Body"},
+  {word:"目", romaji:"Me", meaning:"Eye", category:"Body"},
+  {word:"耳", romaji:"Mimi", meaning:"Ear", category:"Body"},
+  {word:"鼻", romaji:"Hana", meaning:"Nose", category:"Body"},
+  {word:"口", romaji:"Kuchi", meaning:"Mouth", category:"Body"},
+  {word:"手", romaji:"Te", meaning:"Hand", category:"Body"},
+  {word:"足", romaji:"Ashi", meaning:"Foot / Leg", category:"Body"},
+  {word:"お腹", romaji:"Onaka", meaning:"Stomach", category:"Body"},
+  {word:"心", romaji:"Kokoro", meaning:"Heart", category:"Body"},
+
+  {word:"猫", romaji:"Neko", meaning:"Cat", category:"Animals"},
+  {word:"犬", romaji:"Inu", meaning:"Dog", category:"Animals"},
+  {word:"鳥", romaji:"Tori", meaning:"Bird", category:"Animals"},
+  {word:"馬", romaji:"Uma", meaning:"Horse", category:"Animals"},
+  {word:"牛", romaji:"Ushi", meaning:"Cow", category:"Animals"},
+  {word:"豚", romaji:"Buta", meaning:"Pig", category:"Animals"},
+  {word:"うさぎ", romaji:"Usagi", meaning:"Rabbit", category:"Animals"},
+  {word:"熊", romaji:"Kuma", meaning:"Bear", category:"Animals"},
+  {word:"ライオン", romaji:"Raion", meaning:"Lion", category:"Animals"},
+  {word:"象", romaji:"Zou", meaning:"Elephant", category:"Animals"},
+
+  {word:"天気", romaji:"Tenki", meaning:"Weather", category:"Nature"},
+  {word:"雨", romaji:"Ame", meaning:"Rain", category:"Nature"},
+  {word:"雪", romaji:"Yuki", meaning:"Snow", category:"Nature"},
+  {word:"風", romaji:"Kaze", meaning:"Wind", category:"Nature"},
+  {word:"太陽", romaji:"Taiyou", meaning:"Sun", category:"Nature"},
+  {word:"月", romaji:"Tsuki", meaning:"Moon", category:"Nature"},
+  {word:"星", romaji:"Hoshi", meaning:"Star", category:"Nature"},
+  {word:"山", romaji:"Yama", meaning:"Mountain", category:"Nature"},
+  {word:"川", romaji:"Kawa", meaning:"River", category:"Nature"},
+  {word:"海", romaji:"Umi", meaning:"Sea / Ocean", category:"Nature"},
+
+  {word:"学校", romaji:"Gakkou", meaning:"School", category:"Places"},
+  {word:"家", romaji:"Ie", meaning:"House / Home", category:"Places"},
+  {word:"駅", romaji:"Eki", meaning:"Station", category:"Places"},
+  {word:"病院", romaji:"Byouin", meaning:"Hospital", category:"Places"},
+  {word:"銀行", romaji:"Ginkou", meaning:"Bank", category:"Places"},
+  {word:"公園", romaji:"Kouen", meaning:"Park", category:"Places"},
+  {word:"図書館", romaji:"Toshokan", meaning:"Library", category:"Places"},
+  {word:"店", romaji:"Mise", meaning:"Shop / Store", category:"Places"},
+  {word:"会社", romaji:"Kaisha", meaning:"Company / Office", category:"Places"},
+  {word:"トイレ", romaji:"Toire", meaning:"Toilet / Restroom", category:"Places"},
+
+  {word:"電車", romaji:"Densha", meaning:"Train", category:"Transport"},
+  {word:"バス", romaji:"Basu", meaning:"Bus", category:"Transport"},
+  {word:"車", romaji:"Kuruma", meaning:"Car", category:"Transport"},
+  {word:"自転車", romaji:"Jitensha", meaning:"Bicycle", category:"Transport"},
+  {word:"飛行機", romaji:"Hikouki", meaning:"Airplane", category:"Transport"},
+  {word:"タクシー", romaji:"Takushii", meaning:"Taxi", category:"Transport"},
+  {word:"船", romaji:"Fune", meaning:"Ship / Boat", category:"Transport"},
+  {word:"道", romaji:"Michi", meaning:"Road / Street", category:"Transport"},
+
+  {word:"お金", romaji:"Okane", meaning:"Money", category:"Shopping"},
+  {word:"高い", romaji:"Takai", meaning:"Expensive", category:"Shopping"},
+  {word:"安い", romaji:"Yasui", meaning:"Cheap", category:"Shopping"},
+  {word:"買う", romaji:"Kau", meaning:"To buy", category:"Shopping"},
+  {word:"売る", romaji:"Uru", meaning:"To sell", category:"Shopping"},
+  {word:"値段", romaji:"Nedan", meaning:"Price", category:"Shopping"},
+  {word:"クレジットカード", romaji:"Kurejitto kaado", meaning:"Credit card", category:"Shopping"},
+  {word:"レシート", romaji:"Reshiito", meaning:"Receipt", category:"Shopping"},
+
+  {word:"服", romaji:"Fuku", meaning:"Clothes", category:"Clothing"},
+  {word:"靴", romaji:"Kutsu", meaning:"Shoes", category:"Clothing"},
+  {word:"帽子", romaji:"Boushi", meaning:"Hat", category:"Clothing"},
+  {word:"シャツ", romaji:"Shatsu", meaning:"Shirt", category:"Clothing"},
+  {word:"ズボン", romaji:"Zubon", meaning:"Pants", category:"Clothing"},
+  {word:"靴下", romaji:"Kutsushita", meaning:"Socks", category:"Clothing"},
+
+  {word:"食べる", romaji:"Taberu", meaning:"To eat", category:"Verbs"},
+  {word:"飲む", romaji:"Nomu", meaning:"To drink", category:"Verbs"},
+  {word:"行く", romaji:"Iku", meaning:"To go", category:"Verbs"},
+  {word:"来る", romaji:"Kuru", meaning:"To come", category:"Verbs"},
+  {word:"見る", romaji:"Miru", meaning:"To see / watch", category:"Verbs"},
+  {word:"聞く", romaji:"Kiku", meaning:"To listen / hear", category:"Verbs"},
+  {word:"話す", romaji:"Hanasu", meaning:"To speak", category:"Verbs"},
+  {word:"読む", romaji:"Yomu", meaning:"To read", category:"Verbs"},
+  {word:"書く", romaji:"Kaku", meaning:"To write", category:"Verbs"},
+  {word:"寝る", romaji:"Neru", meaning:"To sleep", category:"Verbs"},
+  {word:"起きる", romaji:"Okiru", meaning:"To wake up", category:"Verbs"},
+  {word:"働く", romaji:"Hataraku", meaning:"To work", category:"Verbs"},
+  {word:"勉強する", romaji:"Benkyou suru", meaning:"To study", category:"Verbs"},
+  {word:"作る", romaji:"Tsukuru", meaning:"To make", category:"Verbs"},
+  {word:"走る", romaji:"Hashiru", meaning:"To run", category:"Verbs"},
+  {word:"歩く", romaji:"Aruku", meaning:"To walk", category:"Verbs"},
+  {word:"待つ", romaji:"Matsu", meaning:"To wait", category:"Verbs"},
+  {word:"始まる", romaji:"Hajimaru", meaning:"To begin", category:"Verbs"},
+  {word:"終わる", romaji:"Owaru", meaning:"To end", category:"Verbs"},
+  {word:"教える", romaji:"Oshieru", meaning:"To teach", category:"Verbs"},
+
+  {word:"大きい", romaji:"Ookii", meaning:"Big", category:"Adjectives"},
+  {word:"小さい", romaji:"Chiisai", meaning:"Small", category:"Adjectives"},
+  {word:"新しい", romaji:"Atarashii", meaning:"New", category:"Adjectives"},
+  {word:"古い", romaji:"Furui", meaning:"Old", category:"Adjectives"},
+  {word:"いい", romaji:"Ii", meaning:"Good", category:"Adjectives"},
+  {word:"悪い", romaji:"Warui", meaning:"Bad", category:"Adjectives"},
+  {word:"楽しい", romaji:"Tanoshii", meaning:"Fun", category:"Adjectives"},
+  {word:"難しい", romaji:"Muzukashii", meaning:"Difficult", category:"Adjectives"},
+  {word:"簡単", romaji:"Kantan", meaning:"Easy", category:"Adjectives"},
+  {word:"暑い", romaji:"Atsui", meaning:"Hot", category:"Adjectives"},
+  {word:"寒い", romaji:"Samui", meaning:"Cold", category:"Adjectives"},
+  {word:"速い", romaji:"Hayai", meaning:"Fast", category:"Adjectives"},
+  {word:"遅い", romaji:"Osoi", meaning:"Slow", category:"Adjectives"},
+  {word:"かわいい", romaji:"Kawaii", meaning:"Cute", category:"Adjectives"},
+  {word:"美しい", romaji:"Utsukushii", meaning:"Beautiful", category:"Adjectives"},
+
+  {word:"何", romaji:"Nani", meaning:"What", category:"Questions"},
+  {word:"どこ", romaji:"Doko", meaning:"Where", category:"Questions"},
+  {word:"いつ", romaji:"Itsu", meaning:"When", category:"Questions"},
+  {word:"誰", romaji:"Dare", meaning:"Who", category:"Questions"},
+  {word:"なぜ", romaji:"Naze", meaning:"Why", category:"Questions"},
+  {word:"どう", romaji:"Dou", meaning:"How", category:"Questions"},
+  {word:"どれ", romaji:"Dore", meaning:"Which", category:"Questions"},
+  {word:"いくつ", romaji:"Ikutsu", meaning:"How many", category:"Questions"},
+
+  {word:"嬉しい", romaji:"Ureshii", meaning:"Happy", category:"Emotions"},
+  {word:"悲しい", romaji:"Kanashii", meaning:"Sad", category:"Emotions"},
+  {word:"怒る", romaji:"Ikaru", meaning:"To get angry", category:"Emotions"},
+  {word:"心配", romaji:"Shinpai", meaning:"Worried", category:"Emotions"},
+  {word:"寂しい", romaji:"Sabishii", meaning:"Lonely", category:"Emotions"},
+  {word:"怖い", romaji:"Kowai", meaning:"Scared", category:"Emotions"},
+
+  {word:"先生", romaji:"Sensei", meaning:"Teacher", category:"School"},
+  {word:"学生", romaji:"Gakusei", meaning:"Student", category:"School"},
+  {word:"宿題", romaji:"Shukudai", meaning:"Homework", category:"School"},
+  {word:"テスト", romaji:"Tesuto", meaning:"Test", category:"School"},
+  {word:"仕事", romaji:"Shigoto", meaning:"Job / Work", category:"School"},
 ];
 
 // ═══════════════════════════════════════
@@ -1017,6 +1360,7 @@ function showView(name, btn) {
   if (name === 'stats') updateStats();
   if (name === 'categories') buildCategories();
   if (name === 'flashcard') updateCard();
+  if (name === 'vocab') buildVocab();
   updateProgressBar();
 }
 
@@ -1247,6 +1591,87 @@ function speakWord() {
                 || voices.find(v => v.lang.startsWith('ja'))
                 || null;
     const utt = new SpeechSynthesisUtterance(c.kana);
+    utt.lang = 'ja-JP';
+    utt.rate = 0.85;
+    if (voice) utt.voice = voice;
+    utt.onend = () => { if (btn) btn.classList.remove('speaking'); };
+    utt.onerror = () => { if (btn) btn.classList.remove('speaking'); };
+    window.speechSynthesis.speak(utt);
+  }
+  const voices = window.speechSynthesis.getVoices();
+  if (voices && voices.length > 0) {
+    doSpeak();
+  } else {
+    window.speechSynthesis.addEventListener('voiceschanged', function handler() {
+      window.speechSynthesis.removeEventListener('voiceschanged', handler);
+      doSpeak();
+    });
+    setTimeout(doSpeak, 1000);
+  }
+}
+
+// ═══════════════════════════════════════
+// VOCAB LIST
+// ═══════════════════════════════════════
+let vocabBuilt = false;
+function buildVocab() {
+  if (vocabBuilt) return;
+  vocabBuilt = true;
+  const chipWrap = document.getElementById('vocabChips');
+  const categories = ['All', ...new Set(vocabWords.map(w => w.category))];
+  chipWrap.innerHTML = categories.map((c, i) =>
+    `<button class="vocab-chip${i === 0 ? ' active' : ''}" data-cat="${c}" onclick="selectVocabChip(this)">${c}</button>`
+  ).join('');
+  renderVocab(vocabWords);
+}
+
+function selectVocabChip(btn) {
+  document.querySelectorAll('.vocab-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  filterVocab();
+}
+
+function filterVocab() {
+  const q = document.getElementById('vocabSearch').value.trim().toLowerCase();
+  const activeChip = document.querySelector('.vocab-chip.active');
+  const cat = activeChip ? activeChip.dataset.cat : 'All';
+  const filtered = vocabWords.filter(w => {
+    const matchesCat = cat === 'All' || w.category === cat;
+    const matchesQuery = !q || w.word.toLowerCase().includes(q) || w.romaji.toLowerCase().includes(q) || w.meaning.toLowerCase().includes(q);
+    return matchesCat && matchesQuery;
+  });
+  renderVocab(filtered);
+}
+
+function renderVocab(list) {
+  const grid = document.getElementById('vocabGrid');
+  const empty = document.getElementById('vocabEmpty');
+  document.getElementById('vocabCount').textContent = list.length + (list.length === 1 ? ' word' : ' words');
+  if (list.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = list.map(w => `
+    <div class="vocab-card">
+      <button class="vocab-speak-btn" onclick="speakVocab(${JSON.stringify(w.word)}, this)">🔊</button>
+      <div class="vocab-word">${w.word}</div>
+      <div class="vocab-romaji">${w.romaji}</div>
+      <div class="vocab-meaning">${w.meaning}</div>
+      <span class="vocab-tag">${w.category}</span>
+    </div>
+  `).join('');
+}
+
+function speakVocab(text, btn) {
+  if (!window.speechSynthesis) { alert('Audio not supported on this browser.'); return; }
+  window.speechSynthesis.cancel();
+  if (btn) btn.classList.add('speaking');
+  function doSpeak() {
+    const voices = window.speechSynthesis.getVoices();
+    const voice = voices.find(v => v.lang === 'ja-JP') || voices.find(v => v.lang.startsWith('ja')) || null;
+    const utt = new SpeechSynthesisUtterance(text);
     utt.lang = 'ja-JP';
     utt.rate = 0.85;
     if (voice) utt.voice = voice;
