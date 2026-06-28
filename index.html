@@ -320,6 +320,19 @@
   .card-zh .card-script-preview { font-family: 'Noto Sans SC', sans-serif; }
   .card-np .card-script-preview { font-family: 'Noto Sans Devanagari', sans-serif; }
 
+  /* JLPT N5 Prep card */
+  .card-n5 {
+    background: linear-gradient(145deg, #fffaf0 0%, #ffead0 40%, #fff5e0 100%);
+    border: 2px solid #ffdf9e;
+  }
+  .card-n5 .card-header {
+    background: linear-gradient(135deg, #b86a00 0%, #e0a64a 50%, #f5c842 100%);
+  }
+  .card-n5 .card-script-preview { font-family: 'Noto Sans JP', sans-serif; }
+  .card-n5 .meta-chip { background: #fff3d6; color: #b86a00; }
+  .card-n5 .card-cta { background: linear-gradient(135deg, #b86a00, #e0a64a); box-shadow: 0 4px 16px rgba(184,106,0,0.35); }
+  .card-n5 .mini-bar-fill { background: linear-gradient(90deg, #b86a00, #f5c842); }
+
   .card-body { padding: 16px 20px 20px; }
 
   .card-meta-row {
@@ -460,6 +473,8 @@
   .fade-in-3 { animation-delay: 0.35s; }
   .fade-in-4 { animation-delay: 0.5s; }
   .fade-in-5 { animation-delay: 0.65s; }
+  .fade-in-6 { animation-delay: 0.8s; }
+  .fade-in-7 { animation-delay: 0.95s; }
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: translateY(0); }
@@ -609,8 +624,57 @@
 
   </div>
 
+  <!-- JLPT PREP -->
+  <div class="section-head fade-in fade-in-5">
+    <h2>JLPT Prep 🎓</h2>
+    <p>Getting exam-ready? Start here</p>
+  </div>
+
+  <div class="lang-cards" style="margin-bottom: 32px;">
+
+    <!-- JLPT N5 -->
+    <a href="jlpt-n5-prep.html" class="lang-card card-n5 fade-in fade-in-6">
+      <div class="card-header">
+        <div class="card-flag-row">
+          <span class="card-flag">🎓</span>
+          <div>
+            <div class="card-lang-name">JLPT N5 Prep</div>
+            <div class="card-lang-sub">日本語検定 · Exam Ready</div>
+          </div>
+        </div>
+        <div class="card-script-preview">合格</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta-row">
+          <span class="meta-chip">📚 582 Words</span>
+          <span class="meta-chip">📝 250 Questions</span>
+          <span class="meta-chip">Beginner</span>
+        </div>
+        <div class="card-progress-row">
+          <div class="mini-bar-bg">
+            <div class="mini-bar-fill" id="n5Bar" style="width:0%"></div>
+          </div>
+          <span class="mini-bar-label" id="n5Progress">0 / 582</span>
+        </div>
+        <div class="card-desc">The complete N5 vocabulary list plus 250 practice questions across vocabulary, grammar, reading & listening — with Nyanko cheering you on!</div>
+        <div class="card-topics">
+          <span class="topic-tag">📖 Vocabulary</span>
+          <span class="topic-tag">✍️ Grammar</span>
+          <span class="topic-tag">📰 Reading</span>
+          <span class="topic-tag">🎧 Listening</span>
+          <span class="topic-tag">📝 Mock Tests</span>
+        </div>
+        <div class="card-cta">
+          <span>Start N5 Prep</span>
+          <span class="cta-arrow">→</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
   <!-- HOW IT WORKS -->
-  <div class="how-section fade-in fade-in-5">
+  <div class="how-section fade-in fade-in-7">
     <div class="section-head" style="padding: 0 0 0;">
       <h2>How it works 🐾</h2>
       <p>Simple enough to stick with every day</p>
@@ -675,6 +739,12 @@ document.getElementById('jpBar').style.width = Math.round(jpDone / 90 * 100) + '
 document.getElementById('krBar').style.width = Math.round(krDone / 90 * 100) + '%';
 document.getElementById('jpProgress').textContent = jpDone + ' / 90';
 document.getElementById('krProgress').textContent = krDone + ' / 90';
+
+// Load progress from JLPT N5 Prep page (object map of "category||word" -> true/false)
+const n5KnownMap = JSON.parse(localStorage.getItem('calicoN5_vocabKnown_v1') || '{}');
+const n5Done = Object.values(n5KnownMap).filter(Boolean).length;
+document.getElementById('n5Bar').style.width = Math.round(n5Done / 582 * 100) + '%';
+document.getElementById('n5Progress').textContent = n5Done + ' / 582';
 
 // ── STREAK LOGIC ──
 // We track a global streak: any card marked done on a given day counts.

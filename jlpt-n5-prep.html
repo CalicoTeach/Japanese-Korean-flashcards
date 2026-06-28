@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JLPT N5 Prep 🌸 — Calico</title>
+<meta name="description" content="Free JLPT N5 prep: a complete 582-word vocabulary browser and 250 practice questions, guided by your calico cat companion.">
+<meta name="theme-color" content="#e8678a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#e8678a;
+    --pink-deep:#c94f6f;
+    --pink-pale:#fbe4ea;
+    --cream:#fff9f5;
+    --green:#4fae8e;
+    --green-pale:#e3f5ee;
+    --gold:#e0a64a;
+    --gold-pale:#fbeedb;
+    --blue:#5b86c9;
+    --blue-pale:#e7eefa;
+    --ink:#352b2e;
+    --sub:#8a7b7e;
+    --bad:#d9636f;
+    --bad-pale:#fbe3e5;
+    --radius:18px;
+    --shadow:0 6px 20px rgba(180,90,110,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Nunito',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    padding-bottom:60px;
+  }
+  h1,h2,h3,.display{ font-family:'Baloo 2',sans-serif; }
+  a{ color:var(--pink-deep); }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 18px; background:#fff; border-bottom:1px solid #f3dee4;
+    position:sticky; top:0; z-index:20;
+  }
+  .topbar a.back{ font-weight:700; text-decoration:none; font-size:14px; color:var(--sub); }
+  .topbar .brand{ font-family:'Baloo 2',sans-serif; font-weight:700; color:var(--pink-deep); font-size:17px; }
+
+  .hero{ text-align:center; padding:28px 18px 10px; }
+  .hero .cat{ font-size:46px; }
+  .hero h1{ margin:6px 0 4px; font-size:28px; color:var(--pink-deep); }
+  .hero p{ margin:0; color:var(--sub); font-size:15px; }
+
+  .stat-row{
+    display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+    margin:18px auto 6px; max-width:480px; padding:0 16px;
+  }
+  .stat-pill{
+    background:#fff; border-radius:14px; padding:10px 16px; box-shadow:var(--shadow);
+    text-align:center; min-width:84px;
+  }
+  .stat-pill .num{ font-family:'Baloo 2'; font-weight:700; font-size:20px; color:var(--pink-deep); display:block; }
+  .stat-pill .lbl{ font-size:11px; color:var(--sub); text-transform:uppercase; letter-spacing:.03em; }
+
+  .tabs{
+    display:flex; justify-content:center; gap:8px; margin:22px auto 8px; padding:0 16px;
+  }
+  .tab-btn{
+    border:none; background:#fff; color:var(--sub); font-family:'Baloo 2'; font-weight:600;
+    padding:10px 20px; border-radius:999px; cursor:pointer; font-size:15px;
+    box-shadow:var(--shadow); transition:.15s;
+  }
+  .tab-btn.active{ background:var(--pink); color:#fff; }
+
+  main{ max-width:640px; margin:0 auto; padding:0 16px; }
+  section.panel{ display:none; }
+  section.panel.active{ display:block; }
+
+  /* ---------- Vocabulary tab ---------- */
+  .cat-scroll{
+    display:flex; gap:8px; overflow-x:auto; padding:14px 2px 10px; -webkit-overflow-scrolling:touch;
+  }
+  .cat-chip{
+    flex:0 0 auto; border:none; background:#fff; color:var(--ink); font-family:'Nunito'; font-weight:700;
+    padding:8px 14px; border-radius:999px; font-size:13px; cursor:pointer; white-space:nowrap;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05); border:2px solid transparent;
+  }
+  .cat-chip.active{ background:var(--pink-pale); border-color:var(--pink); color:var(--pink-deep); }
+
+  .progress-line{ display:flex; align-items:center; gap:10px; font-size:13px; color:var(--sub); margin:6px 2px 16px; }
+  .progress-track{ flex:1; height:8px; background:#f3e3e8; border-radius:6px; overflow:hidden; }
+  .progress-fill{ height:100%; background:var(--pink); border-radius:6px; transition:width .3s; }
+
+  .flash-wrap{ perspective:1200px; margin:0 auto 16px; max-width:420px; }
+  .flashcard{
+    position:relative; height:280px; border-radius:24px; cursor:pointer;
+    transform-style:preserve-3d; transition:transform .5s cubic-bezier(.2,.8,.2,1);
+    box-shadow:var(--shadow);
+  }
+  .flashcard.flipped{ transform:rotateY(180deg); }
+  .face{
+    position:absolute; inset:0; border-radius:24px; backface-visibility:hidden;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:24px; text-align:center;
+  }
+  .face.front{ background:linear-gradient(160deg,#fff,var(--pink-pale)); }
+  .face.back{ background:linear-gradient(160deg,#fff,var(--green-pale)); transform:rotateY(180deg); }
+  .face .cat-tag{ position:absolute; top:14px; left:18px; font-size:11px; color:var(--sub); font-weight:700; text-transform:uppercase; }
+  .face .word{ font-family:'Baloo 2'; font-weight:700; font-size:40px; color:var(--ink); line-height:1.25; word-break:break-word; }
+  .face .hint{ margin-top:10px; font-size:12px; color:var(--sub); }
+  .face .reading{ font-size:20px; color:var(--pink-deep); font-weight:700; margin-bottom:8px; }
+  .face .meaning{ font-size:22px; color:var(--ink); font-weight:700; }
+
+  .card-controls{ display:flex; align-items:center; justify-content:center; gap:14px; margin-top:6px; }
+  .ctrl-btn{
+    border:none; background:#fff; box-shadow:var(--shadow); border-radius:999px; padding:12px 18px;
+    font-family:'Baloo 2'; font-weight:700; font-size:14px; color:var(--ink); cursor:pointer;
+  }
+  .ctrl-btn.know{ background:var(--green); color:#fff; }
+  .ctrl-btn.know.is-known{ background:var(--green-pale); color:var(--green); }
+  .card-counter{ text-align:center; font-size:13px; color:var(--sub); margin-top:10px; }
+
+  /* ---------- Practice tab ---------- */
+  .test-pick{ display:flex; flex-direction:column; gap:14px; margin-top:16px; }
+  .test-card{
+    background:#fff; border-radius:var(--radius); padding:18px 20px; box-shadow:var(--shadow);
+    cursor:pointer; border:2px solid transparent;
+  }
+  .test-card:hover{ border-color:var(--pink); }
+  .test-card h3{ margin:0 0 4px; color:var(--pink-deep); font-size:19px; }
+  .test-card p{ margin:0; color:var(--sub); font-size:13px; }
+  .test-card .best{ display:inline-block; margin-top:8px; font-size:12px; font-weight:700; color:var(--green); background:var(--green-pale); padding:3px 10px; border-radius:999px; }
+
+  .section-filter{ display:flex; gap:8px; flex-wrap:wrap; margin:16px 0; }
+  .start-btn{
+    display:block; width:100%; border:none; background:var(--pink); color:#fff; font-family:'Baloo 2';
+    font-weight:700; font-size:17px; padding:14px; border-radius:999px; cursor:pointer; margin-top:10px;
+  }
+  .back-link-row{ margin:14px 0; }
+  .back-link-row button{ background:none; border:none; color:var(--sub); font-weight:700; cursor:pointer; font-size:14px; }
+
+  .quiz-progress{ display:flex; align-items:center; gap:10px; margin:16px 0 6px; font-size:13px; color:var(--sub); font-weight:700; }
+  .quiz-score{ margin-left:auto; color:var(--pink-deep); }
+
+  .passage-box{
+    background:#fff; border-left:5px solid var(--blue); border-radius:12px; padding:14px 16px;
+    margin:14px 0; font-style:italic; font-size:14px; line-height:1.6; box-shadow:var(--shadow);
+  }
+  .passage-box .ptitle{ font-style:normal; font-weight:700; color:var(--blue); display:block; margin-bottom:6px; font-family:'Baloo 2'; }
+
+  .q-card{ background:#fff; border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); margin-bottom:14px; }
+  .q-tag{ font-size:11px; font-weight:700; color:var(--sub); text-transform:uppercase; }
+  .q-text{ font-size:18px; font-weight:700; margin:8px 0 14px; line-height:1.5; white-space:pre-line; }
+  .opt-btn{
+    display:block; width:100%; text-align:left; background:var(--cream); border:2px solid #f1dee4;
+    border-radius:12px; padding:12px 14px; margin-bottom:10px; font-size:15px; font-family:'Nunito';
+    font-weight:700; cursor:pointer; color:var(--ink);
+  }
+  .opt-btn:disabled{ cursor:default; }
+  .opt-btn.correct{ background:var(--green-pale); border-color:var(--green); color:#246b54; }
+  .opt-btn.incorrect{ background:var(--bad-pale); border-color:var(--bad); color:#9c3540; }
+
+  .next-btn{
+    display:none; width:100%; border:none; background:var(--ink); color:#fff; font-family:'Baloo 2';
+    font-weight:700; font-size:16px; padding:13px; border-radius:999px; cursor:pointer;
+  }
+
+  .result-card{ background:#fff; border-radius:var(--radius); padding:28px 20px; text-align:center; box-shadow:var(--shadow); margin-top:18px; }
+  .result-card .big{ font-family:'Baloo 2'; font-size:42px; color:var(--pink-deep); font-weight:700; }
+  .breakdown{ display:flex; justify-content:center; gap:14px; margin:16px 0; flex-wrap:wrap; }
+  .breakdown div{ font-size:12px; color:var(--sub); }
+  .breakdown b{ display:block; font-size:18px; color:var(--ink); font-family:'Baloo 2'; }
+  .result-actions{ display:flex; gap:10px; margin-top:10px; }
+  .result-actions button{ flex:1; border:none; border-radius:999px; padding:12px; font-family:'Baloo 2'; font-weight:700; cursor:pointer; }
+  .result-actions .retry{ background:var(--pink); color:#fff; }
+  .result-actions .leave{ background:#f1e3e8; color:var(--ink); }
+
+  footer{ text-align:center; margin-top:40px; color:var(--sub); font-size:13px; }
+  footer .paws{ font-size:20px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .flashcard{ transition:none; }
+  }
+  :focus-visible{ outline:3px solid var(--pink-deep); outline-offset:2px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back" href="./">← Back to Calico</a>
+  <span class="brand">🐱 Calico</span>
+</div>
+
+<div class="hero">
+  <div class="cat">🌸🐱🌸</div>
+  <h1>JLPT N5 Prep</h1>
+  <p>Your complete vocabulary list & practice tests — guided by Nyanko</p>
+</div>
+
+<div class="stat-row">
+  <div class="stat-pill"><span class="num" id="statVocabKnown">0</span><span class="lbl">Words Known</span></div>
+  <div class="stat-pill"><span class="num">582</span><span class="lbl">Total Words</span></div>
+  <div class="stat-pill"><span class="num" id="statBestScore">—</span><span class="lbl">Best Score</span></div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" id="tabBtnVocab">📚 Vocabulary</button>
+  <button class="tab-btn" id="tabBtnPractice">📝 Practice Tests</button>
+</div>
+
+<main>
+  <!-- VOCABULARY TAB -->
+  <section class="panel active" id="vocabPanel">
+    <div class="cat-scroll" id="catScroll"></div>
+    <div class="progress-line">
+      <span id="vocabProgressLabel">0 / 0 known</span>
+      <div class="progress-track"><div class="progress-fill" id="vocabProgressFill" style="width:0%"></div></div>
+    </div>
+
+    <div class="flash-wrap">
+      <div class="flashcard" id="flashcard">
+        <div class="face front">
+          <span class="cat-tag" id="cardCatFront">—</span>
+          <div class="word" id="cardWord">—</div>
+          <div class="hint">tap to flip 🐾</div>
+        </div>
+        <div class="face back">
+          <span class="cat-tag" id="cardCatBack">—</span>
+          <div class="reading" id="cardReading">—</div>
+          <div class="meaning" id="cardMeaning">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-controls">
+      <button class="ctrl-btn" id="prevBtn">← Prev</button>
+      <button class="ctrl-btn know" id="knowBtn">✓ Got it!</button>
+      <button class="ctrl-btn" id="nextBtn">Next →</button>
+    </div>
+    <div class="card-counter" id="cardCounter">Card 1 / 582</div>
+  </section>
+
+  <!-- PRACTICE TAB -->
+  <section class="panel" id="practicePanel">
+    <div id="testPickView">
+      <div class="test-pick" id="testPickList"></div>
+    </div>
+
+    <div id="testSetupView" style="display:none;">
+      <div class="back-link-row"><button id="backToPickBtn">← Choose a different test</button></div>
+      <h3 id="setupTitle" class="display">Practice Test</h3>
+      <p style="color:var(--sub);font-size:14px;margin-top:-6px;">Pick a section, or do the full test.</p>
+      <div class="section-filter" id="sectionFilter"></div>
+      <button class="start-btn" id="startQuizBtn">Start Quiz →</button>
+    </div>
+
+    <div id="quizView" style="display:none;">
+      <div class="quiz-progress">
+        <span id="quizProgressLabel">Q1 / 100</span>
+        <div class="progress-track" style="max-width:140px;"><div class="progress-fill" id="quizProgressFill" style="width:0%"></div></div>
+        <span class="quiz-score" id="quizScoreLabel">Score: 0</span>
+      </div>
+      <div id="passageSlot"></div>
+      <div class="q-card">
+        <div class="q-tag" id="qTag">Vocabulary</div>
+        <div class="q-text" id="qText">—</div>
+        <div id="optsSlot"></div>
+      </div>
+      <button class="next-btn" id="nextQBtn">Next Question →</button>
+    </div>
+
+    <div id="resultView" style="display:none;"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="paws">🐾🐾🐾</div>
+  Nyanko believes in you — がんばって！
+</footer>
+
+<script src="jlpt-n5-vocab-data.js"></script>
+<script src="jlpt-n5-test-data.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var STORE_KNOWN = "calicoN5_vocabKnown_v1";
+  var STORE_SCORES = "calicoN5_bestScores_v1";
+
+  function loadKnown(){
+    try { return JSON.parse(localStorage.getItem(STORE_KNOWN)) || {}; } catch(e){ return {}; }
+  }
+  function saveKnown(obj){
+    try { localStorage.setItem(STORE_KNOWN, JSON.stringify(obj)); } catch(e){}
+  }
+  function loadScores(){
+    try { return JSON.parse(localStorage.getItem(STORE_SCORES)) || {}; } catch(e){ return {}; }
+  }
+  function saveScores(obj){
+    try { localStorage.setItem(STORE_SCORES, JSON.stringify(obj)); } catch(e){}
+  }
+  function keyFor(catTitle, word){ return catTitle + "||" + word; }
+
+  // ---------------- DATA ----------------
+  var CATS = (window.N5_VOCAB || []);
+  var ALL_WORDS = [];
+  CATS.forEach(function(cat){
+    cat.words.forEach(function(w){
+      ALL_WORDS.push({ cat: cat.title, word: w[0], reading: w[1], meaning: w[2] });
+    });
+  });
+  var TESTS = (window.N5_TESTS || []);
+
+  var known = loadKnown();
+
+  // ---------------- TABS ----------------
+  var tabBtnVocab = document.getElementById("tabBtnVocab");
+  var tabBtnPractice = document.getElementById("tabBtnPractice");
+  var vocabPanel = document.getElementById("vocabPanel");
+  var practicePanel = document.getElementById("practicePanel");
+
+  function showTab(which){
+    var isVocab = which === "vocab";
+    tabBtnVocab.classList.toggle("active", isVocab);
+    tabBtnPractice.classList.toggle("active", !isVocab);
+    vocabPanel.classList.toggle("active", isVocab);
+    practicePanel.classList.toggle("active", !isVocab);
+  }
+  tabBtnVocab.addEventListener("click", function(){ showTab("vocab"); });
+  tabBtnPractice.addEventListener("click", function(){ showTab("practice"); });
+
+  // ---------------- STATS HEADER ----------------
+  function refreshHeaderStats(){
+    var knownCount = Object.keys(known).filter(function(k){ return known[k]; }).length;
+    document.getElementById("statVocabKnown").textContent = knownCount;
+    var scores = loadScores();
+    var best = null;
+    Object.keys(scores).forEach(function(id){
+      var pct = Math.round((scores[id].score / scores[id].total) * 100);
+      if (best === null || pct > best) best = pct;
+    });
+    document.getElementById("statBestScore").textContent = best === null ? "—" : best + "%";
+  }
+
+  // ---------------- VOCAB TAB ----------------
+  var currentCat = "All";
+  var deck = [];
+  var cardIndex = 0;
+  var flipped = false;
+
+  var catScroll = document.getElementById("catScroll");
+  function renderCatChips(){
+    var chips = [{ title: "All", count: ALL_WORDS.length }].concat(
+      CATS.map(function(c){ return { title: c.title, count: c.words.length }; })
+    );
+    catScroll.innerHTML = "";
+    chips.forEach(function(c){
+      var btn = document.createElement("button");
+      btn.className = "cat-chip" + (c.title === currentCat ? " active" : "");
+      btn.textContent = c.title + " (" + c.count + ")";
+      btn.addEventListener("click", function(){
+        currentCat = c.title;
+        buildDeck();
+        renderCatChips();
+      });
+      catScroll.appendChild(btn);
+    });
+  }
+
+  function buildDeck(){
+    deck = currentCat === "All" ? ALL_WORDS.slice() : ALL_WORDS.filter(function(w){ return w.cat === currentCat; });
+    cardIndex = 0;
+    flipped = false;
+    renderCard();
+  }
+
+  var flashcardEl = document.getElementById("flashcard");
+
+  function renderCard(){
+    if (deck.length === 0) return;
+    var item = deck[cardIndex];
+    flashcardEl.classList.remove("flipped");
+    flipped = false;
+    document.getElementById("cardCatFront").textContent = item.cat;
+    document.getElementById("cardCatBack").textContent = item.cat;
+    document.getElementById("cardWord").textContent = item.word;
+    document.getElementById("cardReading").textContent = item.reading === "—" ? "" : item.reading;
+    document.getElementById("cardMeaning").textContent = item.meaning;
+    document.getElementById("cardCounter").textContent = "Card " + (cardIndex + 1) + " / " + deck.length;
+
+    var k = keyFor(item.cat, item.word);
+    var knowBtn = document.getElementById("knowBtn");
+    knowBtn.classList.toggle("is-known", !!known[k]);
+    knowBtn.textContent = known[k] ? "✓ Known" : "✓ Got it!";
+
+    var knownInDeck = deck.filter(function(w){ return known[keyFor(w.cat, w.word)]; }).length;
+    document.getElementById("vocabProgressLabel").textContent = knownInDeck + " / " + deck.length + " known";
+    document.getElementById("vocabProgressFill").style.width = (deck.length ? (knownInDeck / deck.length * 100) : 0) + "%";
+  }
+
+  flashcardEl.addEventListener("click", function(){
+    flipped = !flipped;
+    flashcardEl.classList.toggle("flipped", flipped);
+  });
+
+  document.getElementById("prevBtn").addEventListener("click", function(){
+    if (deck.length === 0) return;
+    cardIndex = (cardIndex - 1 + deck.length) % deck.length;
+    renderCard();
+  });
+  document.getElementById("nextBtn").addEventListener("click", function(){
+    if (deck.length === 0) return;
+    cardIndex = (cardIndex + 1) % deck.length;
+    renderCard();
+  });
+  document.getElementById("knowBtn").addEventListener("click", function(){
+    if (deck.length === 0) return;
+    var item = deck[cardIndex];
+    var k = keyFor(item.cat, item.word);
+    known[k] = !known[k];
+    saveKnown(known);
+    renderCard();
+    refreshHeaderStats();
+  });
+
+  document.addEventListener("keydown", function(e){
+    if (!vocabPanel.classList.contains("active")) return;
+    if (e.key === "ArrowLeft") document.getElementById("prevBtn").click();
+    if (e.key === "ArrowRight") document.getElementById("nextBtn").click();
+    if (e.key === " ") { e.preventDefault(); flashcardEl.click(); }
+  });
+
+  // ---------------- PRACTICE TAB ----------------
+  var testPickView = document.getElementById("testPickView");
+  var testSetupView = document.getElementById("testSetupView");
+  var quizView = document.getElementById("quizView");
+  var resultView = document.getElementById("resultView");
+  var testPickList = document.getElementById("testPickList");
+
+  var activeTest = null;
+  var activeSection = "All";
+  var quizQuestions = [];
+  var quizIndex = 0;
+  var quizScore = 0;
+  var answered = false;
+  var sectionTally = {};
+
+  function renderTestPick(){
+    var scores = loadScores();
+    testPickList.innerHTML = "";
+    TESTS.forEach(function(t){
+      var card = document.createElement("div");
+      card.className = "test-card";
+      var best = scores[t.id];
+      card.innerHTML =
+        "<h3>" + t.label + "</h3>" +
+        "<p>" + t.count + " questions · Vocabulary, Grammar, Reading & Listening</p>" +
+        (best ? "<span class='best'>Best: " + best.score + "/" + best.total + " (" + Math.round(best.score/best.total*100) + "%)</span>" : "");
+      card.addEventListener("click", function(){
+        activeTest = t;
+        showSetup();
+      });
+      testPickList.appendChild(card);
+    });
+  }
+
+  function showSetup(){
+    testPickView.style.display = "none";
+    testSetupView.style.display = "block";
+    quizView.style.display = "none";
+    resultView.style.display = "none";
+    document.getElementById("setupTitle").textContent = activeTest.label + " (" + activeTest.count + "Q)";
+    var sections = ["All", "Vocabulary", "Grammar", "Reading", "Listening"];
+    var filterEl = document.getElementById("sectionFilter");
+    filterEl.innerHTML = "";
+    activeSection = "All";
+    sections.forEach(function(s){
+      var btn = document.createElement("button");
+      btn.className = "cat-chip" + (s === activeSection ? " active" : "");
+      var count = s === "All" ? activeTest.questions.length : activeTest.questions.filter(function(q){ return q.section === s; }).length;
+      btn.textContent = s + " (" + count + ")";
+      btn.addEventListener("click", function(){
+        activeSection = s;
+        Array.prototype.forEach.call(filterEl.children, function(c){ c.classList.remove("active"); });
+        btn.classList.add("active");
+      });
+      filterEl.appendChild(btn);
+    });
+  }
+
+  document.getElementById("backToPickBtn").addEventListener("click", function(){
+    testPickView.style.display = "block";
+    testSetupView.style.display = "none";
+  });
+
+  document.getElementById("startQuizBtn").addEventListener("click", function(){
+    quizQuestions = activeSection === "All" ? activeTest.questions.slice() : activeTest.questions.filter(function(q){ return q.section === activeSection; });
+    quizIndex = 0;
+    quizScore = 0;
+    sectionTally = {};
+    testSetupView.style.display = "none";
+    quizView.style.display = "block";
+    renderQuestion();
+  });
+
+  function renderQuestion(){
+    answered = false;
+    var q = quizQuestions[quizIndex];
+    document.getElementById("quizProgressLabel").textContent = "Q" + (quizIndex + 1) + " / " + quizQuestions.length;
+    document.getElementById("quizProgressFill").style.width = ((quizIndex) / quizQuestions.length * 100) + "%";
+    document.getElementById("quizScoreLabel").textContent = "Score: " + quizScore;
+    document.getElementById("qTag").textContent = q.section;
+    document.getElementById("qText").textContent = q.q;
+
+    var passageSlot = document.getElementById("passageSlot");
+    if (q.passage) {
+      passageSlot.innerHTML = "<div class='passage-box'><span class='ptitle'>" + q.passage.title + "</span>" + q.passage.text.replace(/\n/g, "<br>") + "</div>";
+    } else {
+      passageSlot.innerHTML = "";
+    }
+
+    var optsSlot = document.getElementById("optsSlot");
+    optsSlot.innerHTML = "";
+    var letters = ["A", "B", "C", "D"];
+    q.opts.forEach(function(opt, i){
+      var btn = document.createElement("button");
+      btn.className = "opt-btn";
+      btn.textContent = letters[i] + ") " + opt;
+      btn.addEventListener("click", function(){ selectAnswer(i); });
+      optsSlot.appendChild(btn);
+    });
+    document.getElementById("nextQBtn").style.display = "none";
+  }
+
+  function selectAnswer(i){
+    if (answered) return;
+    answered = true;
+    var q = quizQuestions[quizIndex];
+    var buttons = document.getElementById("optsSlot").children;
+    for (var j = 0; j < buttons.length; j++) {
+      buttons[j].disabled = true;
+      if (j === q.a) buttons[j].classList.add("correct");
+      else if (j === i) buttons[j].classList.add("incorrect");
+    }
+    if (!sectionTally[q.section]) sectionTally[q.section] = { correct: 0, total: 0 };
+    sectionTally[q.section].total++;
+    if (i === q.a) {
+      quizScore++;
+      sectionTally[q.section].correct++;
+      document.getElementById("quizScoreLabel").textContent = "Score: " + quizScore;
+    }
+    document.getElementById("nextQBtn").style.display = "block";
+  }
+
+  document.getElementById("nextQBtn").addEventListener("click", function(){
+    quizIndex++;
+    if (quizIndex >= quizQuestions.length) {
+      showResult();
+    } else {
+      renderQuestion();
+    }
+  });
+
+  function showResult(){
+    quizView.style.display = "none";
+    resultView.style.display = "block";
+    var total = quizQuestions.length;
+    var pct = Math.round((quizScore / total) * 100);
+
+    var scores = loadScores();
+    var prevBest = scores[activeTest.id];
+    var isNewBest = !prevBest || quizScore > prevBest.score;
+    if (isNewBest) {
+      scores[activeTest.id] = { score: quizScore, total: total, date: new Date().toISOString().slice(0,10) };
+      saveScores(scores);
+    }
+    refreshHeaderStats();
+
+    var breakdownHtml = Object.keys(sectionTally).map(function(s){
+      var t = sectionTally[s];
+      return "<div><b>" + t.correct + "/" + t.total + "</b>" + s + "</div>";
+    }).join("");
+
+    resultView.innerHTML =
+      "<div class='result-card'>" +
+        "<div>" + (pct >= 80 ? "🎉" : pct >= 50 ? "🌸" : "🐾") + "</div>" +
+        "<div class='big'>" + quizScore + " / " + total + "</div>" +
+        "<div style='color:var(--sub);font-weight:700;'>" + pct + "% correct" + (isNewBest ? " · New best! 🌟" : "") + "</div>" +
+        "<div class='breakdown'>" + breakdownHtml + "</div>" +
+        "<div class='result-actions'>" +
+          "<button class='retry' id='retryBtn'>↻ Retry</button>" +
+          "<button class='leave' id='leaveBtn'>Choose Another Test</button>" +
+        "</div>" +
+      "</div>";
+
+    document.getElementById("retryBtn").addEventListener("click", function(){
+      quizQuestions = activeSection === "All" ? activeTest.questions.slice() : activeTest.questions.filter(function(q){ return q.section === activeSection; });
+      quizIndex = 0; quizScore = 0; sectionTally = {};
+      resultView.style.display = "none";
+      quizView.style.display = "block";
+      renderQuestion();
+    });
+    document.getElementById("leaveBtn").addEventListener("click", function(){
+      resultView.style.display = "none";
+      testPickView.style.display = "block";
+      renderTestPick();
+    });
+  }
+
+  // ---------------- INIT ----------------
+  renderCatChips();
+  buildDeck();
+  renderTestPick();
+  refreshHeaderStats();
+})();
+</script>
+</body>
+</html>
